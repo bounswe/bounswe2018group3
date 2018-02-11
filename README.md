@@ -9,7 +9,7 @@ _A description for our project will be here._
 * [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy)
 * [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy)
 * [Anıl Can Kara](https://github.com/bounswe/bounswe2018group3/wiki/Anıl-Can-Kara)
-* Ali Uslu
+* [Ali Uslu](https://github.com/bounswe/bounswe2018group3/wiki/Ali-Uslu)
 * Umutcan Uvut
 * Onur Varkıvanç
 * [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın)

@@ -13,5 +13,8 @@ Welcome to BOUN-SWE Group-3 repository.
 * Oğuzhan Yetimoğlu
 * Abdurrahman Emre Yılmaz
 
+## Contributing
+You can create new issues but please before creating it read [issue creating rules](https://github.com/bounswe/bounswe2018group3/wiki/Creating-Issues).
+
 ## Wiki
 You can find more details in [our wiki](https://github.com/bounswe/bounswe2018group3/wiki)

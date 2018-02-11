@@ -14,7 +14,7 @@ _A description for our project will be here._
 * [Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç)
 * [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın)
 * [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu)
-* Abdurrahman Emre Yılmaz
+* [A. Emre Yılmaz](https://github.com/bounswe/bounswe2018group3/wiki/Abdurrahman-Emre-Y%C4%B1lmaz)
 
 ## Meeting Notes
 [Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-Notes-1---09.02.2018)

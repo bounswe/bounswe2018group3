@@ -2,7 +2,7 @@
 
 Welcome to BOUN-SWE Group-3 repository. 
 
-# Who We Are ?
+## Who We Are ?
 * Özge Dinçsoy
 * Recep Deniz Aksoy
 * Anıl Can Kara

@@ -18,7 +18,9 @@ _A description for our project will be here._
 
 ## Meeting Notes
 [Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-Notes-1---09.02.2018)
-_A link to the last meeting notes will be here for convenience. Please update the link when uploading meeting notes._
+
+_A link to the last meeting notes will be here for convenience._
+_Please update the link when uploading meeting notes._
 
 ## Contributing
 You can create new issues but please before creating it read [issue creating rules](https://github.com/bounswe/bounswe2018group3/wiki/Creating-Issues).

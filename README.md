@@ -3,7 +3,7 @@
 Welcome to BOUN-SWE Group-3 repository. We are studying on Cultural Activities Project.
 
 ## Description
-Our project is creating a social platform for people who like to attend cultural activities. You can find the detailed description [here](https://github.com/bounswe/bounswe2018group3/blob/master/CulturalActivitiesProjectDescription.pdf). The features of our project will be determined throughout this semester. 
+Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
 
 ## Who We Are
 * [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy)

@@ -17,7 +17,7 @@ Our project is creating a social platform for people who like to attend cultural
 * [A. Emre Yılmaz](https://github.com/bounswe/bounswe2018group3/wiki/Abdurrahman-Emre-Y%C4%B1lmaz)
 
 ## Meeting Notes
-[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%233-12.02.18)
+[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%233.1---23.02.2018)
 
 _A link to the last meeting notes will be here for convenience._
 _Please update the link when uploading meeting notes._

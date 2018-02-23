@@ -1,4 +1,4 @@
-# Bogazici University SWE Group 3
+# The 9 11 Deniers
 
 Welcome to BOUN-SWE Group-3 repository. We are studying on Cultural Activities Project.
 

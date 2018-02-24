@@ -2,6 +2,8 @@
 
 Welcome to BOUN-SWE Group-3 repository. We are studying on Cultural Activities Project.
 
+Ni! Ni! Ni!
+
 ## Description
 Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
 

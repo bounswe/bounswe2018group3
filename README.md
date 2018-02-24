@@ -1,4 +1,4 @@
-# The 9 11 Deniers
+# The Knights Who Say "Ni!"
 
 Welcome to BOUN-SWE Group-3 repository. We are studying on Cultural Activities Project.
 

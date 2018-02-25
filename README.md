@@ -29,3 +29,5 @@ You can create new issues but please before creating it read [issue creating rul
 
 ## Wiki
 You can find more details in [our wiki](https://github.com/bounswe/bounswe2018group3/wiki)
+
+Please use this [Meeting Notes Template](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-Template) while creating a new page of Meeting Notes.

@@ -1,6 +1,8 @@
-# The Knights Who Say "Ni!"
+# Robin 
+![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/small_logo.jpg)
+#### by The Knights Who Say "Ni!"
 
-Welcome to BOUN-SWE Group-3 repository. We are studying on Cultural Activities Project.
+Welcome to our repository. We are studying on Cultural Activities Project.
 
 Ni! Ni! Ni!
 

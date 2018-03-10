@@ -29,6 +29,19 @@ _Please update the link when uploading meeting notes._
 ## Contributing
 You can create new issues but please before creating it read [issue creating rules](https://github.com/bounswe/bounswe2018group3/wiki/Creating-Issues).
 
+## Project
+* [Communication Plan](https://github.com/bounswe/bounswe2018group3/wiki/Communication-Plan)
+* [Project Plan](https://github.com/bounswe/bounswe2018group3/wiki/Project-Plan)
+* [User Scenarios](https://github.com/bounswe/bounswe2018group3/wiki/User-Scenarios)
+* [Mock-ups](https://github.com/bounswe/bounswe2018group3/wiki/Mock-ups)
+
+## Research
+* [Git](https://github.com/bounswe/bounswe2018group3/wiki/Git)
+* [Favourite GitHub Repositories](https://github.com/bounswe/bounswe2018group3/wiki/Favourite-GitHub-Repositories)
+
+## Project Requirements
+* [Requirements](https://github.com/bounswe/bounswe2018group3/wiki/Project-Requirements)
+
 ## Wiki
 You can find more details in [our wiki](https://github.com/bounswe/bounswe2018group3/wiki)
 

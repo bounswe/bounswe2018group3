@@ -9,16 +9,6 @@ Ni! Ni! Ni!
 ## Description
 Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
 
-## Who We Are
-* [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy)
-* [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy)
-* [Anıl Can Kara](https://github.com/bounswe/bounswe2018group3/wiki/Anıl-Can-Kara)
-* [Ali Uslu](https://github.com/bounswe/bounswe2018group3/wiki/Ali-Uslu)
-* [Umutcan Uvut](https://github.com/bounswe/bounswe2018group3/wiki/Umutcan-Uvut)
-* [Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç)
-* [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın)
-* [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu)
-* [A. Emre Yılmaz](https://github.com/bounswe/bounswe2018group3/wiki/Abdurrahman-Emre-Y%C4%B1lmaz)
 
 ## Meeting Notes
 [Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%235-05.03.2018)
@@ -46,3 +36,13 @@ You can create new issues but please before creating it read [issue creating rul
 You can find more details in [our wiki](https://github.com/bounswe/bounswe2018group3/wiki)
 
 Please use this [Meeting Notes Template](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-Notes-Template) while creating a new page of Meeting Notes.
+
+
+
+## Who We Are
+![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/IMG_20180305_152332.jpg)
+
+
+
+| [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu) | [Ali Uslu](https://github.com/bounswe/bounswe2018group3/wiki/Ali-Uslu) | [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın)| [Anıl Can Kara](https://github.com/bounswe/bounswe2018group3/wiki/Anıl-Can-Kara)|[Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç)| [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy) | [A. Emre Yılmaz](https://github.com/bounswe/bounswe2018group3/wiki/Abdurrahman-Emre-Y%C4%B1lmaz)| [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy)  | [Umutcan Uvut](https://github.com/bounswe/bounswe2018group3/wiki/Umutcan-Uvut)     |
+| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |

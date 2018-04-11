@@ -13,6 +13,7 @@ class TemplateRendering:
         dir_path = os.path.dirname(os.path.realpath(__file__))
         template_path = dir_path+"/templates"
         template_dirs = [ template_path ]
+
         env = Environment(
             loader = FileSystemLoader(template_dirs),
             auto_reload=True,

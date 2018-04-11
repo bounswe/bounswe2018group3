@@ -30,6 +30,15 @@ class TwitterRequests:
         for tweet in data:
             print(tweet._json['text'])
 
+class result_handler(tornado.web.RequestHandler):
+    def post(self):
+        method_type = self.get_argument('method_type')
+        username = self.get_argument('username')
+        val1 = self.get_argument('val1')
+        val2 = self.get_argument('val2')
+
+        
+
 
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
@@ -60,13 +69,14 @@ class IndexPageHandler(tornado.web.RequestHandler, TemplateRendering):
         self.write(self.render_template("index.html"))
 
 
+
 class Application(tornado.web.Application):
     def __init__(self):
 
         handlers = [
             (r'/', IndexPageHandler),
             (r'/index.html', IndexPageHandler)
-#            (r'/api*', apiHandler),
+            (r'/result', resultHandler),
 #            (r'/logs/(.*)',logsHandler),
 #	    (r'/reports/(.*)',tornado.web.StaticFileHandler,{'path':"./reports/"})
         ]

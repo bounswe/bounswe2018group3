@@ -17,7 +17,7 @@ class TwitterRequests:
     #****EXAMPLE FUNCTION*****
     #Function for searching tweets.
     #Author: Recep Deniz Aksoy
-    def search_tweet():
+    def search_tweet(word):
         consumer_key = "" # API key
         consumer_secret = "" # API secret
 
@@ -25,7 +25,7 @@ class TwitterRequests:
         auth = OAuthHandler(consumer_key, consumer_secret) 
         api = tp.API(auth)
         #Using tp.Cursor function get 10 tweets which have bogazici in it.
-        data = tp.Cursor(api.search, q= "bogazici", languages = 'tr').items(10)
+        data = tp.Cursor(api.search, q= word, languages = 'tr').items(10)
         #Printing all 10 tweets.
         for tweet in data:
             print(tweet._json['text'])
@@ -36,8 +36,11 @@ class result_handler(tornado.web.RequestHandler):
         username = self.get_argument('username')
         val1 = self.get_argument('val1')
         val2 = self.get_argument('val2')
+        if(method_type == "search"):
+            #Search word in val1 field.
+            TwitterRequests.search_tweet(val1);
 
-        
+
 
 
 class TemplateRendering:

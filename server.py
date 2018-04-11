@@ -11,8 +11,12 @@ from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import tweepy as tp
 from tweepy import OAuthHandler
 
-
+#Write all functions in this class.
+#Please use comments and necessary format like in example function.
 class TwitterRequests:
+    #****EXAMPLE FUNCTION*****
+    #Function for searching tweets.
+    #Author: Recep Deniz Aksoy
     def search_tweet():
         consumer_key = "" # API key
         consumer_secret = "" # API secret

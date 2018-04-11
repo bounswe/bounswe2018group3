@@ -6,6 +6,15 @@ Welcome to our repository. We are studying on Cultural Activities Project.
 
 Ni! Ni! Ni!
 
+## Installing dependencies for server
+`pip3 install pipenv`
+`pipenv install`
+
+## Running server
+`pipenv run python server.py`
+
+Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
+
 ## Description
 Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
 

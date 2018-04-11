@@ -19,24 +19,19 @@ from tweepy import OAuthHandler
 #Function for searching tweets.
 #Author: Recep Deniz Aksoy
 def search_tweet(word):
-    consumer_key = "yGdJZDaefWNoVLl6skirBlaGK" # API key
-    consumer_secret = "OiUZR47gJIXaqsCPCazN1ibcbkHQy68GOyxj78txAKpNmO4y6N" # API secret
+    consumer_key = "" # API key
+    consumer_secret = "" # API secret
 
     #Getting auth using consumer_token and consumer_secret as auth variable.
     auth = OAuthHandler(consumer_key, consumer_secret) 
     api = tp.API(auth)
     #Using tp.Cursor function get 10 tweets which have bogazici in it.
-    data = tp.Cursor(api.search, q= word, languages = 'tr').items(10)
+    data = tp.Cursor(api.search, q= word, languages = 'tr', tweet_mode = 'extended').items(10)
     #Printing all 10 tweets.
-    i = 0
+    raw_table = []
     for tweet in data:
-        if(i == 0):
-            print(tweet._json)
-            table = pd.read_json(json.dumps(tweet._json)['text'])
-        else:
-            temp = pd.read_json(json.dumps(tweet._json)['text'])
-            table = table.append(temp)
-        i+=1
+            raw_table.append(tweet._json['full_text'])
+    table = pd.DataFrame.from_dict(raw_table)
 
     return table
 
@@ -72,7 +67,7 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
         if(method_type == "search"):
             #Search word in val1 field.
             table = search_tweet(val1);
-            self.write(self.render_template('result.html', variables = {'result' : table.to_html()}))
+            self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
 
 
  
@@ -101,6 +96,7 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
  
 if __name__ == '__main__':
+    pd.set_option('display.max_colwidth', -1)
     ws_app = Application()
     server = tornado.httpserver.HTTPServer(ws_app)
     server.listen(9090)

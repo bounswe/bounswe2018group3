@@ -68,6 +68,8 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
             #Search word in val1 field.
             table = search_tweet(val1);
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
+        #elif(method_type == "search_user"):
+            #Search user function etc..
 
 
  

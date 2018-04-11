@@ -8,6 +8,7 @@ Ni! Ni! Ni!
 
 ## Installing dependencies for server
 `pip3 install pipenv`
+
 `pipenv install`
 
 ## Running server

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title>API Response</title>
+
+   	<style>
+        body {
+            font-family: Arial;
+            color: #555;
+            font-size: 16px;
+            margin: 2em auto;
+            max-width: 800px;
+            padding: 1em;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        h1 {
+            color: #444;
+            text-align: center; 
+        }
+        table {
+    		border-collapse: collapse;
+    		width: 100%;
+		}
+
+		th, td {
+   			text-align: left;
+    		padding: 8px;
+    		color: #555;
+		}
+
+		tr:nth-child(even){background-color: #f2f2f2}
+
+    </style>
+    </head>
+    <body>
+		{% block content %}
+        <h1>Results</h1>	
+		{{ result | safe }}
+        {% endblock %}
+    </body>
+</html>

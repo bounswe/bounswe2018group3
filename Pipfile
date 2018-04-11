@@ -14,6 +14,7 @@ name = "pypi"
 tornado = "*"
 "jinja2" = "*"
 tweepy = "*"
+pandas = "*"
 
 
 [requires]

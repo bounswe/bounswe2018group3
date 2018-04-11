@@ -28,7 +28,7 @@ class TwitterRequests:
         data = tp.Cursor(api.search, q= "bogazici", languages = 'tr').items(10)
         #Printing all 10 tweets.
         for tweet in data:
-            #print(tweet._json['text'])
+            print(tweet._json['text'])
 
 
 class TemplateRendering:

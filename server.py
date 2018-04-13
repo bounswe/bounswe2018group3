@@ -54,6 +54,35 @@ def trending_topics(wloc = 1):
     table = pd.DataFrame.from_dict(raw_table)
     return table
 
+#Function for getting followers
+#Author: Oğuzhan Yetimoğlu
+
+def get_followers(word):
+
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    api = tp.API(auth)
+    raw_table = []
+    data = tp.Cursor(api.followers, screen_name = word).items()
+    for user in data:
+        raw_table.append(user.screen_name)
+    table = pd.DataFrame.from_dict(raw_table)
+    return table
+
+#Function for getting friends
+#Author: Oğuzhan Yetimoğlu
+
+def get_friends(word):
+    
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    api = tp.API(auth)
+    raw_table = []
+    data = tp.Cursor(api.friends, screen_name = word).items()
+    for user in data:
+        raw_table.append(user.screen_name)
+    table = pd.DataFrame.from_dict(raw_table)
+    return table
+
+
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -90,8 +119,13 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
             #If no location argument is passed to the function, it shows the worldwide results.
             table = trending_topics();
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
-        #elif(method_type == "search_user"):
-            #Search user function etc..
+        elif(method_type == "searchFriends"):
+            table = get_friends(username);
+            self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
+
+        elif(method_type == "searchFollowers"):
+            table = get_followers(username);
+            self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
 
 
  

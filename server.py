@@ -89,9 +89,9 @@ def get_friends(word):
 
 def send_direct_message(word, message):
 
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth = tp.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(token, token_secret)
-    api = tweepy.API(auth)
+    api = tp.API(auth)
     api.send_direct_message(screen_name=word, text=message)
 
 #Function for checking two sided following for a user

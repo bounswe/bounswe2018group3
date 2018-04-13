@@ -13,14 +13,16 @@ import pandas as pd
 import tweepy as tp
 from tweepy import OAuthHandler
 
+consumer_key = "" # API key
+consumer_secret = "" # API secret
+
 #Write all functions in this class.
 #Please use comments and necessary format like in example function.
 #****EXAMPLE FUNCTION*****
 #Function for searching tweets.
 #Author: Recep Deniz Aksoy
 def search_tweet(word):
-    consumer_key = "" # API key
-    consumer_secret = "" # API secret
+    
 
     #Getting auth using consumer_token and consumer_secret as auth variable.
     auth = OAuthHandler(consumer_key, consumer_secret) 
@@ -38,8 +40,6 @@ def search_tweet(word):
 #A function that collects trending topics for given location
 #Author: Onur Varkıvanç
 def trending_topics(wloc = 1):
-    consumer_key = "" # API key
-    consumer_secret = "" # API secret
 
     #Getting auth using consumer_token and consumer_secret as auth variable.
     auth = OAuthHandler(consumer_key, consumer_secret) 

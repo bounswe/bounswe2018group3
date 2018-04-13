@@ -150,6 +150,7 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
         username = self.get_argument('username')
         val1 = self.get_argument('val1')
         val2 = self.get_argument('val2')
+        val3 = self.get_argument('val3')
         if(method_type == "search"):
             #Search word in val1 field.
             table = search_tweet(val1)

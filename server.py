@@ -98,6 +98,19 @@ api = tweepy.API(auth)
 api.send_direct_message(screen_name='username', text='try on PC')
 
 
+#Function for checking two sided following for a user
+#Author: Ozge Dincsoy
+def two_sided_following(user):
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    api = tp.API(auth)
+    two_sided_friendship = []
+    user_friends_list = get_friends(user)
+    for friend in user_friends_list:
+        is_following = api.exists_friendship(friend, user)
+        two_sided_friendship.append(friend.screen_name)
+    table = pd.DataFrame.from_dict(two_sided_friendship)
+    return table
+    
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
         dir_path = os.path.dirname(os.path.realpath(__file__))

@@ -85,18 +85,12 @@ def get_friends(word):
 #Function for sending Direct Message
 #Author: Ali Uslu
 
-def send_direct_message(word)
-
-consumer_key = '' #key
-consumer_secret = '' #consumer secret
-token = '' #token
-secret = '' #secret
+def send_direct_message(word, message):
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(token, secret)
+auth.set_access_token(token, token_secret)
 api = tweepy.API(auth)
-api.send_direct_message(screen_name='username', text='try on PC')
-
+api.send_direct_message(screen_name=word, text=message)
 
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
@@ -142,6 +136,9 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
             table = get_followers(username);
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
 
+
+        elif(method_type == "sendDirectMessage"):
+            send_direct_message(username, 'message')
 
  
 class IndexPageHandler(tornado.web.RequestHandler, TemplateRendering):

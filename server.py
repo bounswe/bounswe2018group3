@@ -15,6 +15,8 @@ from tweepy import OAuthHandler
 
 consumer_key = "" # API key
 consumer_secret = "" # API secret
+token = ""
+token_secret = ""
 
 #Write all functions in this class.
 #Please use comments and necessary format like in example function.
@@ -81,16 +83,16 @@ def get_friends(word):
         raw_table.append(user.screen_name)
     table = pd.DataFrame.from_dict(raw_table)
     return table
-
+    
 #Function for sending Direct Message
 #Author: Ali Uslu
 
 def send_direct_message(word, message):
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(token, token_secret)
-api = tweepy.API(auth)
-api.send_direct_message(screen_name=word, text=message)
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(token, token_secret)
+    api = tweepy.API(auth)
+    api.send_direct_message(screen_name=word, text=message)
 
 #Function for checking two sided following for a user
 #Author: Ozge Dincsoy
@@ -169,7 +171,7 @@ class Application(tornado.web.Application):
             (r'/index.html', IndexPageHandler),
             (r'/result', resultHandler)
 #            (r'/logs/(.*)',logsHandler),
-#	    (r'/reports/(.*)',tornado.web.StaticFileHandler,{'path':"./reports/"})
+#       (r'/reports/(.*)',tornado.web.StaticFileHandler,{'path':"./reports/"})
         ]
  
         settings = {

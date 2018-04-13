@@ -120,6 +120,49 @@ def get_favs(username):
     table = pd.DataFrame.from_dict(raw_table)
     return table
 
+#Function to post a tweet specified by the API user.
+#Author: Anıl Can Kara
+def post_tweet(YourTweet):
+ 	#Four necessary information to authenticate a Twitter account.
+    access_token = 'ACCESS_TOKEN'
+    access_secret = 'ACCESS_SECRET'
+    consumer_key = 'CONSUMER_KEY'
+    consumer_secret = 'CONSUMER_SECRET'
+
+ 	#Handles the authentication by taking the consumer keys and access tokens as parameters.
+    authentication = OAuthHandler(consumer_key, consumer_secret) 
+    #If the access token and the access key is not known, redirect the user to authenticate:
+
+    #redirect_user(authentication.get_authorization_url()) 
+    #auth.get_access_token("verifier_value")
+
+    authentication.set_access_token(access_token, access_secret)
+
+ 	#Starts the API on that user instance specified above.
+    api = tweepy.API(authentication)
+
+	#Posts a tweet in that user's account.
+    api.update_status(YourTweet)
+
+#Function to follow back all the users following the authenticated user.
+#Author: Anıl Can Kara
+def follow_back_everybody():
+    access_token = 'ACCESS_TOKEN'
+    access_secret = 'ACCESS_SECRET'
+    consumer_key = 'CONSUMER_KEY'
+    consumer_secret = 'CONSUMER_SECRET'
+
+    #Handles the authentication by taking the consumer keys and access tokens as parameters.
+    authentication = OAuthHandler(consumer_key, consumer_secret)
+    authentication.set_access_token(access_token, access_secret)
+
+    #Starts the API on that user instance specified above
+    api = tweepy.API(authentication)
+
+    #Follow back every follower of that user.
+    for every_follower in tweepy.Cursor(api.followers).items():
+    	every_follower.follow()
+
 
     
 class TemplateRendering:
@@ -172,6 +215,11 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
 
         elif(method_type == "sendDirectMessage"):
             send_direct_message(username, 'message')
+        elif(method_type == "post_tweet"):
+        	#Post the tweet typed into the YourTweet field.
+            post_tweet(YourTweet);
+        elif(method_type == "follow"):
+        	follow_back_everybody();
 
  
 class IndexPageHandler(tornado.web.RequestHandler, TemplateRendering):

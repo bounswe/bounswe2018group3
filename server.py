@@ -35,6 +35,24 @@ def search_tweet(word):
 
     return table
 
+#A function that collects trending topics for given location
+#Author: Onur Varkıvanç
+def trending_topics(wloc = 1):
+    consumer_key = "" # API key
+    consumer_secret = "" # API secret
+
+    #Getting auth using consumer_token and consumer_secret as auth variable.
+    auth = OAuthHandler(consumer_key, consumer_secret) 
+    api = tp.API(auth)
+
+    #Get trending topics for the given location (default value is worldwide, 1) 
+    trends = api.trends_place(wloc)
+    #Printing the names of the topics
+    raw_table = []
+    for trend in trends[0]['trends']:
+        raw_table.append(trend['name']) #may require checking for unicode characters
+    table = pd.DataFrame.from_dict(raw_table)
+    return table
 
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
@@ -67,6 +85,10 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
         if(method_type == "search"):
             #Search word in val1 field.
             table = search_tweet(val1);
+            self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
+        elif(method_type == "tt"):
+            #If no location argument is passed to the function, it shows the worldwide results.
+            table = trending_topics();
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
         #elif(method_type == "search_user"):
             #Search user function etc..

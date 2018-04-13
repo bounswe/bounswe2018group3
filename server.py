@@ -106,6 +106,21 @@ def two_sided_following(user):
         two_sided_friendship.append(friend.screen_name)
     table = pd.DataFrame.from_dict(two_sided_friendship)
     return table
+
+#Function for getting users favorite tweets
+#Author: Umutcan Uvut
+def get_favs(username):
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    api = tp.API(auth)
+    data = api.favorites(id = username)
+    # Printing all 10 tweets.
+    raw_table = []
+    for favs in data:
+        raw_table.append(favs._json['text'])
+    table = pd.DataFrame.from_dict(raw_table)
+    return table
+
+
     
 class TemplateRendering:
     def render_template(self, template_name, variables={}):
@@ -137,20 +152,22 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
         val2 = self.get_argument('val2')
         if(method_type == "search"):
             #Search word in val1 field.
-            table = search_tweet(val1);
+            table = search_tweet(val1)
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
         elif(method_type == "tt"):
             #If no location argument is passed to the function, it shows the worldwide results.
-            table = trending_topics();
+            table = trending_topics()
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
         elif(method_type == "searchFriends"):
-            table = get_friends(username);
+            table = get_friends(username)
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
 
         elif(method_type == "searchFollowers"):
-            table = get_followers(username);
+            table = get_followers(username)
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
-
+        elif (method_type == "getFavs"):
+            table = get_favs(username)
+            self.write(self.render_template('result.html', variables={'result': table.to_html(index=False)}))
 
         elif(method_type == "sendDirectMessage"):
             send_direct_message(username, 'message')

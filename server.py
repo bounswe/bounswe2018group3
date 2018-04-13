@@ -82,6 +82,21 @@ def get_friends(word):
     table = pd.DataFrame.from_dict(raw_table)
     return table
 
+#Function for sending Direct Message
+#Author: Ali Uslu
+
+def send_direct_message(word)
+
+consumer_key = '' #key
+consumer_secret = '' #consumer secret
+token = '' #token
+secret = '' #secret
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(token, secret)
+api = tweepy.API(auth)
+api.send_direct_message(screen_name='username', text='try on PC')
+
 
 class TemplateRendering:
     def render_template(self, template_name, variables={}):

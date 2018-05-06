@@ -135,10 +135,6 @@ def get_favs(username):
 #Author: Anıl Can Kara
 def post_tweet(YourTweet):
  	#Four necessary information to authenticate a Twitter account.
-    access_token = 'ACCESS_TOKEN'
-    access_secret = 'ACCESS_SECRET'
-    consumer_key = 'CONSUMER_KEY'
-    consumer_secret = 'CONSUMER_SECRET'
 
  	#Handles the authentication by taking the consumer keys and access tokens as parameters.
     authentication = OAuthHandler(consumer_key, consumer_secret)
@@ -147,7 +143,7 @@ def post_tweet(YourTweet):
     #redirect_user(authentication.get_authorization_url())
     #auth.get_access_token("verifier_value")
 
-    authentication.set_access_token(access_token, access_secret)
+    authentication.set_access_token(token, token_secret)
 
  	#Starts the API on that user instance specified above.
     api = tweepy.API(authentication)
@@ -158,14 +154,10 @@ def post_tweet(YourTweet):
 #Function to follow back all the users following the authenticated user.
 #Author: Anıl Can Kara
 def follow_back_everybody():
-    access_token = 'ACCESS_TOKEN'
-    access_secret = 'ACCESS_SECRET'
-    consumer_key = 'CONSUMER_KEY'
-    consumer_secret = 'CONSUMER_SECRET'
 
     #Handles the authentication by taking the consumer keys and access tokens as parameters.
     authentication = OAuthHandler(consumer_key, consumer_secret)
-    authentication.set_access_token(access_token, access_secret)
+    authentication.set_access_token(token, token_secret)
 
     #Starts the API on that user instance specified above
     api = tweepy.API(authentication)

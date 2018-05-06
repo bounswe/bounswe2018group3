@@ -194,12 +194,11 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
     def post(self):
         method_type = self.get_argument('method_type')
         username = self.get_argument('username')
-        val1 = self.get_argument('val1')
-        val2 = self.get_argument('val2')
-        val3 = self.get_argument('val3')
+        word = self.get_argument('word')
+        
         if(method_type == "search"):
             #Search word in val1 field.
-            table = search_tweet(val1)
+            table = search_tweet(word)
             self.write(self.render_template('result.html', variables = {'result' : table.to_html(index = False)}))
         elif(method_type == "tt"):
             #If no location argument is passed to the function, it shows the worldwide results.

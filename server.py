@@ -118,6 +118,7 @@ def two_sided_following(user):
             two_sided_friendship.append(friend.screen_name)
     table = pd.DataFrame.from_dict(two_sided_friendship)
     return table
+
 #Function for getting users favorite tweets
 #Author: Umutcan Uvut
 def get_favs(username):
@@ -214,8 +215,9 @@ class resultHandler(tornado.web.RequestHandler, TemplateRendering):
         elif (method_type == "getFavs"):
             table = get_favs(username)
             self.write(self.render_template('result.html', variables={'result': table.to_html(index=False)}))
+		
         elif (method_type == "twoSidedFriendship"):
-            table = get_favs(username)
+            table = two_sided_following(username)
             self.write(self.render_template('result.html', variables={'result': table.to_html(index=False)}))
 
         elif(method_type == "sendDirectMessage"):

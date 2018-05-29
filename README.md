@@ -21,7 +21,7 @@ Our project is creating a social platform for people who like to attend cultural
 
 
 ## Meeting Notes
-[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%235-05.03.2018)
+[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%238-26.03.2018)
 
 _A link to the last meeting notes will be here for convenience._
 _Please update the link when uploading meeting notes._

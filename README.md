@@ -48,6 +48,12 @@ You can find more details in [our wiki](https://github.com/bounswe/bounswe2018gr
 Please use this [Meeting Notes Template](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-Notes-Template) while creating a new page of Meeting Notes.
 
 
+## Milestones
+* [Milestone 1](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-1)
+* [Milestone 2](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-2)
+* [Milestone 3](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-3)
+* [Milestone 4](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-4)
+* [Milestone 5](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-5)
 
 ## Who We Are
 ![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/IMG_20180305_152332.jpg)

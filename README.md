@@ -56,9 +56,7 @@ Please use this [Meeting Notes Template](https://github.com/bounswe/bounswe2018g
 * [Milestone 5](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-5)
 
 ## Who We Are
-![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/IMG_20180305_152332.jpg)
+![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/groupphoto.jpeg)
 
-
-
-| [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu) | [Ali Uslu](https://github.com/bounswe/bounswe2018group3/wiki/Ali-Uslu) | [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın)| [Anıl Can Kara](https://github.com/bounswe/bounswe2018group3/wiki/Anıl-Can-Kara)|[Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç)| [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy) | [A. Emre Yılmaz](https://github.com/bounswe/bounswe2018group3/wiki/Abdurrahman-Emre-Y%C4%B1lmaz)| [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy)  | [Umutcan Uvut](https://github.com/bounswe/bounswe2018group3/wiki/Umutcan-Uvut)     |
-| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+| [Çağdaş Tombul](https://github.com/bounswe/bounswe2018group3/wiki/%C3%87a%C4%9Fda%C5%9F-Tombul) | [Uğurcan Arıkan](https://github.com/bounswe/bounswe2018group3/wiki/U%C4%9Furcan-Ar%C4%B1kan) | [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy) | [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın) | [Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç) | [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy) | [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu) |
+| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |

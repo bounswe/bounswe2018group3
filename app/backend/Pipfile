@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+pip = "==18.0"
+pylint = "*"
+
+[packages]
+django = "==2.0"
+djangorestframework = "==3.8.2"
+markdown = "*"
+django-filter = "*"
+django-rest-auth = "*"
+django-allauth = "*"
+
+[requires]
+python_version = "3.6"

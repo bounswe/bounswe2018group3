@@ -7,61 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca60257b-1415-4963-9fca-2b3d87f4082f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/.idea/caches/build_file_checksums.ser" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/Robin/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/androidTest/java/com/robin/ExampleInstrumentedTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/activities/LoginActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/activities/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/adapters/EventAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/fragments/EventsFragment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/fragments/MainPageFragment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/fragments/ProfileFragment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Annotation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Comment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Event.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Image.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Location.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/Tag.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/com/robin/models/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable-v24/lotus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/ic_event_available_black_24dp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/ic_home_black_24dp.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/culturalactivities/com/robin/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/java/culturalactivities/com/robin/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/ic_person_black_24dp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/logo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/drawable/lotus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/activity_login.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/activity_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/content_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/content_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/fragment_events.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/fragment_main_page.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/fragment_profile.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/layout/simple_event.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/menu/menu_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/menu/menu_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/app/src/test/java/com/robin/ExampleUnitTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/android/Robin/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/android/Robin/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/Robin/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -90,9 +48,9 @@
       </map>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="428" />
-    <option name="y" value="24" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="765" />
+    <option name="y" value="183" />
     <option name="width" value="960" />
     <option name="height" value="1023" />
   </component>
@@ -220,7 +178,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="428" y="24" width="960" height="1023" extended-state="4" />
+    <frame x="765" y="183" width="960" height="1023" extended-state="0" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />

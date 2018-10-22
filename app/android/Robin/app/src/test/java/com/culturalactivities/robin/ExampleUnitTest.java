@@ -1,4 +1,4 @@
-package culturalactivities.com.robin;
+package com.culturalactivities.robin;
 
 import org.junit.Test;
 

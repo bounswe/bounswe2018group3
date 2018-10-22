@@ -1,4 +1,4 @@
-package culturalactivities.com.robin;
+package com.culturalactivities.robin;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("culturalactivities.com.robin", appContext.getPackageName());
+        assertEquals("com.culturalactivities.robin", appContext.getPackageName());
     }
 }

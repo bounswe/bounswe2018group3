@@ -21,9 +21,9 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
         [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-        width: 400,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
         },
     },
     paper: {
@@ -53,76 +53,76 @@ const styles = theme => ({
 
 
 class SignUp extends React.Component {
-  
+
 
     validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
-    }   
-    
-    render(){
+    }
+
+    render() {
         const { classes } = this.props;
         return (
             <React.Fragment>
-            <CssBaseline />
-            <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                <img src={logo} height="140px" width="auto" alt="logo" />
-                <Avatar className={classes.avatar}>
-                    <AddCircleOutline />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign Up
+                <CssBaseline />
+                <main className={classes.layout}>
+                    <Paper className={classes.paper}>
+                        <img src={logo} height="140px" width="auto" alt="logo" />
+                        <Avatar className={classes.avatar}>
+                            <AddCircleOutline />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign Up
                 </Typography>
-                <form className={classes.form}>
-                <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">First Name</InputLabel>
-                    <Input id="fname" name="fname" autoComplete="fname" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Last Name</InputLabel>
-                    <Input id="lname" name="lname" autoComplete="lname" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email" autoComplete="email" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="username">Username</InputLabel>
-                    <Input id="username" name="username" autoComplete="username" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input
-                        name="password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    </FormControl>
-                    <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    >
-                    Sign up
+                        <form className={classes.form}>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">First Name</InputLabel>
+                                <Input id="fname" name="fname" autoComplete="fname" autoFocus />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Last Name</InputLabel>
+                                <Input id="lname" name="lname" autoComplete="lname" autoFocus />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Email Address</InputLabel>
+                                <Input id="email" name="email" autoComplete="email" autoFocus />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="username">Username</InputLabel>
+                                <Input id="username" name="username" autoComplete="username" autoFocus />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Input
+                                    name="password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                />
+                            </FormControl>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign up
                     </Button>
-                    
-                    <Button component={Link} to="/signIn"
-                    type="submit"
-                    fullWidth
-                    variant="text"
-                    color="secondary"
-                    className={classes.submit}
-                    >
-                    Already a member
+
+                            <Button component={Link} to="/signIn"
+                                type="submit"
+                                fullWidth
+                                variant="text"
+                                color="secondary"
+                                className={classes.submit}
+                            >
+                                Already a member
                     </Button>
-                    
-                </form>
-                </Paper>
-            </main>
+
+                        </form>
+                    </Paper>
+                </main>
             </React.Fragment>
         );
     }

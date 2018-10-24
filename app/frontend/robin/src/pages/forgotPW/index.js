@@ -4,18 +4,16 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import LockIcon from '@material-ui/icons/LockOutlined';
+import FingerprintOutlined from '@material-ui/icons/FingerprintOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import logo from '../robin.svg';
 
 import { Link } from "react-router-dom";
-
+  
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -59,10 +57,10 @@ class SignIn extends React.Component{
         <Paper className={classes.paper}>
         <img src={logo} height="140px" width="auto" alt="logo" />
           <Avatar className={classes.avatar}>
-            <LockIcon />
+            <FingerprintOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign In
+            Forgot Password
           </Typography>
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
@@ -70,18 +68,9 @@ class SignIn extends React.Component{
               <Input id="email" name="email" autoComplete="email" autoFocus />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
+              <InputLabel htmlFor="username">Username</InputLabel>
+              <Input id="username" name="username" autoComplete="username" autoFocus />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -89,18 +78,9 @@ class SignIn extends React.Component{
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              Reset Password
             </Button>
-            <Button component={Link} to="/signUp"
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              className={classes.submit}
-            >
-              Sign Up
-            </Button>
-            <Button component={Link} to="/forgotPassword"
+            <Button component={Link} to="/signIn"
               type="submit"
               fullWidth
               variant="text"
@@ -108,7 +88,7 @@ class SignIn extends React.Component{
               mini="true"
               className={classes.submit}
             >
-              Forgot Password
+              Go back to sign in page
             </Button>
           </form>
         </Paper>

@@ -4,14 +4,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import logo from '../robin.svg';
 
 import { Link } from "react-router-dom";
 
@@ -28,7 +27,7 @@ const styles = theme => ({
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.spacing.unit * 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -40,7 +39,7 @@ const styles = theme => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing.unit / 2,
     },
     submit: {
         marginTop: theme.spacing.unit * 3,
@@ -62,7 +61,7 @@ class SignUp extends React.Component {
         <CssBaseline />
         <main className={classes.layout}>
             <Paper className={classes.paper}>
-            <div classname={classes.logo}>Robin</div>
+            <img src={logo} height="140px" width="auto" alt="logo" />
             <Avatar className={classes.avatar}>
                 <AddCircleOutline />
             </Avatar>
@@ -95,10 +94,6 @@ class SignUp extends React.Component {
                     autoComplete="current-password"
                 />
                 </FormControl>
-                <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                />
                 <Button
                 type="submit"
                 fullWidth

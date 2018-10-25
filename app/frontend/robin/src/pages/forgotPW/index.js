@@ -50,52 +50,52 @@ class SignIn extends React.Component{
   render() {
     const { classes } = this.props;
 
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-        <img src={logo} height="140px" width="auto" alt="logo" />
-          <Avatar className={classes.avatar}>
-            <FingerprintOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Forgot Password
-          </Typography>
-          <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="username">Username</InputLabel>
-              <Input id="username" name="username" autoComplete="username" autoFocus />
-            </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Reset Password
-            </Button>
-            <Button component={Link} to="/signIn"
-              type="submit"
-              fullWidth
-              variant="text"
-              color="secondary"
-              mini="true"
-              className={classes.submit}
-            >
-              Go back to sign in page
-            </Button>
-          </form>
-        </Paper>
-      </main>
-    </React.Fragment>
-  );
-}
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <main className={classes.layout}>
+          <Paper className={classes.paper}>
+          <img src={logo} height="140px" width="auto" alt="logo" />
+            <Avatar className={classes.avatar}>
+              <FingerprintOutlined />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Forgot Password
+            </Typography>
+            <form className={classes.form}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="email">Email Address</InputLabel>
+                <Input id="email" name="email" autoComplete="email" autoFocus />
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="username">Username</InputLabel>
+                <Input id="username" name="username" autoComplete="username" autoFocus />
+              </FormControl>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Reset Password
+              </Button>
+              <Button component={Link} to="/signIn"
+                type="submit"
+                fullWidth
+                variant="text"
+                color="secondary"
+                mini="true"
+                className={classes.submit}
+              >
+                Go back to sign in page
+              </Button>
+            </form>
+          </Paper>
+        </main>
+      </React.Fragment>
+    );
+  }
 } 
 
 SignIn.propTypes = {

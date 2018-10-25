@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import logo from '../robin.svg';
+import Image from '../../events.jpg'; 
 
 import { Link } from "react-router-dom";
 
@@ -64,7 +65,10 @@ class SignUp extends React.Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-                <CssBaseline />
+                <div style={{
+                backgroundImage: `url(${Image})`
+            }}>
+            <CssBaseline />
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
                         <img src={logo} height="140px" width="auto" alt="logo" />
@@ -123,6 +127,7 @@ class SignUp extends React.Component {
                         </form>
                     </Paper>
                 </main>
+                </div>
             </React.Fragment>
         );
     }

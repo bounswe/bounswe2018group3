@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
-import Header from "../components/header.js"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "./login.css"
 
-import "../css/login.css"
+import logo from '../robin.svg';
+import androidApp from "./google-play.png"
 
 export default class Login extends React.Component {
 
@@ -15,7 +18,7 @@ export default class Login extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    async handleChange(e) {
+    handleChange(e) {
         const { name, value } = e.target
       
         this.setState({[name] : value,});
@@ -25,15 +28,53 @@ export default class Login extends React.Component {
 
     }
 
+    enableLoginButton(){
+        if(this.state.email === "" || this.state.password === "")
+            return (
+                <button className="btn btn-lg btn-primary btn-block login-button-disabled" disabled type="submit">
+                    Sign in
+                </button>
+            )
+
+        return (
+            <button className="btn btn-lg btn-primary btn-block login-button-enabled" type="submit">
+                Sign in
+            </button>
+        )
+    }
+
     render() {
         return (
-            <div>
-                <Header />
-                <div class="forgotPasswordWrapper">
-                    <h2>Login to your account</h2>
-                    <input type="text" name="email" class="registrationInput input" placeholder="email" onChange={(e)=>this.handleChange(e)}/>
-                    <input type="password" name="password" class="registrationInput input" placeholder="password" onChange={(e)=>this.handleChange(e)}/>
-                    <button type="submit" class="signbut bolder" onClick={this.handleSubmit}>Login</button>
+            <div className="container">
+                <div className="row">
+                    <div className="signin-container">
+                        <div className="account-wall">
+                            <div className="col-md-6 col-md offset-3">
+                                <img src={logo} height="120px" alt="logo" />      
+                            </div>
+                            <h2 className="text-center">Robin</h2>
+                            <form className="form-signin">
+                                <input type="text" className="form-control" placeholder="Email" required autofocus name="email" onChange={this.handleChange}/>
+                                <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
+                                    {this.enableLoginButton()}
+                                <div className="col-md-6 col-md offset-3">
+                                </div>
+                                <hr />
+                                <div className="forgot-password" >
+                                    <Link to="/forgotpassword" className="forgot-password-link">
+                                        <p className="text-center">Forgot Password</p>
+                                    </Link>
+                                </div>
+                            </form>
+                        </div>
+                        <Link to="register" className="register-link">
+                            <p className="text-center new-account">Create an account </p>
+                        </Link>
+                        <div className="text-center">
+                            <p className="download-android-app">Download Android App</p>
+                            <img src={androidApp} height="40px" alt="androidApp" />
+                        </div>        
+                    </div>
                 </div>
             </div>
         )

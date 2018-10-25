@@ -10,7 +10,7 @@ class App extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/" render={() => <Redirect to={"/signIn"} />} />
+        <Route exact path="/" render={() => <Redirect to={"/register"} />} />
         <Route path="/login" component={Login} />
         <Route path="/forgotPassword" component={ForgotPassword} />
         <Route path="/register" component={Register} />

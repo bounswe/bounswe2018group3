@@ -74,11 +74,11 @@
   width: 350px;
   margin: 0 auto;
 }
-.register-button-disabled{
+.button-disabled{
   opacity: 0.5;
   font-size: 16px;
 }
-.register-button-enabled{
+.button-enabled{
   opacity: 1;
   font-size: 16px;
 }

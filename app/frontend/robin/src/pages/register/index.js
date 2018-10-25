@@ -40,13 +40,13 @@ export default class Login extends React.Component {
   enableButton(){
     if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.username === "" || this.state.acceptedTerms === false)
       return (
-        <button className="btn btn-lg btn-primary btn-block register-button-disabled" disabled type="submit">
+        <button className="btn btn-lg btn-primary btn-block button-disabled" disabled type="submit">
           Sign up
         </button>
       )
 
     return (
-      <button className="btn btn-lg btn-primary btn-block register-button-enabled" type="submit">
+      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit">
         Sign up
       </button>
     )

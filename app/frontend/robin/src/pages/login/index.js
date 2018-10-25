@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./login.css"
 
-import logo from '../robin.svg';
-import androidApp from "./google-play.png"
+import logo from '../../images/robin.svg';
+import androidApp from "../../images/google-play.png"
 
 export default class Login extends React.Component {
 

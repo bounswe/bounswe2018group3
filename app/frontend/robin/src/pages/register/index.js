@@ -67,10 +67,10 @@ export default class Login extends React.Component {
                 <input type="text" className="form-control" placeholder="Email" required autofocus name="email" onChange={this.handleChange}/>
                 <input type="text" className="form-control" placeholder="Username" required autofocus name="username" onChange={this.handleChange}/>
                 <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
-                {this.enableButton()}
                 <div className="terms">
                   <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                 </div>
+                {this.enableButton()}
               </form>
             </div>
             <Link to="login" className="login-link">

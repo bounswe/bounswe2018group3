@@ -18,7 +18,6 @@ export default class Login extends React.Component {
       password: "",
       repeatPasswprd: "",
       acceptedTerms: false,
-      formHasErrors: true
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -37,6 +36,10 @@ export default class Login extends React.Component {
   }
 
   handleSubmit(){
+
+  }
+
+  validateUsername(){
 
   }
 
@@ -103,6 +106,12 @@ export default class Login extends React.Component {
     return (
       <div className="container">
         <div className="row">
+          <div className="col-md-7 text-container">
+          <h3>
+            Robin is the latest platform for social activities
+          </h3>
+          </div>
+          <div className="col-md-5">
           <div className="signup-container">
             <div className="account-wall">
               <div className="col-md-6 col-md offset-3">
@@ -127,6 +136,7 @@ export default class Login extends React.Component {
               <p className="download-android-app">Download Android App</p>
               <img src={androidApp} height="40px" alt="androidApp" />
             </div>        
+          </div>
           </div>
         </div>
       </div>

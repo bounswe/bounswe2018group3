@@ -16,9 +16,11 @@ export default class Login extends React.Component {
             email: "",
             username:"",
             password: "",
-            repeatPasswprd: ""
+            repeatPasswprd: "",
+            acceptedTerms: false
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     }
 
     handleChange(e) {
@@ -27,12 +29,16 @@ export default class Login extends React.Component {
         this.setState({[name] : value,});
     }
 
+    handleCheckboxChange(){
+        this.setState({acceptedTerms: !this.state.acceptedTerms})
+    }
+
     handleSubmit(){
 
     }
 
-    enableLoginButton(){
-        if(this.state.email === "" || this.state.password === "")
+    enableButton(){
+        if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.username === "" || this.state.acceptedTerms === false)
             return (
                 <button className="btn btn-lg btn-primary btn-block register-button-disabled" disabled type="submit">
                     Sign up
@@ -61,9 +67,9 @@ export default class Login extends React.Component {
                                 <input type="text" className="form-control" placeholder="Email" required autofocus name="email" onChange={this.handleChange}/>
                                 <input type="text" className="form-control" placeholder="Username" required autofocus name="username" onChange={this.handleChange}/>
                                 <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
-                                {this.enableLoginButton()}
+                                {this.enableButton()}
                                 <div className="terms">
-                                  <input type="checkbox"/> I accecpt terms and conditions
+                                  <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                                 </div>
                             </form>
                         </div>

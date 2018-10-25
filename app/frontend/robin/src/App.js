@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import SignIn from "./pages/signIn/index"
 import SignUp from "./pages/signUp/index"
 import ForgotPassword from "./pages/forgotPW/index"
-import Main from "./pages/main/index"
+import Register from "./pages/register/index"
 import Login from "./pages/login/index"
 
 class App extends React.Component {
@@ -15,7 +15,7 @@ class App extends React.Component {
         <Route path="/login" component={Login} />
         <Route path="/signUp" component={SignUp} />
         <Route path="/forgotPassword" component={ForgotPassword} />
-        <Route path="/main" component={Main} />
+        <Route path="/register" component={Register} />
       </Switch>
     );
   }

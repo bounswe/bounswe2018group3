@@ -49,7 +49,6 @@ export default class Login extends React.Component {
       if(response.status === 200){
         var token = response.data.key;
       }
-      console.log(token);
     }).catch(error => {
       console.error(error);
     })

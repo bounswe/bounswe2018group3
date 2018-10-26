@@ -4,8 +4,12 @@ import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./register.css"
 
+import axios from 'axios';
+
 import logo from '../../images/robin.svg';
-import androidApp from "../../images/google-play.png"
+import androidApp from "../../images/google-play.png";
+
+import { REGISTRATION_URL } from "../constants/backend-urls";
 
 export default class Login extends React.Component {
 
@@ -23,6 +27,7 @@ export default class Login extends React.Component {
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async handleChange(e) {
@@ -35,8 +40,30 @@ export default class Login extends React.Component {
     this.setState({acceptedTerms: !this.state.acceptedTerms})
   }
 
-  handleSubmit(){
-
+  handleSubmit(e){
+    e.preventDefault();
+    var data = {
+      username: this.state.username,
+      email: this.state.email,
+      password1: this.state.password,
+      password2: this.state.password,
+    };
+    var headers= {
+      "Content-Type": "application/json"
+    };
+    var options = {
+      method: "post",
+      url: REGISTRATION_URL,
+      data: data,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        var token = response.data.key;
+      }
+    }).catch(error => {
+      console.error(error);
+    })
   }
 
   validateUsername(){
@@ -93,13 +120,13 @@ export default class Login extends React.Component {
         <button className="btn btn-lg btn-primary btn-block button-disabled" disabled type="submit">
           Sign up
         </button>
-      )
+      );
 
     return (
-      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit">
+      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit" onClick={e => this.handleSubmit(e)}>
         Sign up
       </button>
-    )
+    );
   }
 
   render() {

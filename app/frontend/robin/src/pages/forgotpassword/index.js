@@ -7,7 +7,7 @@ import "./forgotpassword.css"
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
 
-export default class Login extends React.Component {
+export default class ForgotPassword extends React.Component {
 
   constructor(props){
     super(props);

@@ -134,9 +134,9 @@ export default class Login extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-7 text-container">
-          <h3>
-            Robin is the latest platform for social activities
-          </h3>
+            <h3>
+              Robin is the latest platform for social activities
+            </h3>
           </div>
           <div className="col-md-5">
           <div className="signup-container">
@@ -144,7 +144,9 @@ export default class Login extends React.Component {
               <div className="col-md-6 col-md offset-3">
                 <img src={logo} height="120px" alt="logo" />      
               </div>
-              <h2 className="text-center">Robin</h2>
+              <h2 className="text-center">
+                Robin
+              </h2>
               <form className="form-signup">
                 <input type="text" className="form-control" placeholder="Full Name" required autofocus name="name" onChange={this.handleChange}/>
                 <input type="text" className="form-control" placeholder="Username" required autofocus name="username" onChange={this.handleChange}/>

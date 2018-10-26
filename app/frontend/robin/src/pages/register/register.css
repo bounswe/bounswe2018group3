@@ -68,3 +68,7 @@
 .text-container{
   margin-top: 100px;
 }
+.form-error-message{
+  font-size: 10px;
+  color: red;
+}

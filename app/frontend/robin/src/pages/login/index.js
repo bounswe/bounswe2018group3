@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
+import axios from 'axios';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./login.css"
 
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
+
+import { LOGIN_URL } from "../constants/backend-urls";
 
 export default class Login extends React.Component {
 
@@ -25,8 +29,30 @@ export default class Login extends React.Component {
     this.setState({[name] : value,});
   }
 
-  handleSubmit(){
-
+  handleSubmit(e){
+    e.preventDefault();
+    var data = {
+      email: this.state.email,
+      password: this.state.password,
+      username: "paradox"
+    };
+    var headers= {
+      "Content-Type": "application/json"
+    };
+    var options = {
+      method: "post",
+      url: LOGIN_URL,
+      data: data,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        var token = response.data.key;
+      }
+      console.log(token);
+    }).catch(error => {
+      console.error(error);
+    })
   }
 
   enableButton(){
@@ -38,7 +64,7 @@ export default class Login extends React.Component {
       )
 
     return (
-      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit" onClick={this.handleSubmit}>
+      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit" onClick={e => this.handleSubmit(e)}>
         Sign in
       </button>
     )

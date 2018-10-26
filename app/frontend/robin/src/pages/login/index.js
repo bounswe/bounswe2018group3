@@ -16,6 +16,7 @@ export default class Login extends React.Component {
       password: ""
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
@@ -37,7 +38,7 @@ export default class Login extends React.Component {
       )
 
     return (
-      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit">
+      <button className="btn btn-lg btn-primary btn-block button-enabled" type="submit" onClick={this.handleSubmit}>
         Sign in
       </button>
     )

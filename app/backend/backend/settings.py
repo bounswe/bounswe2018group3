@@ -138,7 +138,6 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True   
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 
 # Following is added to enable registration with email instead of username

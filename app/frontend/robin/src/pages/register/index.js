@@ -22,6 +22,7 @@ export default class Login extends React.Component {
       password: "",
       repeatPasswprd: "",
       acceptedTerms: false,
+      redirect: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -62,6 +63,7 @@ export default class Login extends React.Component {
       if(response.status === 201){
         var token = response.data.key;
         response.token = token;
+        this.setState({redirect: true});
       }
     }).catch(error => {
       console.error(error);
@@ -134,6 +136,11 @@ export default class Login extends React.Component {
   }
 
   render() {
+    if(this.state.redirect){
+      return (
+        <Redirect to="/registersuccess"/>
+      );
+    }
     return (
       <div className="container">
         <div className="row">

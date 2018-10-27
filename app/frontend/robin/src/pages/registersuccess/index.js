@@ -8,7 +8,7 @@ import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
 
 
-export default class ForgotPasswordSuccess extends React.Component {
+export default class RegisterSuccess extends React.Component {
 
   constructor(props){
     super(props);
@@ -26,7 +26,7 @@ export default class ForgotPasswordSuccess extends React.Component {
                 </div>
                 <h2 className="text-center">Robin</h2>
                 <form className="form-signin">
-                  <p>A reset mail was sent to your email with the instructions. Please check your email to reset your password.</p>
+                  <p>A confirmation mail was sent to your email with the instructions. Please check your email to activate your account.</p>
                 </form>
             </div>
             <Link to="login" className="register-link">

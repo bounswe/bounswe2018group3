@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./register.css"
@@ -41,6 +41,7 @@ export default class Login extends React.Component {
 
   handleSubmit(e){
     e.preventDefault();
+    var response = {};
     var data = {
       email: this.state.email,
       password1: this.state.password,
@@ -58,10 +59,13 @@ export default class Login extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.key;
+        response.token = token;
       }
     }).catch(error => {
       console.error(error);
+      response.error = error;
     })
+    return( <Redirect to="/home" />)
   }
 
   validateUsername(){

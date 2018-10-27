@@ -3,7 +3,7 @@ from .views import FacebookLogin, ExampleView
 from allauth.account.views import ConfirmEmailView
 from allauth.account.views import confirm_email as allauthemailconfirmation
 from rest_auth.registration.views import VerifyEmailView
-from views import complete_view
+from .views import complete_view
 
 urlpatterns = [
     path('users/', include('users.urls')),

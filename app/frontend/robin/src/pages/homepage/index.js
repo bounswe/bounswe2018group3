@@ -5,6 +5,5 @@ import NavBar from "./navbar"
 export default (props) => {
   return (
       <NavBar />
-    
   );
 };

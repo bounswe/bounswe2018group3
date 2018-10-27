@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./login.css"
@@ -47,7 +48,10 @@ export default class Login extends React.Component {
     };
     axios(options).then(response => {
       if(response.status === 200){
-        var token = response.data.key;
+        var token = response.data.token;
+        console.log(token);
+        Cookies.set("jwtToken", token);
+        console.log(Cookies.get("jwtToken"))
       }
     }).catch(error => {
       console.error(error);

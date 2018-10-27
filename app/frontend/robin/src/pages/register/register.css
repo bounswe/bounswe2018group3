@@ -43,6 +43,7 @@
 .signup-container{
   width: 350px;
   max-width: 350px;
+  margin: 0 auto;
 }
 .button-disabled{
   opacity: 0.5;

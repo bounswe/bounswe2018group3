@@ -18,7 +18,6 @@ export default class Login extends React.Component {
     this.state = {
       name: "",
       email: "",
-      username:"",
       password: "",
       repeatPasswprd: "",
       acceptedTerms: false,
@@ -43,7 +42,6 @@ export default class Login extends React.Component {
   handleSubmit(e){
     e.preventDefault();
     var data = {
-      username: this.state.username,
       email: this.state.email,
       password1: this.state.password,
       password2: this.state.password,
@@ -133,12 +131,12 @@ export default class Login extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-7 text-container">
+          <div className="col-md-7 text-container d-none d-md-block">
             <h3>
               Robin is the latest platform for social activities
             </h3>
           </div>
-          <div className="col-md-5">
+          <div className="col-md-5 col-xs-12">
           <div className="signup-container">
             <div className="account-wall">
               <div className="col-md-6 col-md offset-3">
@@ -149,7 +147,6 @@ export default class Login extends React.Component {
               </h2>
               <form className="form-signup">
                 <input type="text" className="form-control" placeholder="Full Name" required autofocus name="name" onChange={this.handleChange}/>
-                <input type="text" className="form-control" placeholder="Username" required autofocus name="username" onChange={this.handleChange}/>
                 {this.validateEmail()}
                 {this.validatePassword()}
                 <div className="terms">

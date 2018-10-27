@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
 
-    'allauth.socialaccount',
+    'allauth.socialaccount',+
     'allauth.socialaccount.providers.facebook',
 
     'api',
@@ -138,8 +138,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True   
 ACCOUNT_USERNAME_REQUIRED = False
 
-# Required because we do not have an email server.
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Following is added to enable registration with email instead of username
 AUTHENTICATION_BACKENDS = (
@@ -162,5 +161,16 @@ REST_FRAMEWORK = {
 
 REST_USE_JWT = True
 
-
 SITE_ID = 1
+
+# Required because we do not have an email server.
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Test e-mail function
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'bounswegroup3@gmail.com'
+EMAIL_HOST_PASSWORD = 'PASSWORDHERE'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_SUBJECT_PREFIX = '[Test mail]'

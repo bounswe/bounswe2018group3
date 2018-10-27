@@ -11,7 +11,7 @@ import androidApp from "../../images/google-play.png"
 
 import { FORGOT_PASSWORD_URL } from "../constants/backend-urls";
 
-export default class Login extends React.Component {
+export default class ForgotPassword extends React.Component {
 
   constructor(props){
     super(props);

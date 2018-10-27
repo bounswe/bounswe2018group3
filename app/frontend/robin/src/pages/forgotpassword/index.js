@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect, Switch } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./forgotpassword.css"
@@ -17,6 +17,7 @@ export default class ForgotPassword extends React.Component {
     super(props);
     this.state = {
       email: "",
+      redirect: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,10 +50,13 @@ export default class ForgotPassword extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.key;
+        this.setState({redirect: true});
       }
     }).catch(error => {
       console.error(error);
     })
+    
+    console.log(this.state);
   }
 
   checkFormErrors(){
@@ -96,19 +100,25 @@ export default class ForgotPassword extends React.Component {
   }
 
   render() {
+    if(this.state.redirect){
       return (
-        <div className="container">
-          <div className="row">
-            <div className="signin-container">
-              <div className="account-wall">
-                <div className="col-mxs-12">
-                  <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
-                </div>
-                <h2 className="text-center">Robin</h2>
-                <form className="form-signin">
-                  {this.validateEmail()}
-                  {this.enableButton()}
-                </form>
+        <Redirect to="/forgotpasswordsuccess"/>
+      );
+    }
+    else{
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="signin-container">
+            <div className="account-wall">
+              <div className="col-mxs-12">
+                <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
+              </div>
+              <h2 className="text-center">Robin</h2>
+              <form className="form-signin">
+                {this.validateEmail()}
+                {this.enableButton()}
+              </form>
             </div>
             <Link to="register" className="register-link">
               <p className="text-center new-account">Create an account </p>
@@ -121,5 +131,5 @@ export default class ForgotPassword extends React.Component {
         </div>
       </div>
     )
-  }
+  }}
 }

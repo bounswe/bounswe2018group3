@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -18,7 +18,8 @@ export default class Login extends React.Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      redirect: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,6 +78,7 @@ export default class Login extends React.Component {
         console.log(token);
         Cookies.set("jwtToken", token);
         console.log(Cookies.get("jwtToken"))
+        this.setState({redirect: true});
       }
     }).catch(error => {
       console.error(error);
@@ -99,6 +101,11 @@ export default class Login extends React.Component {
   }
 
   render() {
+    if(this.state.redirect === true){
+      return (
+        <Redirect to="/home"/>
+      );
+    }
       return (
         <div className="container">
           <div className="row">

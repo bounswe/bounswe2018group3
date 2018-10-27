@@ -102,7 +102,7 @@ export default class ForgotPassword extends React.Component {
             <div className="signin-container">
               <div className="account-wall">
                 <div className="col-mxs-12">
-                  <img src={logo} className="mx-auto d-block" height="120px" alt="logo" />      
+                  <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
                 </div>
                 <h2 className="text-center">Robin</h2>
                 <form className="form-signin">

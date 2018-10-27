@@ -6,6 +6,8 @@ import ForgotPassword from "./pages/forgotpassword/index"
 import Register from "./pages/register/index"
 import Login from "./pages/login/index"
 import HomePage from "./pages/homepage/index"
+import Profile from "./pages/profile/index"
+import Event from "./pages/eventpage/index"
 
 class App extends React.Component {
   render() {
@@ -16,6 +18,8 @@ class App extends React.Component {
         <Route path="/forgotPassword" component={ForgotPassword} />
         <Route path="/register" component={Register} />
         <Route path="/home" component={HomePage} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/event" component={Event} />
       </Switch>
     );
   }

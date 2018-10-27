@@ -1,32 +1,31 @@
 import React from 'react';
-import { Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { Card, Button, CardTitle, CardText, Row, Col, CardBody, CardSubtitle, CardLink } from 'reactstrap';
 
-const Example = (props) => {
+export default class EventComp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+  }
+  render() {
   return (
+    <div>
     <Row>
-      <Col sm="6">
+      <Col>
       <Card>
         <CardBody>
-          <CardTitle>Card title</CardTitle>
-          <CardSubtitle>Card subtitle</CardSubtitle>
+          <CardTitle>{this.props.title}</CardTitle>
+          <CardSubtitle>{this.props.subtitle}</CardSubtitle>
         </CardBody>
-        <img width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
+        <img width="100%" src={this.props.eventPhoto} alt="Card image cap" />
         <CardBody>
-          <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-          <CardLink href="#">Card Link</CardLink>
-          <CardLink href="#">Another Link</CardLink>
+          <CardText>{this.props.eventDetails}</CardText>
+          <CardLink href="#">Event Tickets</CardLink>
+          <CardLink href="#">Detailed Info</CardLink>
         </CardBody>
       </Card>
       </Col>
-      <Col sm="6">
-        <Card body>
-          <CardTitle>Special Title Treatment</CardTitle>
-          <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-          <Button>Go somewhere</Button>
-        </Card>
-      </Col>
     </Row>
+    </div>
   );
-};
-
-export default Example;
+  }
+}

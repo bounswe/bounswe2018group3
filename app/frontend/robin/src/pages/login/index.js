@@ -21,12 +21,38 @@ export default class Login extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
   }
 
   handleChange(e) {
     const { name, value } = e.target
   
     this.setState({[name] : value,});
+  }
+
+  validateEmail(){
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(this.state.email === ""){
+      return(
+        <input type="text" className="form-control" placeholder="Email" required autofocus name="email" value={this.state.email} onChange={this.handleChange}/>
+      );
+    }
+    else if(re.test(String(this.state.email).toLowerCase())){
+      return(
+        <input type="text" className="form-control is-valid" placeholder="Email" required autofocus name="email" value={this.state.email} onChange={this.handleChange}/>
+      );
+    }
+    else{
+      return(
+        <input type="text" className="form-control is-invalid" placeholder="Email" required autofocus name="email" value={this.state.email} onChange={this.handleChange}/>
+      );
+    }
+  }
+
+  checkFormErrors(){
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var emailValidity = re.test(String(this.state.email).toLowerCase());
+    return emailValidity;
   }
 
   handleSubmit(e){
@@ -54,7 +80,7 @@ export default class Login extends React.Component {
   }
 
   enableButton(){
-    if(this.state.email === "" || this.state.password === "")
+    if(this.state.email === "" || this.state.password === "" || !this.checkFormErrors())
       return (
         <button className="btn btn-lg btn-primary btn-block button-disabled" disabled type="submit">
           Sign in
@@ -79,7 +105,7 @@ export default class Login extends React.Component {
                 </div>
                 <h2 className="text-center">Robin</h2>
                 <form className="form-signin">
-                  <input type="text" className="form-control" placeholder="Email" required autofocus name="email" onChange={this.handleChange}/>
+                  {this.validateEmail()}
                   <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
                   {this.enableButton()}
                   <hr />

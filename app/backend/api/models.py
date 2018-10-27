@@ -9,13 +9,13 @@ class Event(models.Model):
     price = models.FloatField()
     #tags =
     #comments =
-    rating = models.DecimalField(max_digits=3,decimal_places=2)
+    rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
     #images = 
     #attendants =
 
 class Comment(models.Model):
     author = models.CharField(max_length=255)
-    rating = models.DecimalField(max_digits=3,decimal_places=2)
+    rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
     date = models.DateField()
     content = models.TextField()
 

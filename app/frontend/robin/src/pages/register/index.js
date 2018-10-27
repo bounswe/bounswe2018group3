@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./register.css"
+import 'font-awesome/css/font-awesome.min.css';
 
 import axios from 'axios';
 
@@ -64,7 +65,7 @@ export default class Login extends React.Component {
     }).catch(error => {
       console.error(error);
       response.error = error;
-    })
+    });
     return( <Redirect to="/home" />)
   }
 
@@ -143,8 +144,8 @@ export default class Login extends React.Component {
           <div className="col-md-5 col-xs-12">
           <div className="signup-container">
             <div className="account-wall">
-              <div className="col-md-6 col-md offset-3">
-                <img src={logo} height="120px" alt="logo" />      
+              <div className="col-xs-12">
+                <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
               </div>
               <h2 className="text-center">
                 Robin
@@ -157,6 +158,13 @@ export default class Login extends React.Component {
                   <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                 </div>
                 {this.enableButton()}
+                <div class="or-seperator"><i>or</i></div>
+                  <div className="text-center social-text">Login with your social media account</div>
+                  <div class="text-center social-btn">
+                      <a href="#" class="btn btn-primary btn-facebook"><i class="fa fa-facebook"></i>&nbsp; facebook</a>
+                      <a href="#" class="btn btn-info btn-twitter"><i class="fa fa-twitter"></i>&nbsp; twitter</a>
+                      <a href="#" class="btn btn-danger btn-google"><i class="fa fa-google"></i>&nbsp; google</a>
+                  </div>
               </form>
             </div>
             <Link to="login" className="login-link">

@@ -66,10 +66,60 @@
   margin-top: 12px;
   margin-bottom: 8px;
 }
+.social-text{
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
 .text-container{
   margin-top: 100px;
 }
 .form-error-message{
   font-size: 10px;
   color: red;
+}
+.button-divider{
+  width: 100%; 
+  height: 20px; 
+  border-bottom: 1px solid black; 
+  text-align: center;
+}
+.button-divider-text{
+  font-size: 10px; 
+  background-color: #F3F5F6; 
+  padding: 0 10px;
+}
+.social-btn .btn {
+  border: none;
+  margin: 10px 3px 0;
+  opacity: 1;
+}
+.social-btn .btn:hover {
+  opacity: 0.9;
+}
+.social-btn .btn-facebook {
+  background: #507cc0 !important;
+}
+.social-btn .btn-twitter {
+  background: #64ccf1 !important;
+}
+.social-btn .btn-google {
+  background: #df4930 !important;
+}
+.or-seperator {
+  margin-top: 20px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  font-size: 12px;
+}
+.or-seperator i {
+  padding: 0 10px;
+  background: #f7f7f7;
+  position: relative;
+  top: -11px;
+  z-index: 1;
+}
+.img-center{
+  margin: 0 auto;
 }

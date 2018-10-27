@@ -58,7 +58,8 @@ export default class Login extends React.Component {
       headers: headers,
     };
     axios(options).then(response => {
-      if(response.status === 200){
+      console.log(response);
+      if(response.status === 201){
         var token = response.data.key;
         response.token = token;
       }
@@ -113,12 +114,12 @@ export default class Login extends React.Component {
   checkFormErrors(){
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var emailValidity = re.test(String(this.state.email).toLowerCase());
-    var passwordValidity = (this.state.password.length < 20) && (this.state.password.length > 8)
+    var passwordValidity = (this.state.password.length <= 20) && (this.state.password.length >= 8)
     return emailValidity && passwordValidity;
   }
 
   enableButton(){
-    if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.username === "" || this.state.acceptedTerms === false || !this.checkFormErrors())
+    if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.acceptedTerms === false || !this.checkFormErrors())
       return (
         <button className="btn btn-lg btn-primary btn-block button-disabled" disabled type="submit">
           Sign up

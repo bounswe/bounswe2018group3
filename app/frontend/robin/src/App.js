@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import ForgotPassword from "./pages/forgotpassword/index"
+import ForgotPasswordSuccess from "./pages/forgotpasswordsuccess/index"
 import Register from "./pages/register/index"
 import Login from "./pages/login/index"
 import HomePage from "./pages/homepage/index"

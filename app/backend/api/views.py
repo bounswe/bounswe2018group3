@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from rest_framework.decorators import api_view
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
@@ -24,3 +25,7 @@ class ExampleView(APIView):
             'auth': str(request.auth),  # None
         }
         return Response(content)
+
+@api_view()
+def complete_view(request):
+    return Response("Email account is activated")

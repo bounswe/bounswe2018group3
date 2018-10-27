@@ -8,6 +8,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "connected-react-router": "^4.5.0",
+    "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "mdbreact": "^4.8.2",
     "react": "^16.6.0",

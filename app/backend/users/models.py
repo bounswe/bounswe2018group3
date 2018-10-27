@@ -15,7 +15,7 @@ class CustomUser(User):
     #watchingTags
     #followedUsers
     #commentList
-    rating = models.DecimalField(max_digits=3,decimal_places=2);
+    rating = models.DecimalField(max_digits=3,decimal_places=2)
     #eventList
     #blockedUsers
     #blockedTags

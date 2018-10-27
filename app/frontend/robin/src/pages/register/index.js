@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./register.css"
+import 'font-awesome/css/font-awesome.min.css';
 
 import axios from 'axios';
 
@@ -18,7 +19,6 @@ export default class Login extends React.Component {
     this.state = {
       name: "",
       email: "",
-      username:"",
       password: "",
       repeatPasswprd: "",
       acceptedTerms: false,
@@ -42,8 +42,8 @@ export default class Login extends React.Component {
 
   handleSubmit(e){
     e.preventDefault();
+    var response = {};
     var data = {
-      username: this.state.username,
       email: this.state.email,
       password1: this.state.password,
       password2: this.state.password,
@@ -58,12 +58,16 @@ export default class Login extends React.Component {
       headers: headers,
     };
     axios(options).then(response => {
-      if(response.status === 200){
+      console.log(response);
+      if(response.status === 201){
         var token = response.data.key;
+        response.token = token;
       }
     }).catch(error => {
       console.error(error);
-    })
+      response.error = error;
+    });
+    return( <Redirect to="/home" />)
   }
 
   validateUsername(){
@@ -110,12 +114,12 @@ export default class Login extends React.Component {
   checkFormErrors(){
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var emailValidity = re.test(String(this.state.email).toLowerCase());
-    var passwordValidity = (this.state.password.length < 20) && (this.state.password.length > 8)
+    var passwordValidity = (this.state.password.length <= 20) && (this.state.password.length >= 8)
     return emailValidity && passwordValidity;
   }
 
   enableButton(){
-    if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.username === "" || this.state.acceptedTerms === false || !this.checkFormErrors())
+    if(this.state.email === "" || this.state.password === "" || this.state.name === "" || this.state.acceptedTerms === false || !this.checkFormErrors())
       return (
         <button className="btn btn-lg btn-primary btn-block button-disabled" disabled type="submit">
           Sign up
@@ -133,29 +137,35 @@ export default class Login extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-7 text-container">
+          <div className="col-md-7 text-container d-none d-md-block">
             <h3>
               Robin is the latest platform for social activities
             </h3>
           </div>
-          <div className="col-md-5">
+          <div className="col-md-5 col-xs-12">
           <div className="signup-container">
             <div className="account-wall">
-              <div className="col-md-6 col-md offset-3">
-                <img src={logo} height="120px" alt="logo" />      
+              <div className="col-xs-12">
+                <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
               </div>
               <h2 className="text-center">
                 Robin
               </h2>
               <form className="form-signup">
                 <input type="text" className="form-control" placeholder="Full Name" required autofocus name="name" onChange={this.handleChange}/>
-                <input type="text" className="form-control" placeholder="Username" required autofocus name="username" onChange={this.handleChange}/>
                 {this.validateEmail()}
                 {this.validatePassword()}
                 <div className="terms">
                   <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                 </div>
                 {this.enableButton()}
+                <div class="or-seperator"><i>or</i></div>
+                  <div className="text-center social-text">Login with your social media account</div>
+                  <div class="text-center social-btn">
+                      <a href="#" class="btn btn-primary btn-facebook"><i class="fa fa-facebook"></i>&nbsp; facebook</a>
+                      <a href="#" class="btn btn-info btn-twitter"><i class="fa fa-twitter"></i>&nbsp; twitter</a>
+                      <a href="#" class="btn btn-danger btn-google"><i class="fa fa-google"></i>&nbsp; google</a>
+                  </div>
               </form>
             </div>
             <Link to="login" className="login-link">

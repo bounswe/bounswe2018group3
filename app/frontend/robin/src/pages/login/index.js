@@ -34,7 +34,6 @@ export default class Login extends React.Component {
     var data = {
       email: this.state.email,
       password: this.state.password,
-      username: "paradox"
     };
     var headers= {
       "Content-Type": "application/json"

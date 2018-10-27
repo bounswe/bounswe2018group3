@@ -11,11 +11,11 @@ import * as serviceWorker from './serviceWorker';
 
 
 ReactDOM.render(
-    <Provider store={store}>
+    //<Provider store={store}>
         <BrowserRouter history={history}>
             <App />
-        </BrowserRouter>
-    </Provider>,
+        </BrowserRouter>,
+    //</Provider>,
     document.getElementById("root")
 );
 

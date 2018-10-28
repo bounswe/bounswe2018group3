@@ -35,8 +35,4 @@ def complete_view(request):
 @api_view()
 def verification_sent_view(request):
     return Response("Email has been sent to given address!")
-
-@api_view()
-def confirm_email(request):
-    res = requests.post("http://" + request.get_host() + "/rest-auth/registration/verify-email/" , data={"key" : request.key})
-    return Response(res.text)
+    

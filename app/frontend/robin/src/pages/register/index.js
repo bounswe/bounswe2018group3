@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./register.css"
+import "./index.css"
 import 'font-awesome/css/font-awesome.min.css';
 
 import axios from 'axios';
@@ -12,7 +12,7 @@ import androidApp from "../../images/google-play.png";
 
 import { REGISTRATION_URL } from "../constants/backend-urls";
 
-export default class Login extends React.Component {
+export default class Register extends React.Component {
 
   constructor(props){
     super(props);

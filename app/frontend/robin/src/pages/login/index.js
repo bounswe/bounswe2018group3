@@ -5,7 +5,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./login.css"
+import "./index.css"
 
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"

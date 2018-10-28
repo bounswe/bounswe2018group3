@@ -7,7 +7,6 @@ import "./index.css"
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
 
-
 export default class RegisterSuccess extends React.Component {
 
   constructor(props){

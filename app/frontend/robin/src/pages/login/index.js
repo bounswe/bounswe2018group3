@@ -5,7 +5,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./login.css"
+import "./index.css"
 
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
@@ -19,11 +19,13 @@ export default class Login extends React.Component {
     this.state = {
       email: "",
       password: "",
-      redirect: false,
+      redirect: "",
+      error: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
+    this.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   handleChange(e) {
@@ -78,11 +80,23 @@ export default class Login extends React.Component {
         console.log(token);
         Cookies.set("jwtToken", token);
         console.log(Cookies.get("jwtToken"))
-        this.setState({redirect: true});
+        this.setState({redirect: "/home", error: false});
       }
     }).catch(error => {
       console.error(error);
+      this.setState({error: true});
     })
+  }
+
+  handleErrorMessage(){
+    if(this.state.error){
+      return(
+        <div className="text-danger text-center ">
+          Wrong password or email
+        </div>
+      );
+    }
+    return;
   }
 
   enableButton(){
@@ -101,31 +115,32 @@ export default class Login extends React.Component {
   }
 
   render() {
-    if(this.state.redirect === true){
+    if(this.state.redirect !== ""){
       return (
-        <Redirect to="/home"/>
+        <Redirect to={this.state.redirect}/>
       );
     }
-      return (
-        <div className="container">
-          <div className="row">
-            <div className="signin-container">
-              <div className="account-wall">
-                <div className="col-xs-12">
-                  <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="signin-container">
+            <div className="account-wall">
+              <div className="col-xs-12">
+                <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
+              </div>
+              <h2 className="text-center">Robin</h2>
+              <form className="form-signin">
+                {this.validateEmail()}
+                <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
+                {this.handleErrorMessage()}
+                {this.enableButton()}
+                <hr />
+                <div className="forgot-password" >
+                  <Link to="/forgotpassword" className="forgot-password-link">
+                    <p className="text-center forgot-password-text">Forgot Password</p>
+                  </Link>
                 </div>
-                <h2 className="text-center">Robin</h2>
-                <form className="form-signin">
-                  {this.validateEmail()}
-                  <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
-                  {this.enableButton()}
-                  <hr />
-                  <div className="forgot-password" >
-                    <Link to="/forgotpassword" className="forgot-password-link">
-                      <p className="text-center forgot-password-text">Forgot Password</p>
-                    </Link>
-                  </div>
-                </form>
+              </form>
             </div>
             <Link to="register" className="register-link">
               <p className="text-center new-account">Create an account </p>

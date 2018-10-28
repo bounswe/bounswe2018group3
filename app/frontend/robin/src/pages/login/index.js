@@ -20,10 +20,12 @@ export default class Login extends React.Component {
       email: "",
       password: "",
       redirect: "",
+      error: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
+    this.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   handleChange(e) {
@@ -78,11 +80,23 @@ export default class Login extends React.Component {
         console.log(token);
         Cookies.set("jwtToken", token);
         console.log(Cookies.get("jwtToken"))
-        this.setState({redirect: "/home"});
+        this.setState({redirect: "/home", error: false});
       }
     }).catch(error => {
       console.error(error);
+      this.setState({error: true});
     })
+  }
+
+  handleErrorMessage(){
+    if(this.state.error){
+      return(
+        <div className="text-danger text-center ">
+          Wrong password or email
+        </div>
+      );
+    }
+    return;
   }
 
   enableButton(){
@@ -118,6 +132,7 @@ export default class Login extends React.Component {
               <form className="form-signin">
                 {this.validateEmail()}
                 <input type="password" className="form-control" placeholder="Password" required name="password" onChange={this.handleChange}/>
+                {this.handleErrorMessage()}
                 {this.enableButton()}
                 <hr />
                 <div className="forgot-password" >

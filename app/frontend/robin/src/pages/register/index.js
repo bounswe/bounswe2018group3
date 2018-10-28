@@ -22,7 +22,7 @@ export default class Login extends React.Component {
       password: "",
       repeatPasswprd: "",
       acceptedTerms: false,
-      redirect: false,
+      redirect: "",
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -63,13 +63,12 @@ export default class Login extends React.Component {
       if(response.status === 201){
         var token = response.data.key;
         response.token = token;
-        this.setState({redirect: true});
+        this.setState({redirect: "/registersuccess"});
       }
     }).catch(error => {
       console.error(error);
       response.error = error;
     });
-    return( <Redirect to="/home" />)
   }
 
   validateUsername(){
@@ -136,18 +135,23 @@ export default class Login extends React.Component {
   }
 
   render() {
-    if(this.state.redirect){
+    if(this.state.redirect !== ""){
       return (
-        <Redirect to="/registersuccess"/>
+        <Redirect to={this.state.redirect}/>
       );
     }
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-7 text-container d-none d-md-block">
-            <h3>
-              Robin is the latest platform for social activities
-            </h3>
+            <div className="jumbotron">
+              <h3>
+                Robin is the latest platform for social activities
+              </h3>
+              <p>    </p>
+              <p>You can create, follow, attend social events</p>
+              <p>Connect with different people</p>
+            </div>
           </div>
           <div className="col-md-5 col-xs-12">
           <div className="signup-container">

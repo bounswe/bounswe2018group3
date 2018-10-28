@@ -1,4 +1,5 @@
 from django.db import models
+from django.core import validators
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
@@ -7,11 +8,11 @@ class Event(models.Model):
     artist = models.CharField(max_length=255)
     date = models.DateField()
     price = models.FloatField()
-    #tags =
-    #comments =
+    tags = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    comments = models.CharField(validators=[validators.int_list_validator],max_length=255)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    #images = 
-    #attendants =
+    images = models.CharField(validators=[validators.int_list_validator],max_length=255) 
+    attendants = models.CharField(validators=[validators.int_list_validator],max_length=255)
 
 class Comment(models.Model):
     author = models.CharField(max_length=255)
@@ -21,5 +22,5 @@ class Comment(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255,unique=True)
-    #connectedTags =
+    connectedTags = models.CharField(validators=[validators.int_list_validator],max_length=255)
     followerNumber = models.IntegerField()

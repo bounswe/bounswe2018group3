@@ -19,13 +19,13 @@ export default class ForgotPasswordSuccess extends React.Component {
       return (
         <div className="container">
           <div className="row">
-            <div className="signin-container">
+            <div className="forgotpasssword-container">
               <div className="account-wall">
                 <div className="col-mxs-12">
                   <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
                 </div>
                 <h2 className="text-center">Robin</h2>
-                <form className="form-signin">
+                <form className="form-forgotpasssword">
                   <p>A reset mail was sent to your email with the instructions. Please check your email to reset your password.</p>
                 </form>
             </div>

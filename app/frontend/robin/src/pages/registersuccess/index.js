@@ -18,13 +18,13 @@ export default class RegisterSuccess extends React.Component {
       return (
         <div className="container">
           <div className="row">
-            <div className="signin-container">
+            <div className="registersuccess-container">
               <div className="account-wall">
                 <div className="col-mxs-12">
                   <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
                 </div>
                 <h2 className="text-center">Robin</h2>
-                <form className="form-signin">
+                <form className="form-registersuccess">
                   <p>A confirmation mail was sent to your email with the instructions. Please check your email to activate your account.</p>
                 </form>
             </div>

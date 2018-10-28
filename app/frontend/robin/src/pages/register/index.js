@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./register.css"
+import "./index.css"
 import 'font-awesome/css/font-awesome.min.css';
 
 import axios from 'axios';
@@ -12,7 +12,7 @@ import androidApp from "../../images/google-play.png";
 
 import { REGISTRATION_URL } from "../constants/backend-urls";
 
-export default class Login extends React.Component {
+export default class Register extends React.Component {
 
   constructor(props){
     super(props);
@@ -20,14 +20,16 @@ export default class Login extends React.Component {
       name: "",
       email: "",
       password: "",
-      repeatPasswprd: "",
       acceptedTerms: false,
+      redirect: "",
+      error: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   async handleChange(e) {
@@ -62,16 +64,12 @@ export default class Login extends React.Component {
       if(response.status === 201){
         var token = response.data.key;
         response.token = token;
+        this.setState({redirect: "/registersuccess", error: false});
       }
     }).catch(error => {
       console.error(error);
       response.error = error;
     });
-    return( <Redirect to="/home" />)
-  }
-
-  validateUsername(){
-
   }
 
   validatePassword(){
@@ -110,6 +108,17 @@ export default class Login extends React.Component {
       );
     }
   }
+
+  handleErrorMessage(){
+    if(this.state.error){
+      return(
+        <div className="text-danger text-center ">
+          Email already in use
+        </div>
+      );
+    }
+    return;
+  }
   
   checkFormErrors(){
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -134,13 +143,23 @@ export default class Login extends React.Component {
   }
 
   render() {
+    if(this.state.redirect !== ""){
+      return (
+        <Redirect to={this.state.redirect}/>
+      );
+    }
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-7 text-container d-none d-md-block">
-            <h3>
-              Robin is the latest platform for social activities
-            </h3>
+            <div className="jumbotron">
+              <h3>
+                Robin is the latest platform for social activities
+              </h3>
+              <p>    </p>
+              <p>You can create, follow, attend social events</p>
+              <p>Connect with different people</p>
+            </div>
           </div>
           <div className="col-md-5 col-xs-12">
           <div className="signup-container">
@@ -158,6 +177,7 @@ export default class Login extends React.Component {
                 <div className="terms">
                   <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                 </div>
+                {this.handleErrorMessage()}
                 {this.enableButton()}
                 <div class="or-seperator"><i>or</i></div>
                   <div className="text-center social-text">Login with your social media account</div>

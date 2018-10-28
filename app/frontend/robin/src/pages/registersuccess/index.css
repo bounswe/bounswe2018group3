@@ -1,11 +1,11 @@
-.form-forgotpasssword{
+.form-registersuccess{
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
   margin-bottom: 10px;
   font-weight: normal;
 }
-.form-forgotpasssword .form-control{
+.form-registersuccess .form-control{
   position: relative;
   font-size: 16px;
   height: auto;
@@ -15,15 +15,15 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.form-forgotpasssword .form-control:focus{
+.form-registersuccess .form-control:focus{
   z-index: 2;
 }
-.form-forgotpasssword input[type="text"]{
+.form-registersuccess input[type="text"]{
   margin-bottom: -1px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.form-forgotpasssword input[type="password"]{
+.form-registersuccess input[type="password"]{
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -40,7 +40,7 @@
   display: block;
   margin-top: 10px;
 }
-.forgotpasssword-container{
+.registersuccess-container{
 width: 350px;
 margin: 0 auto;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect, Switch } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./forgotpassword.css"
+import "./index.css"
 
 import axios from 'axios';
 
@@ -17,11 +17,13 @@ export default class ForgotPassword extends React.Component {
     super(props);
     this.state = {
       email: "",
-      redirect: false,
+      redirect: "",
+      error: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
+    this.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   handleChange(e) {
@@ -50,13 +52,12 @@ export default class ForgotPassword extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.key;
-        this.setState({redirect: true});
+        this.setState({redirect: "/forgotpasswordsuccess", error: false});
       }
     }).catch(error => {
       console.error(error);
+      this.setState({error: true});
     })
-    
-    console.log(this.state);
   }
 
   checkFormErrors(){
@@ -84,6 +85,17 @@ export default class ForgotPassword extends React.Component {
     }
   }
 
+  handleErrorMessage(){
+    if(this.state.error){
+      return(
+        <div className="text-danger text-center ">
+          No account found with the given email 
+        </div>
+      );
+    }
+    return;
+  }
+
   enableButton(){
     if(this.state.email === "" || !this.checkFormErrors())
       return (
@@ -100,28 +112,29 @@ export default class ForgotPassword extends React.Component {
   }
 
   render() {
-    if(this.state.redirect){
+    if(this.state.redirect !== ""){
       return (
-        <Redirect to="/forgotpasswordsuccess"/>
+        <Redirect to={this.state.redirect}/>
       );
     }
     else{
     return (
       <div className="container">
         <div className="row">
-          <div className="signin-container">
+          <div className="forgotpassword-container">
             <div className="account-wall">
               <div className="col-mxs-12">
                 <img src={logo} className="mx-auto d-block" height="100px" alt="logo" />      
               </div>
               <h2 className="text-center">Robin</h2>
-              <form className="form-signin">
+              <form className="form-forgotpassword">
                 {this.validateEmail()}
+                {this.handleErrorMessage()}
                 {this.enableButton()}
               </form>
             </div>
             <Link to="register" className="register-link">
-              <p className="text-center new-account">Create an account </p>
+              <p className="text-center new-account">Go back to login page </p>
             </Link>
             <div className="text-center">
               <p className="download-android-app">Download Android App</p>

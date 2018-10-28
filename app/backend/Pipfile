@@ -15,6 +15,7 @@ django-filter = "*"
 django-rest-auth = "*"
 django-allauth = "*"
 djangorestframework-jwt = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.6"

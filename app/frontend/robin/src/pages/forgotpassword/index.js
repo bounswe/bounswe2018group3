@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect, Switch } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./forgotpassword.css"
+import "./index.css"
 
 import axios from 'axios';
 

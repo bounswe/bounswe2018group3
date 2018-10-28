@@ -17,7 +17,7 @@ export default class ForgotPassword extends React.Component {
     super(props);
     this.state = {
       email: "",
-      redirect: false,
+      redirect: "",
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,13 +50,11 @@ export default class ForgotPassword extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.key;
-        this.setState({redirect: true});
+        this.setState({redirect: "/forgotpasswordsuccess"});
       }
     }).catch(error => {
       console.error(error);
     })
-    
-    console.log(this.state);
   }
 
   checkFormErrors(){
@@ -100,9 +98,9 @@ export default class ForgotPassword extends React.Component {
   }
 
   render() {
-    if(this.state.redirect){
+    if(this.state.redirect !== ""){
       return (
-        <Redirect to="/forgotpasswordsuccess"/>
+        <Redirect to={this.state.redirect}/>
       );
     }
     else{

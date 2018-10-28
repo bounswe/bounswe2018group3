@@ -12,6 +12,8 @@ from rest_framework.views import APIView
 
 from rest_framework.decorators import api_view
 
+import requests
+
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
@@ -29,7 +31,12 @@ class ExampleView(APIView):
 @api_view()
 def complete_view(request):
     return Response("Email account is activated!")
-    
+
 @api_view()
 def verification_sent_view(request):
     return Response("Email has been sent to given address!")
+
+@api_view()
+def confirm_email(request):
+    res = requests.post("http://" + request.get_host() + "/rest-auth/registration/verify-email/" ,data={"key" : request.key})
+    return Response(res.text)

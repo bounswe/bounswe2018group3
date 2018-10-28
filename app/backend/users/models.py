@@ -9,14 +9,14 @@ class CustomUser(AbstractUser):
     email = models.CharField(max_length=255, validators=[validators.EmailValidator])
     username = models.CharField(max_length=255, unique=True)
     #photo = models.ImageField()
-    #colorScheme
-    #watchingTags
-    #followedUsers
-    #commentList
+    colorScheme = models.IntegerField()
+    watchingTags = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    followedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    commentList = models.CharField(validators=[validators.int_list_validator],max_length=255)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    #eventList
-    #blockedUsers
-    #blockedTags
+    eventList = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    blockedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    blockedTags = models.CharField(validators=[validators.int_list_validator],max_length=255)
 
     def __str__(self):
         return self.email

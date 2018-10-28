@@ -4,4 +4,14 @@ from . import models
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
-        fields = ('name', 'images', 'info', 'price', 'location')
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = '__all__'

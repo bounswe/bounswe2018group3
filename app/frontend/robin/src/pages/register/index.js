@@ -64,7 +64,7 @@ export default class Login extends React.Component {
       if(response.status === 201){
         var token = response.data.key;
         response.token = token;
-        this.setState({redirect: "/registersuccess"});
+        this.setState({redirect: "/registersuccess", error: false});
       }
     }).catch(error => {
       console.error(error);

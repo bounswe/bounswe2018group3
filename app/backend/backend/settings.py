@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'api',
     'users',
+    'events',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

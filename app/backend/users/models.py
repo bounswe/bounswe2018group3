@@ -9,14 +9,14 @@ class CustomUser(AbstractUser):
     email = models.CharField(max_length=255, validators=[validators.EmailValidator])
     username = models.CharField(max_length=255, unique=True)
     #photo = models.ImageField()
-    colorScheme = models.IntegerField()
-    watchingTags = models.CharField(validators=[validators.int_list_validator],max_length=255)
-    followedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255)
-    commentList = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    colorScheme = models.IntegerField(default=0)
+    watchingTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    followedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    commentList = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    eventList = models.CharField(validators=[validators.int_list_validator],max_length=255)
-    blockedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255)
-    blockedTags = models.CharField(validators=[validators.int_list_validator],max_length=255)
+    eventList = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    blockedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    blockedTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
 
     def __str__(self):
         return self.email

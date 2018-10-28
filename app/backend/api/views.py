@@ -28,4 +28,8 @@ class ExampleView(APIView):
 
 @api_view()
 def complete_view(request):
-    return Response("Email account is activated")
+    return Response("Email account is activated!")
+    
+@api_view()
+def verification_sent_view(request):
+    return Response("Email has been sent to given address!")

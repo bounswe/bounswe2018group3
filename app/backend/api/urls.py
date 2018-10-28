@@ -8,11 +8,11 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('users/', include('users.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/account-confirm-email/<str:key>/', allauthemailconfirmation, name='account_confirm_email'),
     path('rest-auth/registration/account-email-verification-sent/', verification_sent_view, name='account_email_verification_sent'),
+    path('rest-auth/registration/complete/', complete_view, name='account_confirm_complete'),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('registration/complete/', complete_view, name='account_confirm_complete'),
+    path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/ExampleView/', ExampleView.as_view()),
 ]

@@ -20,15 +20,16 @@ export default class Login extends React.Component {
       name: "",
       email: "",
       password: "",
-      repeatPasswprd: "",
       acceptedTerms: false,
       redirect: "",
+      error: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   async handleChange(e) {
@@ -71,10 +72,6 @@ export default class Login extends React.Component {
     });
   }
 
-  validateUsername(){
-
-  }
-
   validatePassword(){
     if(this.state.password === ""){
       return (
@@ -110,6 +107,17 @@ export default class Login extends React.Component {
         <input type="text" className="form-control is-invalid" placeholder="Email" required autofocus name="email" value={this.state.email} onChange={this.handleChange}/>
       );
     }
+  }
+
+  handleErrorMessage(){
+    if(this.state.error){
+      return(
+        <div className="text-danger text-center ">
+          Email already in use
+        </div>
+      );
+    }
+    return;
   }
   
   checkFormErrors(){
@@ -169,6 +177,7 @@ export default class Login extends React.Component {
                 <div className="terms">
                   <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
                 </div>
+                {this.handleErrorMessage()}
                 {this.enableButton()}
                 <div class="or-seperator"><i>or</i></div>
                   <div className="text-center social-text">Login with your social media account</div>

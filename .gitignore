@@ -6,3 +6,5 @@ app/backend/api/migrations/*
 app/backend/users/migrations/*
 app/backend/events/migrations/*
 app/.DS_Store
+app/backend/.venv
+app/backend/db.sqlite3

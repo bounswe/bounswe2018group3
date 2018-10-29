@@ -6,7 +6,7 @@ from rest_auth.registration.views import SocialLoginView
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,11 +28,23 @@ class ExampleView(APIView):
         }
         return Response(content)
 
-@api_view()
-def complete_view(request):
-    return Response("Email account is activated!")
 
-@api_view()
-def verification_sent_view(request):
-    return Response("Email has been sent to given address!")
-    
+class CompleteView(APIView):
+    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
+    permission_classes = ()
+
+    def get(self, request, format=None):
+        content = {
+            'detail': "E-mail verification is complete!"
+        }
+        return Response(content)
+
+class VerificationSentView(APIView):
+    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
+    permission_classes = ()
+
+    def get(self, request, format=None):
+        content = {
+            'detail': "E-mail verification is sent!"
+        }
+        return Response(content)

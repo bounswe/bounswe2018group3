@@ -1,7 +1,7 @@
 import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./homepage.css"
+import "./index.css"
 import {
   Collapse,
   Navbar,

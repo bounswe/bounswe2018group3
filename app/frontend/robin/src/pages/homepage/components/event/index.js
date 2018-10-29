@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, CardTitle, CardText, Row, Col, CardBody, CardSubtitle, CardLink } from 'reactstrap';
 
-export default class EventComp extends React.Component {
+export default class Event extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
@@ -10,6 +10,7 @@ export default class EventComp extends React.Component {
   return (
     <div>
     <Row>
+      <div className="event-container"></div>
       <Col>
       <Card>
         <CardBody>

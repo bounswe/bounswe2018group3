@@ -3,13 +3,13 @@ package com.culturalactivities.robin.models;
 public class Comment {
     private User author;
     private String content, date;
-    private double price;
+    private int rating;
 
-    public Comment(User author, String content, String date, double price) {
+    public Comment(User author, String content, String date, int rating) {
         this.author = author;
         this.content = content;
         this.date = date;
-        this.price = price;
+        this.rating = rating;
     }
 
     public User getAuthor() {
@@ -36,11 +36,11 @@ public class Comment {
         this.date = date;
     }
 
-    public double getPrice() {
-        return price;
+    public int getRating() {
+        return rating;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

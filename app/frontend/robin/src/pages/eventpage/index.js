@@ -1,6 +1,6 @@
 import Event from "./event"
 import Comment from "./comment"
-import Navbar from "../homepage/navbar"
+import Navbar from "./components/navbar/index"
 import React from 'react';
 
 export default (props) => {

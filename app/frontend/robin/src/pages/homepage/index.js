@@ -2,12 +2,12 @@ import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 
 import { Button } from 'reactstrap';
-import NavBar from "./navbar"
-import EventComp from "./eventComp.js"
+import NavBar from "./components/navbar"
+import EventComp from "./components/event/index"
 import borisPhoto from "./boris.png"
 import skyGif from "./T9L0.gif"
 import gazaSurf from "./gazaSurf.jpg"
-import "./eventComp.css"
+import "./index.css"
 import Cookies from 'js-cookie';
 
 export default class Home extends React.Component{
@@ -17,7 +17,6 @@ export default class Home extends React.Component{
       redirect: "",
       token: Cookies.get("jwtToken")
     }
-    console.log(this.state.token);
   }
 
   render(){

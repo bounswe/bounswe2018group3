@@ -46,6 +46,7 @@ export default class Register extends React.Component {
     e.preventDefault();
     var response = {};
     var data = {
+      name: this.state.name,
       email: this.state.email,
       password1: this.state.password,
       password2: this.state.password,
@@ -69,6 +70,7 @@ export default class Register extends React.Component {
     }).catch(error => {
       console.error(error);
       response.error = error;
+      this.setState({error: true});
     });
   }
 

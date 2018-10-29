@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#29b6f6</color>
-    <color name="colorPrimaryDark">#0c5b80</color>
-    <color name="colorPrimaryLigth">#d6f2ff</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorPrimary">#40403e</color>
+    <color name="colorPrimaryDark">#151513</color>
+    <color name="colorPrimaryLigth">#dcdcdc</color>
+    <color name="colorAccent">#ea462b</color>
+    <color name="colorFacebook">#49639f</color>
+    <color name="colorGoogle">#ce4331</color>
+
 </resources>

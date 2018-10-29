@@ -4,19 +4,20 @@ import java.util.ArrayList;
 
 public class Event {
     private String eventName, eventInfo, artistInfo, date;
-    private double price, rating;
+    private double price;
+    private float rating;
     private Location location;
     private ArrayList<Comment> comments;
     private ArrayList<User> goingUser;
     private ArrayList<Tag> tags;
-    private ArrayList<Image> imageUrls;
+    private ArrayList<Image> images;
 
     public Event() {
         eventName = "Event Title";
-        imageUrls = new ArrayList<>();
+        images = new ArrayList<>();
     }
 
-    public Event(String eventName, String eventInfo, String artistInfo, String date, double price, double rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> imageUrls) {
+    public Event(String eventName, String eventInfo, String artistInfo, String date, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.eventName = eventName;
         this.eventInfo = eventInfo;
         this.artistInfo = artistInfo;
@@ -27,7 +28,7 @@ public class Event {
         this.comments = comments;
         this.goingUser = goingUser;
         this.tags = tags;
-        this.imageUrls = imageUrls;
+        this.images = images;
     }
 
     public String getEventName() {
@@ -70,11 +71,11 @@ public class Event {
         this.price = price;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -110,11 +111,11 @@ public class Event {
         this.tags = tags;
     }
 
-    public ArrayList<Image> getImageUrls() {
-        return imageUrls;
+    public ArrayList<Image> getImages() {
+        return images;
     }
 
-    public void setImageUrls(ArrayList<Image> imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
     }
 }

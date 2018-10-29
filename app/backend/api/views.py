@@ -1,7 +1,7 @@
 # Create your views here.
 from allauth.socialaccount.providers.facebook.views import \
     FacebookOAuth2Adapter
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_auth.registration.views import SocialLoginView
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
@@ -30,7 +30,6 @@ class ExampleView(APIView):
 
 
 class CompleteView(APIView):
-    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
     permission_classes = ()
 
     def get(self, request, format=None):
@@ -40,7 +39,6 @@ class CompleteView(APIView):
         return Response(content)
 
 class VerificationSentView(APIView):
-    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
     permission_classes = ()
 
     def get(self, request, format=None):

@@ -67,18 +67,18 @@ export default class NavBar extends React.Component {
                 <NavLink href="/components/">Profile</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                <NavLink href="https://github.com/reactstrap/reactstrap">Messages</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Options
+                  More
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Option 1
+                    Settings
                   </DropdownItem>
                   <DropdownItem>
-                    Option 2
+                    Need Help
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem onClick={this.handleLogout}>

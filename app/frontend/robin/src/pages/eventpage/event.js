@@ -28,8 +28,8 @@ import { Card, CardImg, CardText, CardBody, CardLink,
       <Card>
 
       <CardBody>
-        <CardTitle>Card title</CardTitle>
-        <CardSubtitle>Card subtitle</CardSubtitle>
+        <CardTitle>Boris Brejcha for Cercle</CardTitle>
+        <CardSubtitle>Château de Fontainebleau, 24 Oct 2018</CardSubtitle>
       </CardBody>
       <Row>
       <Col sm="6">
@@ -39,7 +39,7 @@ import { Card, CardImg, CardText, CardBody, CardLink,
       <CardBody>
         <Row>
         <Col sm="9">
-        <CardText>For Free</CardText>
+        <CardText>Free</CardText>
         </Col>
         <Col sm="3">
         <StarRatingComponent 
@@ -50,9 +50,9 @@ import { Card, CardImg, CardText, CardBody, CardLink,
         />
         </Col>
         </Row>
-        <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-        <CardLink href="#">Card Link</CardLink>
-        <CardLink href="#">Another Link</CardLink>
+        <CardText>This is the masterpiece of his musical work so far. His unbelievable passion for music combined with the longtime experience as a producer for different genres fuses into this exclusive distinctive and very special sound.</CardText>
+        <CardLink href="#">Join</CardLink>
+        <CardLink href="#">Send Message</CardLink>
       </CardBody>
       </Col></Row>
       </Card>

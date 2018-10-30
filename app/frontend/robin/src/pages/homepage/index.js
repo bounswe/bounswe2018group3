@@ -15,15 +15,21 @@ export default class Home extends React.Component{
     super(props);
     this.state = {
       redirect: "",
-      token: Cookies.get("jwtToken")
+      token: Cookies.get("token")
     }
   }
 
+  componentDidUpdate(){
+      this.setState({token: undefined});
+    
+  }
+
   render(){
+    Cookies.get("token")
     if(this.state.token === undefined){
-      return (
+      return(
         <Redirect to="/login"/>
-      );
+      )
     }
     return (
       <div>

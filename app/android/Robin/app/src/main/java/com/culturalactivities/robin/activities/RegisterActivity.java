@@ -94,6 +94,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
+        if (password1.length() < 8){
+            Toast.makeText(this, "Password must be longer than 8 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog.setMessage(this.getString(R.string.account_is_being_created));
         progressDialog.show();
 
@@ -124,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", username);
+                params.put("name", username);
                 params.put("email", email);
                 params.put("password1", password1);
                 params.put("password2", password2);

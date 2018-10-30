@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNavigation(){
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation = findViewById(R.id.xbottom_navigation);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
         bottomNavigation.setInactiveColor(Color.WHITE);

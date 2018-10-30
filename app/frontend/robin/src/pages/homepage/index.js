@@ -19,13 +19,7 @@ export default class Home extends React.Component{
     }
   }
 
-  componentDidUpdate(){
-      this.setState({token: undefined});
-    
-  }
-
   render(){
-    Cookies.get("token")
     if(this.state.token === undefined){
       return(
         <Redirect to="/login"/>

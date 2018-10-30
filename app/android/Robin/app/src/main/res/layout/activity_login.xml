@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"/>/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -44,7 +44,7 @@
         app:passwordToggleEnabled="true">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/etPassword1"
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
@@ -66,7 +66,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" /><![CDATA[ />
+
+    >>>>>>> aa3837f6997b898e16d3bf4b119e5aecc4074ecf
+
+    ]]>
 
     <Button
         android:id="@+id/buttonFacebook"
@@ -79,9 +83,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorFacebook"
+        app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         android:text="LOG IN WITH FACEBOOK"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
@@ -124,4 +128,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+        app:srcCompat="@drawable/robin" />
 </android.support.constraint.ConstraintLayout>

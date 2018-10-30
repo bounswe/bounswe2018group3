@@ -24,9 +24,9 @@ export default class NavBar extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      redirect: ""
     };
-    Cookies.set("token", "dsca");
     this.handleLogout = this.handleLogout.bind(this);
   }
   toggle() {
@@ -36,13 +36,14 @@ export default class NavBar extends React.Component {
   }
 
   handleLogout(){
-    Cookies.get("token")
     Cookies.remove("token");
-    console.log("removed")
-    Cookies.get("token")
+    this.setState({redirect: "/login"});
   }
 
   render() {
+    if(this.state.redirect !== ""){
+      return (<Redirect to={this.state.redirect}/>)
+    }
     return (
       <div>
         <Navbar light expand="md" className="nav">

@@ -1,12 +1,10 @@
 # Robin 
-![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/small_logo.jpg)
+![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png)
 #### by The Knights Who Say "Ni!"
 
 Welcome to our repository. We are studying on Cultural Activities Project.
 
 Ni! Ni! Ni!
-
-## You can find our Twitter API instance [here](http://206.189.0.140:9090/)
 
 ## Installing dependencies for server
 `pip3 install pipenv`

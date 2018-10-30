@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 
-import { Button } from 'reactstrap';
-import NavBar from "./components/navbar"
+import NavBar from "./components/navbar2/index"
 import EventComp from "./components/event/index"
 import borisPhoto from "./boris.png"
 import skyGif from "./T9L0.gif"

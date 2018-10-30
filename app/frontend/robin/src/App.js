@@ -1,8 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import Cookies from 'js-cookie';
-
 import ForgotPassword from "./pages/forgotpassword/index"
 import ForgotPasswordSuccess from "./pages/forgotpasswordsuccess/index"
 import Register from "./pages/register/index";

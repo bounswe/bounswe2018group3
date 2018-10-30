@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
+import Cookies from 'js-cookie';
 
 import ForgotPassword from "./pages/forgotpassword/index"
 import ForgotPasswordSuccess from "./pages/forgotpasswordsuccess/index"
@@ -12,6 +13,13 @@ import Profile from "./pages/profile/index"
 import Event from "./pages/eventpage/index"
 
 class App extends React.Component {
+
+  componentDidMount(){
+    Cookies.remove("jwtToken");
+    Cookies.remove("token");
+    console.log("App.js");
+  }
+
   render() {
     return (
       <Switch>

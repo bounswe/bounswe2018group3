@@ -25,7 +25,7 @@ export default class Register extends React.Component {
       acceptedTerms: false,
       redirect: "",
       error: false,
-      token: Cookies.get("jwtToken")
+      token: Cookies.get("token")
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);

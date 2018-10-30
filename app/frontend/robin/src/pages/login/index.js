@@ -78,8 +78,8 @@ export default class Login extends React.Component {
       if(response.status === 200){
         var token = response.data.token;
         console.log(token);
-        Cookies.set("jwtToken", token);
-        console.log(Cookies.get("jwtToken"))
+        Cookies.set("token", token);
+        console.log(Cookies.get("token"))
         this.setState({redirect: "/home", error: false});
       }
     }).catch(error => {

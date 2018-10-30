@@ -6,6 +6,7 @@ export default class Event extends React.Component {
     super(props);
     this.props = props;
   }
+  
   render() {
   return (
     <div>

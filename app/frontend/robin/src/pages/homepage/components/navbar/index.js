@@ -35,7 +35,8 @@ export default class NavBar extends React.Component {
     });
   }
 
-  handleLogout(){
+  handleLogout(e){
+    e.preventDefault();
     Cookies.remove("token");
     this.setState({redirect: "/login"});
   }
@@ -81,7 +82,7 @@ export default class NavBar extends React.Component {
                     Need Help
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem onClick={this.handleLogout}>
+                  <DropdownItem onClick={e => this.handleLogout(e)}>
                     Logout
                   </DropdownItem>
                 </DropdownMenu>

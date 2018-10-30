@@ -12,6 +12,8 @@ import androidApp from "../../images/google-play.png";
 
 import { REGISTRATION_URL } from "../constants/backend-urls";
 
+import Cookies from 'js-cookie';
+
 export default class Register extends React.Component {
 
   constructor(props){
@@ -22,7 +24,8 @@ export default class Register extends React.Component {
       password: "",
       acceptedTerms: false,
       redirect: "",
-      error: false
+      error: false,
+      token: Cookies.get("jwtToken")
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -145,7 +148,12 @@ export default class Register extends React.Component {
   }
 
   render() {
-    if(this.state.redirect !== ""){
+    if(this.state.token !== undefined){
+      return (
+        <Redirect to="/home"/>
+      );
+    }
+    else if(this.state.redirect !== ""){
       return (
         <Redirect to={this.state.redirect}/>
       );

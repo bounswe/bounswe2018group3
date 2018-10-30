@@ -26,10 +26,21 @@
     <string name="action_logout">Logout</string>
     <string name="comments">Comments</string>
     <string name="lorem_ipsum_base">Lorem ipsum dolor sit amet</string>
-    <string name="lorem_ipsum_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel laoreet metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. Fusce cursus, risus vitae malesuada ornare, dui lorem aliquam ex, et suscipit ex tellus sit amet augue. Pellentesque ullamcorper blandit massa id semper. Morbi suscipit et ante vel tincidunt. Vestibulum pretium eget orci ut rutrum. Nullam at mi leo. Donec bibendum arcu a faucibus sollicitudin. Donec eget erat sollicitudin, mollis magna quis, consectetur ante.
-
-</string>
+    <string name="lorem_ipsum_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel laoreet metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. Fusce cursus, risus vitae malesuada ornare, dui lorem aliquam ex, et suscipit ex tellus sit amet augue. Pellentesque ullamcorper blandit massa id semper. Morbi suscipit et ante vel tincidunt. Vestibulum pretium eget orci ut rutrum. Nullam at mi leo. Donec bibendum arcu a faucibus sollicitudin. Donec eget erat sollicitudin, mollis magna quis, consectetur ante.</string>
     <string name="price">Price</string>
     <string name="organizer">Organizer</string>
     <string name="sample_tags">pop, music, turkey</string>
+    <string name="title_activity_sign_in">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>

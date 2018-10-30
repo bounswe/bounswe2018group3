@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,12 +36,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences preferences;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         setView();
     }
 
@@ -60,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword1);
+        etPassword = findViewById(R.id.etPassword);
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonFacebook = findViewById(R.id.buttonFacebook);
@@ -83,13 +80,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword1);
+
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonFacebook = findViewById(R.id.buttonFacebook);
+
+        buttonLogin.setOnClickListener(this);
+        buttonFacebook.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.buttonLogin:
-                //openMainActivity("", "","", "");
                 login();
                 break;
             case R.id.buttonFacebook:
@@ -98,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.tvForgotPassword:
+                login();
                 break;
         }
     }

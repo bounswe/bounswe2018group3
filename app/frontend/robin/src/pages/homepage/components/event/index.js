@@ -14,7 +14,7 @@ export default class Event extends React.Component {
       <Col>
       <Card>
         <CardBody>
-          <CardTitle>{this.props.title}</CardTitle>
+          <CardLink href="../event">{this.props.title}</CardLink>
           <CardSubtitle>{this.props.subtitle}</CardSubtitle>
         </CardBody>
         <img width="100%" src={this.props.eventPhoto} alt="Card image cap" />

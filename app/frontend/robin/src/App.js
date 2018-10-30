@@ -14,12 +14,6 @@ import Event from "./pages/eventpage/index"
 
 class App extends React.Component {
 
-  componentDidMount(){
-    Cookies.remove("jwtToken");
-    Cookies.remove("token");
-    console.log("App.js");
-  }
-
   render() {
     return (
       <Switch>

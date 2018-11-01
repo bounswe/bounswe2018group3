@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private String email, username, pk, token;
     public static Typeface ubuntuRegular, ubuntuBold;
+    public static ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setView() {
-
+        progressBar = findViewById(R.id.progressBar);
         token = getIntent().getStringExtra("token");
         pk = getIntent().getStringExtra("pk");
         username = getIntent().getStringExtra("username");

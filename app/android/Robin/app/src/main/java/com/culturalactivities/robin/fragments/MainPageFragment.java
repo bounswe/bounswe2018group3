@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
@@ -57,6 +58,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setView(View view) {
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.home_page));
         recyclerView = view.findViewById(R.id.rvEvents);
         eventAdapter = new EventAdapter(activity, events, MainPageFragment.this);
@@ -94,6 +96,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             events.add(event);
         }
         eventAdapter.notifyDataSetChanged();
+        MainActivity.progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

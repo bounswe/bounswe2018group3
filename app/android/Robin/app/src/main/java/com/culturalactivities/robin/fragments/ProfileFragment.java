@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.activities.MainActivity;
 
 
 /**
@@ -43,6 +44,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setView(View view) {
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.profile));
     }
 }

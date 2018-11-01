@@ -123,13 +123,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", username);
+                params.put("username", username);
                 params.put("email", email);
                 params.put("password1", password1);
                 params.put("password2", password2);

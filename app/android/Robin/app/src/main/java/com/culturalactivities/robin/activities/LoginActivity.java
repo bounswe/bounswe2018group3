@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,14 +81,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword1);
-
-        buttonLogin = findViewById(R.id.buttonLogin);
-        buttonFacebook = findViewById(R.id.buttonFacebook);
-
-        buttonLogin.setOnClickListener(this);
-        buttonFacebook.setOnClickListener(this);
     }
 
     @Override
@@ -102,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.tvForgotPassword:
-                login();
+                //login();
                 break;
         }
     }
@@ -121,6 +114,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
+        Log.d("EMAILL1", email);
+        Log.d("PASSS1", password);
         loginRequest(email, password);
     }
 
@@ -130,9 +125,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        //startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
+                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String token = jsonObject.getString("token");
@@ -156,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         }) {
 
@@ -166,6 +159,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("email", email);
                 params.put("password", password);
                 params.put("Content-Type", "application/json; charset=utf-8");
+                Log.d("PAramss", params.toString());
                 return params;
             }
         };

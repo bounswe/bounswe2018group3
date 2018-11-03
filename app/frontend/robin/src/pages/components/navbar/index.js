@@ -20,6 +20,7 @@ export default class NavBar extends React.Component {
       redirect: ""
     };
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleProfile = this.handleProfile.bind(this);
   }
   toggle() {
     this.setState({
@@ -31,6 +32,11 @@ export default class NavBar extends React.Component {
     e.preventDefault();
     Cookies.remove("token");
     this.setState({redirect: "/login"});
+  }
+
+  handleProfile(e){
+    e.preventDefault();
+    this.setState({redirect: "/profile"});
   }
 
   render() {
@@ -64,7 +70,7 @@ export default class NavBar extends React.Component {
           <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mr-1">
-                <button className="btn"><i className="fa fa-user"/></button>
+                <button className="btn" onClick={e => this.handleProfile(e)}><i className="fa fa-user"/></button>
               </li>
               <li className="nav-item mr-1">
                 <button className="btn"><i className="fa fa-bell"/></button>

@@ -1,8 +1,12 @@
-import Profile from "./profile"
 import React from 'react';
 
+import ProfileCard from "./profile"
+import Navbar from "../components/navbar/index"
 export default (props) => {
   return (
-      <Profile />
+    <div>
+      <Navbar/>
+      <ProfileCard/>
+    </div>
   );
 };

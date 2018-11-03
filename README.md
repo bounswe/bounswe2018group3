@@ -1,5 +1,5 @@
 # Robin 
-<img src="https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png" alt="robin" width="400" style="margin:0 auto"/>
+<img src="https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png" alt="robin" width="300" style="margin:0 auto; display: block;"/>
 
 #### by The Knights Who Say "Ni!"
 

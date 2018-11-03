@@ -1,5 +1,7 @@
 # Robin 
-![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png?style{margin: 0 auto})
+![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png)
+<img src="https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png" alt="drawing" width="200"/>
+
 #### by The Knights Who Say "Ni!"
 
 Welcome to our repository. We are studying on Cultural Activities Project.

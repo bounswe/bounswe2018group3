@@ -1,3 +1,17 @@
+# ROBIN
+Web frontend of Project Robin
+
+To install dependencies, run 
+`npm install`,
+to run the project, run
+`npm start`
+command inside current folder.
+Below you may find readme of create-react-app, with which this project was botstrapped.
+
+
+
+# CREATE REACT APP
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

@@ -1,27 +1,17 @@
 # Robin 
-![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/small_logo.jpg)
+![Brave Sir Robin!](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/Screen%20Shot%202018-10-30%20at%2012.08.59.png)
 #### by The Knights Who Say "Ni!"
 
 Welcome to our repository. We are studying on Cultural Activities Project.
 
 Ni! Ni! Ni!
 
-## You can find our Twitter API instance [here](http://206.189.0.140:9090/)
-
-## Installing dependencies for server
-`pip3 install pipenv`
-
-`pipenv install`
-
-## Running server
-`pipenv run python server.py`
-
 ## Description
 Our project is creating a social platform for people who like to attend cultural activities. Features of our project will be determined throughout this semester.
 
 
 ## Meeting Notes
-[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%238-26.03.2018)
+[Last Meeting](https://github.com/bounswe/bounswe2018group3/wiki/Meeting-%232.5)
 
 _A link to the last meeting notes will be here for convenience._
 _Please update the link when uploading meeting notes._

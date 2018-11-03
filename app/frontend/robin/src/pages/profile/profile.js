@@ -10,7 +10,55 @@ import Cookies from 'js-cookie';
 import "./index.css"
 import "./index.css"
 
+var exampleProfile = {
+  cardInfo: {
+    name: "Jane Bishop",
+    cardSummary: "I am a professional student designer and i love concerts",
+    city: "New York",
+    country: "NY",
+    birthday: "October 23 1990",
+    gender: "Female",
+    relationshipStatus: "Single",
+    occupation: "Dentist",
+    education: "University of Columbia",
+    languages: "English, French"
+  },
+  aboutInfo: {
+    about: "I am a dentist in New York looking for company",
+    interests: "",
+    likes: "I love reading books. I like fishing, yoga, listening to music, and watching movies.",
+    hates: "I hate cooking. I don't like swimming that much.",
+    favourites: "My favourite book is Martin Eden. My favourite musician is Lana del Rey. I love jazz and blues. My favourite movie is Sirpski",
+  }
+}
+
 export default class ProfileCard extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      email: "",
+      cardInfo: {
+        name: "",
+        cardSummary: "",
+        city: "",
+        country: "",
+        birthday: "",
+        gender: "",
+        relationshipStatus: "",
+        occupation: "",
+        education: "",
+        languages: "",
+      },
+      aboutInfo: {
+        about: "",
+        interests: "",
+        likes: "",
+        hates: "",
+        favourites: "",
+      }
+    }
+    this.state = exampleProfile;
+  }
 
   render(){
     return (
@@ -22,14 +70,17 @@ export default class ProfileCard extends React.Component{
                 <div className="card w-100" >
                   <img className="card-img-top w-100" src="https://lh3.googleusercontent.com/a8_ujXr3VWHstGkxgJL1TkqfrytP4r_52QhcvqRQVaQPRQ9DHdQ6seI99qc4jLjC0WDM=h900" alt="Card image"  />
                   <div className="card-body">
-                    <h4 className="card-title">John Niro Yumang</h4>
-                    <p className="card-text">I am a professional student designer and i love concerts</p>
+                    <h4 className="card-title">{this.state.cardInfo.name}</h4>
+                    <p className="card-text">{this.state.cardInfo.cardSummary}</p>
                     <div className="address">								
                       <ul>
-                        <li> <i className="fa fa-map-marker" aria-hidden="true"></i> Pampanga, Phillippines </li>
-                        <li><i className="fa fa-university" aria-hidden="true"></i> University of the Phillippines </li>
-                        <li><i className="fa fa-heart" aria-hidden="true"></i> Single </li>
-                        <li><i className="fa fa-calendar-o" aria-hidden="true"></i> October 23 1990 </li>
+                        <li> <i className="fa fa-map-marker" aria-hidden="true"></i> {this.state.cardInfo.city}, {this.state.cardInfo.country} </li>
+                        <li><i className="fa fa-calendar-o" aria-hidden="true"></i> {this.state.cardInfo.birthday} </li>
+                        <li><i className="fa fa-transgender" aria-hidden="true"></i> {this.state.cardInfo.gender} </li>
+                        <li><i className="fa fa-heart" aria-hidden="true"></i> {this.state.cardInfo.relationshipStatus} </li>
+                        <li><i className="fa fa-university" aria-hidden="true"></i> {this.state.cardInfo.occupation} </li>
+                        <li><i className="fa fa-book" aria-hidden="true"></i> {this.state.cardInfo.education} </li>
+                        <li><i className="fa fa-comments" aria-hidden="true"></i> {this.state.cardInfo.languages} </li>
                       </ul>								
                     </div>
                     <div class="text-center social-btn">
@@ -63,13 +114,21 @@ export default class ProfileCard extends React.Component{
                   <div class="tab-pane active" id="profile">
                     <div class="row">
                       <div class="col-md-12">
-                        <h4>About</h4>
-                        <p> Web Designer, UI/UX Engineer</p>
-                        <h5>Hobbies</h5>
-                        <p>Indie music, skiing and hiking. I love the great outdoors.</p>
+                        <h5>About</h5>
+                        <p> {this.state.aboutInfo.about}</p>
+                        <hr/>
+                        <h5>Things I like</h5>
+                        <p>{this.state.aboutInfo.likes}</p>
+                        <hr/>
+                        <h5>Things I don't like</h5>
+                        <p>{this.state.aboutInfo.hates}</p>
+                        <hr/>
+                        <h5>Favourite movie, book, music, meal...</h5>
+                        <p>{this.state.aboutInfo.favourites}</p>
+                        <hr/>
                       </div>
                       <div className="col-md-12">
-                        <h5>Favourite tags</h5>
+                        <h5>Interests</h5>
                         <a href="#" class="badge badge-dark badge-pill">html5</a>
                         <a href="#" class="badge badge-dark badge-pill">react</a>
                         <a href="#" class="badge badge-dark badge-pill">codeply</a>
@@ -79,120 +138,79 @@ export default class ProfileCard extends React.Component{
                         <a href="#" class="badge badge-dark badge-pill">bootstrap</a>
                         <a href="#" class="badge badge-dark badge-pill">responsive-design</a>
                       </div>
-                      <div class="col-md-12">
-                        <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
-                        <table class="table table-sm table-hover table-striped">
-                          <tbody>                                    
-                            <tr>
-                              <td>
-                                <strong>Abby</strong> joined ACME Project Team in <strong>`Collaboration`</strong>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <strong>Gary</strong> deleted My Board1 in <strong>`Discussions`</strong>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <strong>Kensington</strong> deleted MyBoard3 in <strong>`Discussions`</strong>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <strong>John</strong> deleted My Board1 in <strong>`Discussions`</strong>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <strong>Skell</strong> deleted his post Look at Why this is.. in <strong>`Discussions`</strong>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </div>
                   </div>
                   <div class="tab-pane" id="edit">
                     <form role="form">
                       <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">First name</label>
+                        <label class="col-lg-3 col-form-label form-control-label">Name</label>
                         <div class="col-lg-9">
-                          <input class="form-control" type="text" value="Jane"/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Last name</label>
-                        <div class="col-lg-9">
-                          <input class="form-control" type="text" value="Bishop"/>
+                          <input class="form-control" type="text" value={this.state.cardInfo.name}/>
                         </div>
                       </div>
                       <div class="form-group row">
                         <label class="col-lg-3 col-form-label form-control-label">Email</label>
                         <div class="col-lg-9">
-                          <input class="form-control" type="email" value="email@gmail.com"/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Company</label>
-                        <div class="col-lg-9">
-                          <input class="form-control" type="text" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Website</label>
-                        <div class="col-lg-9">
-                          <input class="form-control" type="url" value=""/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Address</label>
-                        <div class="col-lg-9">
-                          <input class="form-control" type="text" value="" placeholder="Street"/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label"></label>
-                        <div class="col-lg-6">
-                          <input class="form-control" type="text" value="" placeholder="City"/>
-                        </div>
-                        <div class="col-lg-3">
-                          <input class="form-control" type="text" value="" placeholder="State"/>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Time Zone</label>
-                        <div class="col-lg-9">
-                          <select id="user_time_zone" class="form-control" size="0">
-                            <option value="Hawaii">(GMT-10:00) Hawaii</option>
-                            <option value="Alaska">(GMT-09:00) Alaska</option>
-                            <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-                            <option value="Arizona">(GMT-07:00) Arizona</option>
-                            <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-                            <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-                            <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-                            <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Username</label>
-                        <div class="col-lg-9">
-                          <input class="form-control" type="text" value="janeuser"/>
+                          <input class="form-control" type="email" value={this.state.cardInfo.email}/>
                         </div>
                       </div>
                       <div class="form-group row">
                         <label class="col-lg-3 col-form-label form-control-label">Password</label>
                         <div class="col-lg-9">
-                          <input class="form-control" type="password" value="11111122333"/>
+                          <input class="form-control" type="password"/>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Confirm password</label>
+                        <label class="col-lg-3 col-form-label form-control-label">Short Summary</label>
                         <div class="col-lg-9">
-                          <input class="form-control" type="password" value="11111122333"/>
+                          <input class="form-control" type="text" value={this.state.cardInfo.cardSummary}/>
                         </div>
                       </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">City and Country</label>
+                        <div class="col-lg-6">
+                          <input class="form-control" type="text" value={this.state.cardInfo.city} placeholder="City"/>
+                        </div>
+                        <div class="col-lg-3">
+                          <input class="form-control" type="text" value={this.state.cardInfo.country} placeholder="State"/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Birthday</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text"/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Gender</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text"/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Relationship Status</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text"/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Occupation</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text" value={this.state.cardInfo.occupation}/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Education</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text" value={this.state.cardInfo.education}/>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label">Languages</label>
+                        <div class="col-lg-9">
+                          <input class="form-control" type="text" value={this.state.cardInfo.education}/>
+                        </div>
+                      </div>   
                       <div class="form-group row">
                         <label class="col-lg-3 col-form-label form-control-label"></label>
                         <div class="col-lg-9">

@@ -3,8 +3,6 @@ import "./eventpage.css"
 
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
-import { Card, CardImg, CardText, CardBody, CardLink,
-  CardTitle, CardSubtitle, Row, Col } from 'reactstrap';
 
 
   export default class Comment extends React.Component {

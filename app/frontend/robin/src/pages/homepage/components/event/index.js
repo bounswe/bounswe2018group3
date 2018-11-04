@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, Button, CardTitle, CardText, Row, Col, CardBody, CardSubtitle, CardLink } from 'reactstrap';
 
 export default class Event extends React.Component {
   constructor(props) {

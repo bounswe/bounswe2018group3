@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./eventpage.css"
-
+import "./eventpage.css";
+import borisPhoto from "../homepage/boris.png";
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
 import { Card, CardImg, CardText, CardBody, CardLink,
@@ -25,6 +25,36 @@ import { Card, CardImg, CardText, CardBody, CardLink,
 
         return (
 
+          <div class="card">
+          <h3 class="card-title">Card title</h3>
+          <div class="row">
+            <div class="col-sm-6">
+              <img class="card-img-top" src={borisPhoto} alt="Card image cap" />
+            </div>
+            <div class="col-sm-6">
+            <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-10">
+                    Price:
+                  </div>
+                  <div class="col-sm-2">
+                  <StarRatingComponent 
+                  name="rate1" 
+                  starCount={5}
+                  value={rating}
+                  onStarClick={this.onStarClick.bind(this)}
+                  />  
+                  </div>
+                </div>
+
+                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            </div>
+          </div>
+
+        </div>
+        /** 
       <Card>
 
       <CardBody>
@@ -56,6 +86,7 @@ import { Card, CardImg, CardText, CardBody, CardLink,
       </CardBody>
       </Col></Row>
       </Card>
+      */
       )
     }
   }

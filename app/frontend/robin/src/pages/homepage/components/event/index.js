@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, Button, CardTitle, CardText, Row, Col, CardBody, CardSubtitle, CardLink } from 'reactstrap';
 
 export default class Event extends React.Component {
   constructor(props) {
@@ -10,23 +9,23 @@ export default class Event extends React.Component {
   render() {
   return (
     <div>
-    <Row>
+    <div class="row">
       <div className="event-container"></div>
-      <Col>
-      <Card>
-        <CardBody>
-          <CardLink href="../event">{this.props.title}</CardLink>
-          <CardSubtitle>{this.props.subtitle}</CardSubtitle>
-        </CardBody>
+      <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <a href="../event">{this.props.title}</a>
+          <div class="card-title">{this.props.subtitle}</div>
+        </div>
         <img width="100%" src={this.props.eventPhoto} alt="Card image cap" />
-        <CardBody>
-          <CardText>{this.props.eventDetails}</CardText>
-          <CardLink href="#">Event Tickets</CardLink>
-          <CardLink href="#">Detailed Info</CardLink>
-        </CardBody>
-      </Card>
-      </Col>
-    </Row>
+        <div class="card-body">
+          <div class="card-text">{this.props.eventDetails}</div>
+          <a href="#">Event Tickets</a>
+          <a href="#">Detailed Info</a>
+        </div>
+      </div>
+      </div>
+    </div>
     </div>
   );
   }

@@ -10,7 +10,7 @@ export default (props) => {
     <Navbar />
       <Event />
       <h2></h2>
-      <h2>
+      <h2 style={{margin:'22px'}}>
       Comments:
       </h2>
       <Comment />

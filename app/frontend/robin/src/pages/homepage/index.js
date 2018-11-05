@@ -26,7 +26,9 @@ export default class Home extends React.Component{
     }
     return (
       <div>
-        <NavBar />
+        <div className="mb-70">
+          <NavBar />
+        </div>
         <div className="eventContainer col-md-6">
           <EventComp title="Boris Brejcha for Cercle" subtitle="Château de Fontainebleau, 24 Oct 2018"
             eventPhoto={borisPhoto} eventDetails=" This is the masterpiece of his musical work so far. His unbelievable passion for music combined with the longtime experience as a producer for different genres fuses into this exclusive distinctive and very special sound. "/>

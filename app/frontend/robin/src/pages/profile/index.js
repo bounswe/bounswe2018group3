@@ -5,7 +5,9 @@ import Navbar from "../components/navbar/index"
 export default (props) => {
   return (
     <div>
-      <Navbar/>
+      <div className="mb-70">
+        <Navbar/>
+      </div>
       <ProfileCard/>
     </div>
   );

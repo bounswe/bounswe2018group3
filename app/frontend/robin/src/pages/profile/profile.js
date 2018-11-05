@@ -82,7 +82,7 @@ export default class ProfileCard extends React.Component{
 
   render(){
     return (
-      <div className="wrapper mt-70">
+      <div className="wrapper">
         <div className="container-fluid" id="body-container-fluid">
           <div className="container">
             <div className="row">
@@ -111,7 +111,6 @@ export default class ProfileCard extends React.Component{
                   </div>
                 </div>		
               </div>
-
               <div className="col-lg-8 col-md-6 order-lg-2">
                 <ul className="nav nav-tabs">
                   <li className="nav-item">

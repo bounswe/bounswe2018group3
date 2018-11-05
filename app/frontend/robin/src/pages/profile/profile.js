@@ -25,6 +25,9 @@ var exampleProfile = {
   likes: "I love reading books. I like fishing, yoga, listening to music, and watching movies.",
   hates: "I hate cooking. I don't like swimming that much.",
   favourites: "My favourite book is Martin Eden. My favourite musician is Lana del Rey. I love jazz and blues. My favourite movie is Sirpski",
+  attendedEvents: "Duman Concert, May 2017, Istanbul\nTasoda Festival, April 2017, Bogazici",
+  willAttendEvents: "Coffee Fest, November 2018, Istanbul",
+  createdEvents: "Home Party, September 2018, Istanbul",
 }
 
 export default class ProfileCard extends React.Component{
@@ -48,9 +51,15 @@ export default class ProfileCard extends React.Component{
       likes: "",
       hates: "",
       favourites: "",
+      attendedEvents: "",
+      willAttendEvents: "",
+      createdEvents: "",
     }
     this.state = exampleProfile;
+    this.oldState = this.state;
+
     this.handleChange = this.handleChange.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   async handleChange(e) {
@@ -58,6 +67,14 @@ export default class ProfileCard extends React.Component{
   
     await this.setState({[name] : value,});
     console.log(this.state);
+  }
+
+  handleCancel(){
+    this.setState(this.oldState);
+  }
+
+  handleSave(){
+
   }
 
   render(){
@@ -98,13 +115,13 @@ export default class ProfileCard extends React.Component{
                     <a href="" data-target="#profile" data-toggle="tab" className="nav-link active">About</a>
                   </li>
                   <li className="nav-item">
-                    <a href="" data-target="#edit" data-toggle="tab" className="nav-link">Events</a>
+                    <a href="" data-target="#events" data-toggle="tab" className="nav-link">Events</a>
                   </li>
                   <li className="nav-item">
-                    <a href="" data-target="#edit" data-toggle="tab" className="nav-link">Friends</a>
+                    <a href="" data-target="#friends" data-toggle="tab" className="nav-link">Friends</a>
                   </li>
                   <li className="nav-item">
-                    <a href="" data-target="#edit" data-toggle="tab" className="nav-link">Photos</a>
+                    <a href="" data-target="#photos" data-toggle="tab" className="nav-link">Photos</a>
                   </li>
                   <li className="nav-item">
                     <a href="" data-target="#edit" data-toggle="tab" className="nav-link">Edit</a>
@@ -137,6 +154,39 @@ export default class ProfileCard extends React.Component{
                         <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                         <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
                         <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="tab-pane" id="events">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <h5>Events I have attended to</h5>
+                        <p> {this.state.attendedEvents}</p>
+                        <hr/>
+                        <h5>Events I will attend to</h5>
+                        <p>{this.state.willAttendEvents}</p>
+                        <hr/>
+                        <h5>Things I have created</h5>
+                        <p>{this.state.createdEvents}</p>
+                        <hr/>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="tab-pane" id="friends">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <h5>Friends</h5>
+                        <p> </p>
+                        <hr/>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="tab-pane" id="photos">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <h5>Photos</h5>
+                        <p> </p>
+                        <hr/>
                       </div>
                     </div>
                   </div>
@@ -241,11 +291,13 @@ export default class ProfileCard extends React.Component{
                           <input className="form-control" type="text" name="interests" value={this.state.interests}/>
                         </div>
                       </div>
-                      <div clasclassNames="form-group row">
+                      <div clasclassNames="form-group row ">
                         <label className="col-lg-3 col-form-label form-control-label"></label>
-                        <div className="col-lg-9">
-                          <input type="reset" className="btn btn-secondary" value="Cancel"/>
-                          <input type="button" className="btn btn-primary" value="Save Changes"/>
+                        <div className="col-lg-9 mx-auto">
+                          <div className="col-lg-7 mx-auto">
+                            <input type="reset" className="btn btn-danger" value="Cancel" onClick={this.handleCancel}/>
+                            <input type="button" className="btn btn-success float-right" value="Submit"/>
+                          </div>
                         </div>
                       </div>
                     </form>

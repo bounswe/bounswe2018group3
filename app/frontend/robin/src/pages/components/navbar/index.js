@@ -53,15 +53,17 @@ export default class NavBar extends React.Component {
           <div className="mx-auto mx-0 order-0 col-md-6">
             <ul className="navbar-nav mx-auto">
               <li className="nav-item active mx-auto w-100">
-                <form className="form-inline my-2 my-lg-0 mx-auto w-80">
-                  <input className="form-control mr-sm-2 col-10" type="search" aria-label="Search" placeholder="search"/>
-                  <span className="input-group-btn">
-                    <button className="btn btn-default" type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </span>
-                </form>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <div className="float-left w-80">
+                  <form className="form-inline my-2 my-lg-0 mx-0 w-100">
+                    <input className="form-control col-10 col-md-8 col-lg-10" type="search" aria-label="Search" placeholder="search"/>
+                    <span className="input-group-btn float-right">
+                      <button className="btn btn-default" type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </form>
+                </div>
+                <button className="navbar-toggler float-right w-20 my-3" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                   <span className="navbar-toggler-icon"></span>
                 </button>
               </li>

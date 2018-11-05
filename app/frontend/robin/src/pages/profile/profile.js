@@ -94,7 +94,7 @@ export default class ProfileCard extends React.Component{
                     <p className="card-text">{this.state.cardSummary}</p>
                     <div className="address">								
                       <ul>
-                        <li> <i className="fa fa-map-marker" aria-hidden="true"></i> {this.state.city}, {this.state.country} </li>
+                        <li><i className="fa fa-map-marker" aria-hidden="true"></i> {this.state.city}, {this.state.country} </li>
                         <li><i className="fa fa-calendar-o" aria-hidden="true"></i> {this.state.birthday} </li>
                         <li><i className="fa fa-transgender" aria-hidden="true"></i> {this.state.gender} </li>
                         <li><i className="fa fa-heart" aria-hidden="true"></i> {this.state.relationshipStatus} </li>
@@ -177,10 +177,38 @@ export default class ProfileCard extends React.Component{
                   </div>
                   <div className="tab-pane" id="friends">
                     <div className="row">
-                      <div className="col-md-12">
+                      <div className="col-12">
                         <h5>Friends</h5>
-                        <p> </p>
-                        <hr/>
+                        <div className="container">
+                          <div className="card card-default">
+                            <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
+                              <ul className="list-unstyled ">
+                                <li className="list-item col-6 float-left mx-0">
+                                  <div className="col-sm-4 col-md-2 px-0 float-left">
+                                    <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
+                                  </div>
+                                  <div className="col-sm-8 col-md-10 float-right">
+                                    <label className="name lead">Mike Anamendolla</label>
+                                    <br/>
+                                    <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
+                                    <br/>
+                                  </div>
+                                </li>
+                                <li className="list-item col-6 float-right mx-0">
+                                  <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
+                                    <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
+                                  </div>
+                                  <div className="col-12 col-sm-8 col-md-10 float-right">
+                                    <label className="name lead">Debbie Schmidt</label>
+                                    <br/>
+                                    <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
+                                    <br/>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

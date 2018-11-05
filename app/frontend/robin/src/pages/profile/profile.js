@@ -6,7 +6,6 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import "jquery/dist/jquery.min.js";
 
 import 'font-awesome/css/font-awesome.min.css';
-import Cookies from 'js-cookie';
 import "./index.css"
 
 var exampleProfile = {
@@ -62,6 +61,10 @@ export default class ProfileCard extends React.Component{
     this.handleCancel = this.handleCancel.bind(this);
   }
 
+  componentDidMount(){
+
+  }
+
   async handleChange(e) {
     const { name, value } = e.target
   
@@ -74,7 +77,7 @@ export default class ProfileCard extends React.Component{
   }
 
   handleSave(){
-
+    this.oldState = this.state;
   }
 
   render(){
@@ -293,11 +296,9 @@ export default class ProfileCard extends React.Component{
                       </div>
                       <div clasclassNames="form-group row ">
                         <label className="col-lg-3 col-form-label form-control-label"></label>
-                        <div className="col-lg-9 mx-auto">
-                          <div className="col-lg-7 mx-auto">
-                            <input type="reset" className="btn btn-danger" value="Cancel" onClick={this.handleCancel}/>
-                            <input type="button" className="btn btn-success float-right" value="Submit"/>
-                          </div>
+                        <div className="col-lg-4 mx-auto">
+                          <input type="reset" className="btn btn-danger" value="Cancel" onClick={this.handleCancel}/>
+                          <input type="button" className="btn btn-success float-right" value="Submit"/>
                         </div>
                       </div>
                     </form>

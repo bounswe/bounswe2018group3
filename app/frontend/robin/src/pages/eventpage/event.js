@@ -24,18 +24,18 @@ import StarRatingComponent from 'react-star-rating-component';
         return (
 
           <div class="card">
-          <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px'}}>Card title</h3>
+          <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>Card title</h3>
           <div class="row">
             <div class="col-sm-6">
               <img class="card-img-top img-fluid shadow-lg bg-white" src={borisPhoto} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
             </div>
             <div class="col-sm-6">
             <div class="card-body">
-                <div class="row" style={{marginLeft:'20px'}}>
-                  <div class="col-sm-10">
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
                     Price:
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
                   <StarRatingComponent 
                   name="rate1" 
                   starCount={5}
@@ -45,10 +45,10 @@ import StarRatingComponent from 'react-star-rating-component';
                   </div>
                 </div>
                 <div class="row" style={{marginLeft:'15px'}}>
-                  <div class="col-sm-10">
+                  <div class="col-sm-9">
                   Date-Time :
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
                   User
                   </div>
                 </div>

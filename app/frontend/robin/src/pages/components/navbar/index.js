@@ -20,6 +20,7 @@ export default class NavBar extends React.Component {
       redirect: ""
     };
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleProfile = this.handleProfile.bind(this);
   }
   toggle() {
     this.setState({
@@ -31,6 +32,11 @@ export default class NavBar extends React.Component {
     e.preventDefault();
     Cookies.remove("token");
     this.setState({redirect: "/login"});
+  }
+
+  handleProfile(e){
+    e.preventDefault();
+    this.setState({redirect: "/profile"});
   }
 
   render() {
@@ -47,15 +53,17 @@ export default class NavBar extends React.Component {
           <div className="mx-auto mx-0 order-0 col-md-6">
             <ul className="navbar-nav mx-auto">
               <li className="nav-item active mx-auto w-100">
-                <form className="form-inline my-2 my-lg-0 mx-auto w-80">
-                  <input className="form-control mr-sm-2 col-10" type="search" aria-label="Search" placeholder="search"/>
-                  <span className="input-group-btn">
-                    <button className="btn btn-default" type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </span>
-                </form>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <div className="float-left w-80">
+                  <form className="form-inline my-2 my-lg-0 mx-0 w-100">
+                    <input className="form-control col-10 col-md-8 col-lg-10" type="search" aria-label="Search" placeholder="search"/>
+                    <span className="input-group-btn float-right">
+                      <button className="btn btn-default" type="submit">
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </form>
+                </div>
+                <button className="navbar-toggler float-right w-20 my-3" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                   <span className="navbar-toggler-icon"></span>
                 </button>
               </li>
@@ -64,7 +72,7 @@ export default class NavBar extends React.Component {
           <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mr-1">
-                <button className="btn"><i className="fa fa-user"/></button>
+                <button className="btn" onClick={e => this.handleProfile(e)}><i className="fa fa-user"/></button>
               </li>
               <li className="nav-item mr-1">
                 <button className="btn"><i className="fa fa-bell"/></button>

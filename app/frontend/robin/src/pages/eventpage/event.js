@@ -58,7 +58,8 @@ import StarRatingComponent from 'react-star-rating-component';
                 <p class="card-text shadow-sm bg-white rounded" style={{marginLeft:'30px', marginRight:'30px', marginTop:'20px'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet quam in sem molestie semper. Integer et tellus vitae neque viverra mattis sit amet ut orci. Praesent blandit urna justo, in viverra magna dapibus a. Nunc et consequat augue. Cras id dolor lectus. Nam blandit tristique leo interdum tristique. Nunc at elit enim. Phasellus ut est condimentum, molestie odio tincidunt, malesuada neque. Nulla ligula eros, semper in efficitur ut, tempor et turpis.</p>
                 </div>
                 </div>
-                 <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
+                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
+                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Mark as Interested</a>
             </div>
             </div>
           </div>

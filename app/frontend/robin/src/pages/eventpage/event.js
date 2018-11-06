@@ -24,18 +24,18 @@ import StarRatingComponent from 'react-star-rating-component';
         return (
 
           <div class="card">
-          <h3 class="card-title">Card title</h3>
+          <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>Card title</h3>
           <div class="row">
             <div class="col-sm-6">
-              <img class="card-img-top" src={borisPhoto} alt="Card image cap" />
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={borisPhoto} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
             </div>
             <div class="col-sm-6">
             <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-10">
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
                     Price:
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
                   <StarRatingComponent 
                   name="rate1" 
                   starCount={5}
@@ -44,9 +44,21 @@ import StarRatingComponent from 'react-star-rating-component';
                   />  
                   </div>
                 </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Date-Time :
+                  </div>
+                  <div class="col-sm-3">
+                  User
+                  </div>
+                </div>
 
-                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                 <a href="#" class="btn btn-primary">Go somewhere</a>
+                <div class="row" style={{marginTop: '15px'}}>
+                <div class="col-sm-12">
+                <p class="card-text shadow-sm bg-white rounded" style={{marginLeft:'30px', marginRight:'30px', marginTop:'20px'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet quam in sem molestie semper. Integer et tellus vitae neque viverra mattis sit amet ut orci. Praesent blandit urna justo, in viverra magna dapibus a. Nunc et consequat augue. Cras id dolor lectus. Nam blandit tristique leo interdum tristique. Nunc at elit enim. Phasellus ut est condimentum, molestie odio tincidunt, malesuada neque. Nulla ligula eros, semper in efficitur ut, tempor et turpis.</p>
+                </div>
+                </div>
+                 <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
             </div>
             </div>
           </div>

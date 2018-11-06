@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Robin</string>
+    <string name="action_settings">Settings</string>
+    <string name="home_page">Home Page</string>
+    <string name="my_events">My Events</string>
+    <string name="profile">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="repassword">Re-password</string>
+    <string name="username">Username</string>
+    <string name="please_enter_username">Please enter username!</string>
+    <string name="please_enter_email">Please enter email address!</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="please_enter_password_again">Please enter password again</string>
+    <string name="please_enter_password_again_correctly">Please enter password correctly</string>
+    <string name="account_is_being_created">Account is being created</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="successfully_signed_in">Successfully Signed In.</string>
+    <string name="welcome">Welcome</string>
+    <string name="action_logout">Logout</string>
+    <string name="comments">Comments</string>
+    <string name="lorem_ipsum_base">Lorem ipsum dolor sit amet</string>
+    <string name="lorem_ipsum_content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel laoreet metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. Fusce cursus, risus vitae malesuada ornare, dui lorem aliquam ex, et suscipit ex tellus sit amet augue. Pellentesque ullamcorper blandit massa id semper. Morbi suscipit et ante vel tincidunt. Vestibulum pretium eget orci ut rutrum. Nullam at mi leo. Donec bibendum arcu a faucibus sollicitudin. Donec eget erat sollicitudin, mollis magna quis, consectetur ante.</string>
+    <string name="price">Price</string>
+    <string name="organizer">Organizer</string>
+    <string name="sample_tags">pop, music, turkey</string>
+    <string name="title_activity_sign_in">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+</resources>

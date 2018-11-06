@@ -23,35 +23,29 @@ import StarRatingComponent from 'react-star-rating-component';
 
         return (
           <div class="card">
+            <div class="card-body">
             <div class="row">
-            <div class="col-sm-1"></div>
-
-              <div class="col-sm-8">
-             <div class="card-body">
-             <div class="row">
-        <div class="col-sm-2">
-        <img width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
-        </div>
-        <div class="col-sm-6">
-        <div class="card-text">User Name</div>
-        </div>
-        <div class="col-sm-3">
-          <StarRatingComponent 
+            <div class="col-sm-2">
+              <img width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
+            </div>
+            <div class="col-sm-10">
+            <div class="row"> 
+            <div class="col-sm-10">
+            <div class="card-title">User Name</div>
+            </div>
+            <div class="col-sm-2">
+                <StarRatingComponent 
                   name="rate1" 
                   starCount={5}
                   value={rating}
                   onStarClick={this.onStarClick.bind(this)}
-            />
-        </div>
-        </div>
-        <div class="card-text">Good Event.</div>
-        <a href="#">Card Link</a>
-        <a href="#">Another Link</a>
-      </div>
-      </div>
-      <div class="col-sm-1">
-      </div>
-      </div>      
+              />
+            </div>
+            </div>
+            <p class="card-text shadow-sm bg-white rounded" style={{marginRight:'30px', marginTop:'20px'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet quam in sem molestie semper. Integer et tellus vitae neque viverra mattis sit amet ut orci. Praesent blandit urna justo, in viverra magna dapibus a. Nunc et consequat augue. Cras id dolor lectus. Nam blandit tristique leo interdum tristique. Nunc at elit enim. Phasellus ut est condimentum, molestie odio tincidunt, malesuada neque. Nulla ligula eros, semper in efficitur ut, tempor et turpis.</p>
+            </div>
+            </div>
+          </div>
         </div>
       )
     }

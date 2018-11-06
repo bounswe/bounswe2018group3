@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect} from "react-router-dom";
 
+import Cookies from 'js-cookie';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
 import "jquery/dist/jquery.min.js";
@@ -24,7 +26,7 @@ var exampleProfile = {
   likes: "I love reading books. I like fishing, yoga, listening to music, and watching movies.",
   hates: "I hate cooking. I don't like swimming that much.",
   favourites: "My favourite book is Martin Eden. My favourite musician is Lana del Rey. I love jazz and blues. My favourite movie is Sirpski",
-  attendedEvents: "Duman Concert, May 2017, Istanbul\nTasoda Festival, April 2017, Bogazici",
+  attendedEvents: "Duman Concert, May 2017, Istanbul, Tasoda Festival, April 2017, Bogazici",
   willAttendEvents: "Coffee Fest, November 2018, Istanbul",
   createdEvents: "Home Party, September 2018, Istanbul",
 }
@@ -69,14 +71,13 @@ export default class ProfileCard extends React.Component{
     const { name, value } = e.target
   
     await this.setState({[name] : value,});
-    console.log(this.state);
   }
 
-  handleCancel(){
-    this.setState(this.oldState);
+  async handleCancel(){
+    await this.setState(this.oldState);
   }
 
-  handleSave(){
+  async handleSave(){
     this.oldState = this.state;
   }
 
@@ -253,13 +254,13 @@ export default class ProfileCard extends React.Component{
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Email</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="email" name="email" value={this.state.email}/>
+                          <input className="form-control" type="email" name="email" value={this.state.email} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Password</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="password" name="password"/>
+                          <input className="form-control" type="password" name="password" onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
@@ -271,76 +272,76 @@ export default class ProfileCard extends React.Component{
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">City and Country</label>
                         <div className="col-lg-6">
-                          <input className="form-control" type="text" name="city" value={this.state.city} placeholder="City"/>
+                          <input className="form-control" type="text" name="city" value={this.state.city} onChange={e => this.handleChange(e)}/>
                         </div>
                         <div className="col-lg-3">
-                          <input className="form-control" type="text" name="country" value={this.state.country} placeholder="State"/>
+                          <input className="form-control" type="text" name="country" value={this.state.country} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Birthday</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="date" name="birthday" value={this.state.birthday}/>
+                          <input className="form-control" type="date" name="birthday" value={this.state.birthday} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Gender</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="gender" value={this.state.gender}/>
+                          <input className="form-control" type="text" name="gender" value={this.state.gender} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Relationship Status</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="relationshipStatus" value={this.state.relationshipStatus}/>
+                          <input className="form-control" type="text" name="relationshipStatus" value={this.state.relationshipStatus} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Company / Occupaion</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="occupation" value={this.state.occupation}/>
+                          <input className="form-control" type="text" name="occupation" value={this.state.occupation} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Education</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="education" value={this.state.education}/>
+                          <input className="form-control" type="text" name="education" value={this.state.education} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Languages</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="languages" value={this.state.languages}/>
+                          <input className="form-control" type="text" name="languages" value={this.state.languages} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>  
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">About Me</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="about" value={this.state.about}/>
+                          <input className="form-control" type="text" name="about" value={this.state.about} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div> 
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Things I Like</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="likes" value={this.state.likes}/>
+                          <input className="form-control" type="text" name="likes" value={this.state.likes} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Things I Don't Like</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="hates" value={this.state.hates}/>
+                          <input className="form-control" type="text" name="hates" value={this.state.hates} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Favourite movie, book, music, meal...</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="favourites" value={this.state.favourites}/>
+                          <input className="form-control" type="text" name="favourites" value={this.state.favourites} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label">Interests</label>
                         <div className="col-lg-9">
-                          <input className="form-control" type="text" name="interests" value={this.state.interests}/>
+                          <input className="form-control" type="text" name="interests" value={this.state.interests} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
                       <div clasclassNames="form-group row ">

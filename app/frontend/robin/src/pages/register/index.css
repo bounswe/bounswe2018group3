@@ -1,0 +1,121 @@
+.form-signup{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+.form-signup .form-control{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    margin-top: 6px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.form-signup .form-control:focus{
+    z-index: 2;
+}
+.form-signup input[type="text"]{
+    margin-bottom: -1px;
+}
+.form-signup input[type="password"]{
+    margin-bottom: 10px;
+}
+.account-wall{
+    margin-top: 30px;
+    padding: 40px 0px 0px 0px;
+    background-color: #f7f7f7;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.new-account{
+    display: block;
+    margin-top: 10px;
+}
+.signup-container{
+  width: 350px;
+  max-width: 350px;
+  margin: 0 auto;
+}
+.button-disabled{
+  opacity: 0.5;
+  font-size: 16px;
+}
+.button-enabled{
+  opacity: 1;
+  font-size: 16px;
+}
+.download-android-app{
+  opacity: 0.9;
+  font-size: 12px;
+}
+.login-link, .login-link:hover, .login-link:visited, .login-link:active{
+  text-decoration: none;
+}
+.terms{
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+.social-text{
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+.text-container{
+  margin-top: 100px;
+}
+.form-error-message{
+  font-size: 10px;
+  color: red;
+}
+.button-divider{
+  width: 100%; 
+  height: 20px; 
+  border-bottom: 1px solid black; 
+  text-align: center;
+}
+.button-divider-text{
+  font-size: 10px; 
+  background-color: #F3F5F6; 
+  padding: 0 10px;
+}
+.social-btn .btn {
+  border: none;
+  margin: 10px 3px 0;
+  opacity: 1;
+}
+.social-btn .btn:hover {
+  opacity: 0.9;
+}
+.social-btn .btn-facebook {
+  background: #507cc0 !important;
+}
+.social-btn .btn-twitter {
+  background: #64ccf1 !important;
+}
+.social-btn .btn-google {
+  background: #df4930 !important;
+}
+.or-seperator {
+  margin-top: 20px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  font-size: 12px;
+}
+.or-seperator i {
+  padding: 0 10px;
+  background: #f7f7f7;
+  position: relative;
+  top: -11px;
+  z-index: 1;
+}
+.img-center{
+  margin: 0 auto;
+}

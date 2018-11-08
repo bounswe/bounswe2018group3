@@ -61,6 +61,7 @@ export default class ProfileCard extends React.Component{
 
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    console.log(this.props.location);
   }
 
   componentDidMount(){
@@ -87,7 +88,7 @@ export default class ProfileCard extends React.Component{
         <div className="container-fluid" id="body-container-fluid">
           <div className="container">
             <div className="row">
-              <div className="col-lg-4 col-md-6 col-sm-12 mb-10">
+              <div className="col-lg-4 col-md-6 col-sm-12">
                 <div className="card w-100" >
                   <img className="card-img-top w-100" src="https://lh3.googleusercontent.com/a8_ujXr3VWHstGkxgJL1TkqfrytP4r_52QhcvqRQVaQPRQ9DHdQ6seI99qc4jLjC0WDM=h900" alt="Card image"  />
                   <div className="card-body">
@@ -344,7 +345,7 @@ export default class ProfileCard extends React.Component{
                           <input className="form-control" type="text" name="interests" value={this.state.interests} onChange={e => this.handleChange(e)}/>
                         </div>
                       </div>
-                      <div clasclassNames="form-group row ">
+                      <div className="form-group row ">
                         <label className="col-lg-3 col-form-label form-control-label"></label>
                         <div className="col-lg-4 mx-auto">
                           <input type="reset" className="btn btn-danger" value="Cancel" onClick={this.handleCancel}/>

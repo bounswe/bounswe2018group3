@@ -21,6 +21,7 @@ export default class NavBar extends React.Component {
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleProfile = this.handleProfile.bind(this);
+    console.log(this.props.location)
   }
   toggle() {
     this.setState({
@@ -36,12 +37,25 @@ export default class NavBar extends React.Component {
 
   handleProfile(e){
     e.preventDefault();
-    this.setState({redirect: "/profile"});
+    if(this.props.location === "/profile"){
+      return;
+    }
+    else
+      this.setState({redirect: "/profile"});
   }
 
   render() {
     if(this.state.redirect !== ""){
-      return (<Redirect to={this.state.redirect}/>)
+      if(this.state.redirect === "/profile"){
+        return (<Redirect to={{
+          pathname: this.state.redirect,
+          props: {
+            token: Cookies.get("token")
+          }
+        }}/>)
+      }
+      else
+        return (<Redirect to={this.state.redirect}/>)
     }
     return (
       <div>

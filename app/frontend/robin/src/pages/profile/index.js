@@ -4,6 +4,7 @@ import {Redirect} from "react-router-dom";
 import Cookies from 'js-cookie';
 
 import Navbar from "../components/navbar/index"
+import GuestBar from "../components/guestBar/index"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -374,6 +375,9 @@ export default class ProfileCard extends React.Component{
     else{
       return (
         <div>
+          <div className="wrapper position-absolute">
+            <GuestBar/>
+          </div>
         <div className="mb-70">
           <Navbar currentPath={this.props.location.pathname}/>
         </div>

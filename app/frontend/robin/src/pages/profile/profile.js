@@ -61,7 +61,6 @@ export default class ProfileCard extends React.Component{
 
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    console.log(this.props.location);
   }
 
   componentDidMount(){

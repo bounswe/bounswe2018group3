@@ -21,7 +21,6 @@ export default class NavBar extends React.Component {
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleProfile = this.handleProfile.bind(this);
-    console.log(this.props.location)
   }
   toggle() {
     this.setState({
@@ -37,7 +36,7 @@ export default class NavBar extends React.Component {
 
   handleProfile(e){
     e.preventDefault();
-    if(this.props.location === "/profile"){
+    if(this.props.currentPath === "/profile"){
       return;
     }
     else

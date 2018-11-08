@@ -7,7 +7,7 @@ import "./eventpage.css"
 export default (props) => {
   return (
     <React.Fragment>
-    <Navbar />
+    <Navbar currentPath={this.props.location.pathname}/>
       <Event />
       <h2></h2>
       <h2 style={{margin:'22px'}}>

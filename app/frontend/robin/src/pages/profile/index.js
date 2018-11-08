@@ -7,9 +7,9 @@ export default class Profile extends React.Component{
     return (
       <div>
         <div className="mb-70">
-          <Navbar/>
+          <Navbar currentPath={this.props.location.pathname}/>
         </div>
-        <ProfileCard/>
+        <ProfileCard currentPath={this.props.location.pathname}/>
       </div>
     );
   }

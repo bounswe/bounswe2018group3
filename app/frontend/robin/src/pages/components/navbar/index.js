@@ -48,9 +48,7 @@ export default class NavBar extends React.Component {
       if(this.state.redirect === "/profile"){
         return (<Redirect to={{
           pathname: this.state.redirect,
-          props: {
-            token: Cookies.get("token")
-          }
+          token: Cookies.get("token")
         }}/>)
       }
       else

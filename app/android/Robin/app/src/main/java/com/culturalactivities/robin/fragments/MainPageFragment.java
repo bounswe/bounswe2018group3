@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -56,6 +59,8 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         setView(view);
         return view;
     }
+
+
 
     private void setView(View view) {
         MainActivity.progressBar.setVisibility(View.VISIBLE);
@@ -107,5 +112,28 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
         transaction.addToBackStack("addEF");
         transaction.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_create_event){
+            activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment, CreateEventFragment.newInstance()).commit();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_homepage, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

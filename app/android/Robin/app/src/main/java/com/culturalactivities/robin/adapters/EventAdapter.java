@@ -74,7 +74,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvName.setTypeface(MainActivity.ubuntuRegular);
         holder.tvDescription.setTypeface(MainActivity.ubuntuRegular);
         Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -82,4 +81,5 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public int getItemCount() {
         return events.size();
     }
+
 }

@@ -41,8 +41,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     public EventsFragment() {}
 
     public static EventsFragment newInstance(){
-        EventsFragment fragment = new EventsFragment();
-        return fragment;
+        return new EventsFragment();
     }
 
     @Override

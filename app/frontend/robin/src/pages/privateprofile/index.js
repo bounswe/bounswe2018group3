@@ -19,6 +19,11 @@ export default class PrivateProfile extends React.Component{
     }
 
     this.state = exampleProfile;
+    this.handleAddFriend = this.handleAddFriend.bind(this);
+  }
+
+  handleAddFriend(){
+
   }
 
   render(){
@@ -37,13 +42,16 @@ export default class PrivateProfile extends React.Component{
             <h4 className="card-title">{this.state.name}</h4>
             <p className="card-text">{this.state.cardSummary}</p>
             <div className="address">								
-              
-                <p className="text-center"><i className="fa fa-lock" aria-hidden="true"></i></p>
-                <p className="text-center">This user's profile is private</p>
-                  <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto">
-                    <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                    Add Friend
-                  </button>
+              <p className="text-center"><i className="fa fa-lock" aria-hidden="true"></i></p>
+              <p className="text-center">This user's profile is private</p>
+              <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto">
+                <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+                Add Friend
+              </button>
+              <button href="" className="btn btn-md btn-primary btn-block w-10 mx-auto">
+                <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
+                Message
+              </button>
             </div>
           </div>
         </div>

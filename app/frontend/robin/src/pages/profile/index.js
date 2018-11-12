@@ -411,6 +411,16 @@ export default class ProfileCard extends React.Component{
                   </div>		
                 </div>
                 <div className="col-lg-8 col-md-6 order-lg-2">
+                <div className="col-12 buttons mb-10 mx-auto">
+                  <button href="" className="btn btn-md btn-success btn-block col-4 ">
+                    <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+                    Add Friend
+                  </button>
+                  <button href="" className="btn btn-md btn-primary btn-block col-4 ">
+                    <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
+                    Message
+                  </button>
+                </div>
                   <ul className="nav nav-tabs">
                     <li className="nav-item">
                       <a href="" data-target="#profile" data-toggle="tab" className="nav-link active">About</a>

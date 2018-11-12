@@ -8,6 +8,7 @@ import RegisterSuccess from "./pages/registersuccess/index";
 import Login from "./pages/login/index"
 import HomePage from "./pages/homepage/index"
 import Profile from "./pages/profile/index"
+import PrivateProfile from "./pages/privateprofile/index";
 import Event from "./pages/eventpage/index"
 
 class App extends React.Component {
@@ -23,6 +24,7 @@ class App extends React.Component {
         <Route path="/registersuccess" component={RegisterSuccess} />
         <Route path="/home" component={HomePage} />
         <Route path="/profile" component={Profile} />
+        <Route path="/privateprofile" component={PrivateProfile}/>
         <Route path="/event" component={Event} />
       </Switch>
     );

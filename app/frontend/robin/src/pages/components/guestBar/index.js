@@ -15,17 +15,25 @@ export default class NavBar extends React.Component {
     super(props);
 
     this.state = {
-      isOpen: false,
+      isOpen: true,
       redirect: ""
     };
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleClose(){
+    this.setState({isOpen: false});
   }
 
   render() {
     if(Cookies.get("token") === undefined){
-      return (
+      return this.state.isOpen && (
         <div className="wrapper">
           <nav className="nav navbar navbar-expand-md navbar-light bg-light fixed-bottom">
             <div className="mx-auto col-xs-12">
+            <button type="button" className="close" aria-label="Close" onClick={this.handleClose}>
+              <span aria-hidden="true">&times;</span>
+            </button>
               <p className="text-center">Login or register to view much more</p>
               <Link to="/login" className="btn btn-lg btn-primary btn-block">
                 Login
@@ -33,7 +41,8 @@ export default class NavBar extends React.Component {
               <Link to="/register" className="btn btn-lg btn-primary btn-block">
                 Register
               </Link>
-              </div>
+            </div>
+            
           </nav>
         </div>
       );

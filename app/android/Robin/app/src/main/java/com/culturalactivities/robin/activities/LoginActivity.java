@@ -113,8 +113,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        Log.d("EMAILL1", email);
-        Log.d("PASSS1", password);
         loginRequest(email, password);
     }
 

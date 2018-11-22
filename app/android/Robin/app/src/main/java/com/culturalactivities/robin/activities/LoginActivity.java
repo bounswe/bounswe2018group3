@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void setView() {
         queue = Volley.newRequestQueue(this);
         preferences = getSharedPreferences("login", MODE_PRIVATE);
-
         String token = preferences.getString("token", null);
 
         if (token != null){
@@ -159,7 +158,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("email", email);
                 params.put("password", password);
                 params.put("Content-Type", "application/json; charset=utf-8");
-                Log.d("PAramss", params.toString());
                 return params;
             }
         };

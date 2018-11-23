@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from . import models
 from . import serializers
 
-# Create your views here.
-
+# Create your views here..
+int i = 0
 #Read and write event models
 class EventListViewReadWrite(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)

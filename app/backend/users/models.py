@@ -8,8 +8,8 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=127)
     password = models.CharField(max_length=255)
     bio = models.TextField(blank=True)
-    city = models.CharField(max_length=255)
-    country = models.CharField(max_length=255)
+    city = models.CharField(blank=True, max_length=255)
+    country = models.CharField(blank=True, max_length=255)
     email = models.CharField(max_length=255, validators=[validators.EmailValidator])
     username = models.CharField(max_length=255, unique=True)
     photo = models.ImageField(blank=True) #may set a default profile pic

@@ -8,9 +8,16 @@ from . import serializers
 
 # Create your views here.
 
-class EventListView(generics.ListCreateAPIView):
+#Read and write event models
+class EventListViewReadWrite(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     queryset = models.Event.objects.all()
-    serializer_class = serializers.EventSerializer
+    serializer_class = serializers.EventSerializerReadWrite
     
+#Read only event models
+class EventListViewReadOnly(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventSerializerReadOnly

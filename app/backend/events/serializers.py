@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from . import models
-from djangotoolbox.fields import ListField
-from djangotoolbox.fields import EmbeddedModelFields
+
 
 #Read and write event models
 class EventSerializerReadWrite(serializers.ModelSerializer):

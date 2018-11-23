@@ -36,12 +36,23 @@ export default class NavBar extends React.Component {
 
   handleProfile(e){
     e.preventDefault();
-    this.setState({redirect: "/profile"});
+    if(this.props.currentPath === "/profile"){
+      return;
+    }
+    else
+      this.setState({redirect: "/profile"});
   }
 
   render() {
     if(this.state.redirect !== ""){
-      return (<Redirect to={this.state.redirect}/>)
+      if(this.state.redirect === "/profile"){
+        return (<Redirect to={{
+          pathname: this.state.redirect,
+          token: Cookies.get("token")
+        }}/>)
+      }
+      else
+        return (<Redirect to={this.state.redirect}/>)
     }
     return (
       <div>

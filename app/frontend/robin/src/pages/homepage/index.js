@@ -27,7 +27,7 @@ export default class Home extends React.Component{
     return (
       <div>
         <div className="mb-70">
-          <NavBar />
+          <NavBar currentPath={this.props.location.pathname}/>
         </div>
         <div className="eventContainer col-md-6">
           <EventComp title="Boris Brejcha for Cercle" subtitle="Château de Fontainebleau, 24 Oct 2018"

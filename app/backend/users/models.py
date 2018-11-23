@@ -8,17 +8,23 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=127)
     password = models.CharField(max_length=255)
     bio = models.TextField(blank=True)
+    city = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
     email = models.CharField(max_length=255, validators=[validators.EmailValidator])
     username = models.CharField(max_length=255, unique=True)
     photo = models.ImageField(blank=True) #may set a default profile pic
+    birthday = models.DateField(blank=True, null=True)
     colorScheme = models.SmallIntegerField(default=0)
     watchingTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     followedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     commentList = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    eventList = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    createdEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     blockedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     blockedTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    attendedEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    createdEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    upcomingEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     #Following fields are included from AbstractUser:
     # last_login
     # is_superuser

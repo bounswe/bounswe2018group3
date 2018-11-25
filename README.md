@@ -49,7 +49,6 @@ Please use this [Meeting Notes Template](https://github.com/bounswe/bounswe2018g
 * [Milestone 5](https://github.com/bounswe/bounswe2018group3/wiki/Milestone-5)
 
 ## Who We Are
-![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/master/rsrc/groupphoto.jpeg)
+![WeirdGroupPhoto](https://github.com/bounswe/bounswe2018group3/blob/android2/rsrc/whoweare.jpg)
 
-| [Çağdaş Tombul](https://github.com/bounswe/bounswe2018group3/wiki/%C3%87a%C4%9Fda%C5%9F-Tombul) | [Uğurcan Arıkan](https://github.com/bounswe/bounswe2018group3/wiki/U%C4%9Furcan-Ar%C4%B1kan) | [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy) | [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın) | [Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç) | [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy) | [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu) |
-| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+| [Mustafa Şişik](https://github.com/bounswe/bounswe2018group3/wiki/Mustafa-%C5%9Ei%C5%9Fik)| [Onur Varkıvanç](https://github.com/bounswe/bounswe2018group3/wiki/Onur-Varkıvanç) | [Furkan Enes Yalçın](https://github.com/bounswe/bounswe2018group3/wiki/Furkan-Enes-Yalçın) | [Özge Dinçsoy](https://github.com/bounswe/bounswe2018group3/wiki/Özge-Dinçsoy) | [Çağdaş Tombul](https://github.com/bounswe/bounswe2018group3/wiki/%C3%87a%C4%9Fda%C5%9F-Tombul) | [Oğuzhan Yetimoğlu](https://github.com/bounswe/bounswe2018group3/wiki/Oğuzhan-Yetimoğlu) | [Uğurcan Arıkan](https://github.com/bounswe/bounswe2018group3/wiki/U%C4%9Furcan-Ar%C4%B1kan) | [Recep Deniz Aksoy](https://github.com/bounswe/bounswe2018group3/wiki/Recep-Deniz-Aksoy) | 

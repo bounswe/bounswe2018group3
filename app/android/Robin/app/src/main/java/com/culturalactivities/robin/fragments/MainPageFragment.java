@@ -3,26 +3,42 @@ package com.culturalactivities.robin.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +49,9 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     private EventAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
 
+
+    RequestQueue queue;
+    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
 
     private AppCompatActivity activity;
     @Override
@@ -46,13 +65,12 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     public static MainPageFragment newInstance(){
-        MainPageFragment fragment = new MainPageFragment();
-        return fragment;
+        return new MainPageFragment();
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
@@ -63,6 +81,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
 
     private void setView(View view) {
+        queue = Volley.newRequestQueue(activity);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.home_page));
         recyclerView = view.findViewById(R.id.rvEvents);
@@ -73,6 +92,56 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getEvents() {
+        events.clear();
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                EVENTS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String name = jsonObject.getString("name");
+                                String info = jsonObject.getString("info");
+                                events.add(new Event(name, info));
+                            }
+                            eventAdapter.notifyDataSetChanged();
+                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("type", "post");
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    private void getEvents2() {
         events.clear();
         String[] testimages = {"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Roma06%28js%29.jpg/1200px-Roma06%28js%29.jpg",
         "https://www.travelfashiongirl.com/wp-content/uploads/2017/04/what-to-wear-hiking-the-great-wall-of-china-in-the-summer-cover.jpg",

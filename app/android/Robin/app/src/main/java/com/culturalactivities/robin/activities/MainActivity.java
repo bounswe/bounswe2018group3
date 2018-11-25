@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AHBottomNavigation bottomNavigation;
     private FragmentTransaction fragmentTransaction;
-    private String email, username, pk, token;
+    public static String email, username, pk, token;
     public static Typeface ubuntuRegular, ubuntuBold;
     public static ProgressBar progressBar;
 
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         ubuntuRegular = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Regular.ttf");
         ubuntuBold = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Bold.ttf");
-        Toast.makeText(this, getString(R.string.welcome), Toast.LENGTH_SHORT).show();
         setNavigation();
     }
 

@@ -31,6 +31,20 @@ public class Event {
         this.images = images;
     }
 
+    public Event(String name, String info) {
+        this.eventName = name;
+        this.eventInfo = info;
+        this.artistInfo = "";
+        this.date = "";
+        this.price = 0;
+        this.rating = 0;
+        this.location = null;
+        this.comments = new ArrayList<>();
+        this.goingUser = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.images = new ArrayList<>();
+    }
+
     public String getEventName() {
         return eventName;
     }

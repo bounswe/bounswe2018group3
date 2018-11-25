@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void openMainActivity(String token, String pk, String username, String email){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("token", token);
+        Log.d("TOKEE", token);
         intent.putExtra("pk", pk);
         intent.putExtra("username", username);
         intent.putExtra("email", email);
@@ -122,7 +123,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String token = jsonObject.getString("token");

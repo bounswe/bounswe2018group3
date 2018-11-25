@@ -73,7 +73,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.ratingBar.setRating(event.getRating());
         holder.tvName.setTypeface(MainActivity.ubuntuRegular);
         holder.tvDescription.setTypeface(MainActivity.ubuntuRegular);
-        Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
+        //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

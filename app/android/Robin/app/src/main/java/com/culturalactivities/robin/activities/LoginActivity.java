@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String token = jsonObject.getString("token");

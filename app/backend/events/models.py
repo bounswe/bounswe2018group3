@@ -1,5 +1,5 @@
 from django.core import validators
-from djongo import models
+from django.db import models
 from django import forms
 from users.models import CustomUser
 
@@ -19,6 +19,6 @@ class Event(models.Model):
     #comments = models.ListField(EmbeddedModelField(model_container=Comment))
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
     #images = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True) 
-    images = models.ListField()
+    #images = models.ListField()
     #attendants = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     attendants = models.ManyToManyField(CustomUser, related_name='event_set')

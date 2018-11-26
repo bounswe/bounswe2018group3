@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivEvent"
+        android:id="@+id/ivBanner"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -25,8 +25,8 @@
         android:layout_marginBottom="8dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/tvArtistName"
-        app:layout_constraintStart_toEndOf="@+id/ivEvent"
-        app:layout_constraintTop_toTopOf="@+id/ivEvent" />
+        app:layout_constraintStart_toEndOf="@+id/ivBanner"
+        app:layout_constraintTop_toTopOf="@+id/ivBanner" />
 
     <TextView
         android:id="@+id/tvArtistName"
@@ -35,8 +35,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
-        app:layout_constraintStart_toEndOf="@+id/ivEvent" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
+        app:layout_constraintStart_toEndOf="@+id/ivBanner" />
 
     <TextView
         android:id="@+id/tvEventDate"
@@ -45,7 +45,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

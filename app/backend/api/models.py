@@ -12,10 +12,10 @@ class Comment(models.Model):
     content = models.TextField()
 
 class EventComment(Comment) :
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comment_set")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comment_set", blank=True)
 
-class EventComment(Comment) :
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_set")
+class UserComment(Comment) :
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_set", blank=True)
 
 class Tag(models.Model):
     #id = models.IntegerField(unique=True,db_index=True)

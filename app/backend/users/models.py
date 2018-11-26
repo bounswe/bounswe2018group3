@@ -1,4 +1,4 @@
-from django.db import models
+from djongo import models
 from django.contrib.auth.models import AbstractUser
 from django.core import validators
 
@@ -10,21 +10,21 @@ class CustomUser(AbstractUser):
     bio = models.TextField(blank=True)
     city = models.CharField(blank=True, max_length=255)
     country = models.CharField(blank=True, max_length=255)
-    email = models.CharField(max_length=255, validators=[validators.EmailValidator])
+    email = models.EmailField()
     username = models.CharField(max_length=255, unique=True)
     photo = models.ImageField(blank=True) #may set a default profile pic
     birthday = models.DateField(blank=True, null=True)
     colorScheme = models.SmallIntegerField(default=0)
-    watchingTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    followedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    commentList = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    createdEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    blockedUsers = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    blockedTags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    attendedEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    createdEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    upcomingEvents = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
+    followedUsers = models.ManyToManyField("self", symmetrical=False, related_name="followers")
+    blockedUsers = models.ManyToManyField("self", symmetrical=False, related_name="blockers")
+    #written_comments = models.EmbeddedModelField(model_container=Comment) can be accessed as comment_set
+    #watchingTags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_field="watchers")
+    #blockedTags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_field="blockers")
+    #createdEvents = models.EmbeddedModelField(model_container=Event) can be accessed as created_events
+    #Following two fields can be accessed as event_set
+    #attendedEvents = models.EmbeddedModelField(model_container=Event)
+    #upcomingEvents = models.EmbeddedModelField(model_container=Event)
     #Following fields are included from AbstractUser:
     # last_login
     # is_superuser

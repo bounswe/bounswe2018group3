@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.profile));
         recyclerView = view.findViewById(R.id.rvEvents);
-        eventAdapter = new EventAdapter(activity, events, this);
+        eventAdapter = new EventAdapter(activity, events, this,1);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
         getEvents();

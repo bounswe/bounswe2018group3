@@ -75,7 +75,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
 
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.my_events));
         recyclerView = view.findViewById(R.id.rvEvents);
-        eventAdapter = new EventAdapter(activity, events, this);
+        eventAdapter = new EventAdapter(activity, events, this,0);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
         getEvents();

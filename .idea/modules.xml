@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bounswe2018group3.iml" filepath="$PROJECT_DIR$/bounswe2018group3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/android/Robin/app/src/androidTest/androidTest.iml" filepath="$PROJECT_DIR$/app/android/Robin/app/src/androidTest/androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/android/Robin/app/src/main/main.iml" filepath="$PROJECT_DIR$/app/android/Robin/app/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/android/Robin/app/src/test/test.iml" filepath="$PROJECT_DIR$/app/android/Robin/app/src/test/test.iml" />
     </modules>
   </component>
 </project>

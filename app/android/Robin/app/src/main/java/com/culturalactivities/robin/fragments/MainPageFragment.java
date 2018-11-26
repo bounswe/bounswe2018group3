@@ -141,7 +141,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         queue.add(jsonObjReq);
     }
 
-    private void getEvents2() {
+    /* private void getEvents2() {
         events.clear();
         String[] testimages = {"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Roma06%28js%29.jpg/1200px-Roma06%28js%29.jpg",
         "https://www.travelfashiongirl.com/wp-content/uploads/2017/04/what-to-wear-hiking-the-great-wall-of-china-in-the-summer-cover.jpg",
@@ -171,7 +171,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         }
         eventAdapter.notifyDataSetChanged();
         MainActivity.progressBar.setVisibility(View.INVISIBLE);
-    }
+    }*/
 
     @Override
     public void onClick(View view) {

@@ -2,7 +2,7 @@ import Event from "./event"
 import Comment from "./comment"
 import Navbar from "../components/navbar/index"
 import React from 'react';
-import "./create-event.css";
+import "./createevent.css";
 
 
 export default class CreateEvent extends React.Component {
@@ -43,55 +43,76 @@ export default class CreateEvent extends React.Component {
                     <div className="mb-70">
         <Navbar currentPath={this.props.location.pathname}/>
       </div>
+      <div class="container-event">
+
         <form>
+            <div class="row">
             <label>
             Name of the event:
             <input
+                name="eventName"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Enter info about the event:
             <input
+                name="eventInfo"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Artist of the event:
             <input
+                name="artistName"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Date of the event:
             <input
+                name="eventDate"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Time of the event:
             <input
+                name="eventTime"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Price of the event:
             <input
+                name="eventPrice"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
+          </div>
+          <div class="row">
           <label>
             Is going:
             <input
@@ -100,7 +121,9 @@ export default class CreateEvent extends React.Component {
               checked={this.state.isGoing}
               onChange={this.handleInputChange} />
           </label>
+          </div>
           <br />
+          <div class="row">
           <label>
             Number of guests:
             <input
@@ -109,7 +132,9 @@ export default class CreateEvent extends React.Component {
               value={this.state.numberOfGuests}
               onChange={this.handleInputChange} />
           </label>
+          </div>
         </form>
+        </div>
         </React.Fragment>
       );
     }

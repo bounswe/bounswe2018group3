@@ -1,4 +1,9 @@
-class CreateEvent extends React.Component {
+import Event from "./event"
+import Comment from "./comment"
+import Navbar from "../components/navbar/index"
+import React from 'react';
+
+export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -7,6 +12,7 @@ class CreateEvent extends React.Component {
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleNameChange = this.handleNameChange.bind(this);
     }
   
     handleInputChange(event) {
@@ -18,10 +24,68 @@ class CreateEvent extends React.Component {
         [name]: value
       });
     }
+
+    handleNameChange(event) {
+        const target = event.target;
+        const value = target.type === 'text' ? target.value : "";
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
+      }
   
     render() {
       return (
         <form>
+            <label>
+            Name of the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
+          <label>
+            Enter info about the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
+          <label>
+            Artist of the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
+          <label>
+            Date of the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
+          <label>
+            Time of the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
+          <label>
+            Price of the event:
+            <input
+                type="text"
+                value={this.state.value}
+                placeholder="Enter text"
+                onChange={this.handleNameChange}/>
+          </label>
           <label>
             Is going:
             <input

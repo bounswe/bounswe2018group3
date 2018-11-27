@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:transitionName="eventBanner"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@mipmap/logo" />
 
         <TextView
             android:id="@+id/tvEventName"

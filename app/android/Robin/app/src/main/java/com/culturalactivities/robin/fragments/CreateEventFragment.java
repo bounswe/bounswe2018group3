@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.activities.MainActivity;
 
 public class CreateEventFragment extends Fragment {
 
@@ -24,8 +25,7 @@ public class CreateEventFragment extends Fragment {
     }
 
     public static CreateEventFragment newInstance() {
-        CreateEventFragment fragment = new CreateEventFragment();
-        return fragment;
+        return new CreateEventFragment();
     }
 
     @Override
@@ -43,6 +43,8 @@ public class CreateEventFragment extends Fragment {
     }
 
     private void setView(View view) {
+        activity.getSupportActionBar().setSubtitle("Create Event");
+        MainActivity.progressBar.setVisibility(View.INVISIBLE);
 
     }
 }

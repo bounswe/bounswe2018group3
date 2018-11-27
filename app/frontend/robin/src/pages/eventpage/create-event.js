@@ -40,13 +40,12 @@ export default class CreateEvent extends React.Component {
     render() {
       return (
           <React.Fragment>
-                    <div className="mb-70">
+                    <div>
         <Navbar currentPath={this.props.location.pathname}/>
       </div>
       <div class="container-event">
-
-        <form>
-            <div class="row">
+        <form class="form-event">
+            <div class="row-event">
             <label>
             Name of the event:
             <input
@@ -57,7 +56,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Enter info about the event:
             <input
@@ -68,7 +67,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Artist of the event:
             <input
@@ -79,7 +78,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Date of the event:
             <input
@@ -90,7 +89,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Time of the event:
             <input
@@ -101,7 +100,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Price of the event:
             <input
@@ -112,7 +111,7 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row">
+          <div class="row-event">
           <label>
             Is going:
             <input
@@ -123,7 +122,7 @@ export default class CreateEvent extends React.Component {
           </label>
           </div>
           <br />
-          <div class="row">
+          <div class="row-event">
           <label>
             Number of guests:
             <input

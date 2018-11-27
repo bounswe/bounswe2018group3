@@ -1,9 +1,18 @@
 
 .container-event{
+    padding-top:70px;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.form-event{
     background-color:#F0F8FF;
     width: 500px;
     margin: 0 auto;
 }
-.mb-70{
-    margin-bottom: 70px;
-  }
+
+.row-event{
+    width: 500px;
+    padding: 20px;
+    margin: 0 auto;
+}

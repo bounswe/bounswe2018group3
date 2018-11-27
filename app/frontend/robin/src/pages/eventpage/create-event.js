@@ -2,6 +2,8 @@ import Event from "./event"
 import Comment from "./comment"
 import Navbar from "../components/navbar/index"
 import React from 'react';
+import "./create-event.css";
+
 
 export default class CreateEvent extends React.Component {
     constructor(props) {
@@ -37,6 +39,10 @@ export default class CreateEvent extends React.Component {
   
     render() {
       return (
+          <React.Fragment>
+                    <div className="mb-70">
+        <Navbar currentPath={this.props.location.pathname}/>
+      </div>
         <form>
             <label>
             Name of the event:
@@ -104,6 +110,7 @@ export default class CreateEvent extends React.Component {
               onChange={this.handleInputChange} />
           </label>
         </form>
+        </React.Fragment>
       );
     }
   }

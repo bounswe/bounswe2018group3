@@ -43,12 +43,16 @@ export default class CreateEvent extends React.Component {
                     <div>
         <Navbar currentPath={this.props.location.pathname}/>
       </div>
-      <div class="container-event">
-        <form class="form-event">
-            <div class="row-event">
-            <label>
+      <div className="container-event">
+        <form className="form-event">
+        
+            <div className="row">
+            <div className="col-lg-6 w-80">
             Name of the event:
-            <input
+            </div>
+            <label>
+            <input 
+                className="col-10 col-md-8 col-lg-12 w-80"
                 name="eventName"
                 type="text"
                 value={this.state.value}
@@ -56,59 +60,83 @@ export default class CreateEvent extends React.Component {
                 onChange={this.handleNameChange}/>
           </label>
           </div>
-          <div class="row-event">
-          <label>
+          <div className="row">
+          <div className="col-lg-6">
             Enter info about the event:
+            </div>
+          <label>
+            <div className="col-lg-6 event-in">
             <input
                 name="eventInfo"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
+                </div>
           </label>
           </div>
-          <div class="row-event">
-          <label>
+          <div className="row">
+          <div className="col-lg-6">
             Artist of the event:
+            </div>
+          <label>
+
+            <div className="col-lg-6 event-in">
             <input
                 name="artistName"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
+                </div>
           </label>
           </div>
-          <div class="row-event">
-          <label>
+          <div className="row">
+
+              <div className="col-lg-6">
             Date of the event:
+            </div>
+          <label>
+            <div className="col-lg-6 event-in">
             <input
                 name="eventDate"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
+                </div>
           </label>
           </div>
-          <div class="row-event">
-          <label>
+          <div className="row">
+
+              <div className="col-lg-6">
             Time of the event:
+            </div>
+          <label>
+            <div className="col-lg-6 event-in">
             <input
                 name="eventTime"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
+                </div>
           </label>
           </div>
-          <div class="row-event">
-          <label>
+          <div className="row">
+
+              <div className="col-lg-6">
             Price of the event:
+            </div>
+          <label>
+            <div className="col-lg-6 event-in">
             <input
                 name="eventPrice"
                 type="text"
                 value={this.state.value}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
+                </div>
           </label>
           </div>
           <div class="row-event">
@@ -132,6 +160,7 @@ export default class CreateEvent extends React.Component {
               onChange={this.handleInputChange} />
           </label>
           </div>
+          <input type="button" className="btn btn-success float-right" value="Submit"/>
         </form>
         </div>
         </React.Fragment>

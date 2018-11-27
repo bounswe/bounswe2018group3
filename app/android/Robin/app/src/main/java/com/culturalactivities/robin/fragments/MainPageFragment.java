@@ -188,7 +188,10 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         int id = item.getItemId();
 
         if (id == R.id.action_create_event){
-            activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment, CreateEventFragment.newInstance()).commit();
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.fragment, CreateEventFragment.newInstance());
+            transaction.addToBackStack("addCEF");
+            transaction.commit();
         }
 
         return super.onOptionsItemSelected(item);

@@ -57,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
         // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.my_events, R.drawable.calendar, R.color.colorPrimaryLigth);
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.profile, R.drawable.profile, R.color.colorPrimaryLigth);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.profile, R.drawable.profile, R.color.colorPrimaryLigth);
 
         // Add items
         bottomNavigation.addItem(item0);
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
+        bottomNavigation.addItem(item3);
         bottomNavigation.setCurrentItem(1);
 
 
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
                         break;
                     case 2:
+                        fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
+                        break;
+                    case 3:
                         fragmentTransaction.replace(R.id.fragment, ProfileFragment.newInstance()).commit();
                         break;
                 }

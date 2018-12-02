@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from . import models
 
-class UserSerializer(serializers.ModelSerializer):
+class UserRWSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
         fields = (
@@ -43,13 +43,10 @@ class UserSerializer(serializers.ModelSerializer):
                 instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)
                 instance.birthday = validated_data.get('birthday', instance.birthday)
                 instance.colorScheme = validated_data.get('colorScheme', instance.colorScheme)
-                instance.rating = validated_data.get('rating', instance.rating)
-                instance.followedUsers = validated_data.get('followedUsers', instance.followedUsers)
-                instance.blockedUsers = validated_data.get('blockedUsers', instance.blockedUsers)
                 instance.save()
                 return instance
 
-class UserSerializerReadOnly(serializers.ModelSerializer):
+class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
         fields = fields = (
@@ -65,7 +62,11 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'birthday', 
             'colorScheme',
             'rating',
-            'ratingNum')
+            'ratingNum',
+            'followedUsers',
+            'blockedUsers',
+            'blockers',
+            'followers')
         read_only_fields = fields = (
             'id',
             'email', 
@@ -79,7 +80,25 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'birthday', 
             'colorScheme',
             'rating',
-            'ratingNum')
+            'ratingNum',
+            'followedUsers',
+            'blockedUsers',
+            'blockers',
+            'followers')
+
+class UserSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = (
+            'id',
+            'username',
+            'first_name',
+            'last_name', 
+            'bio', 
+            'city', 
+            'country',
+            'birthday', 
+            'rating',)
 
 class ProfilePicSerializer(serializers.ModelSerializer):
 

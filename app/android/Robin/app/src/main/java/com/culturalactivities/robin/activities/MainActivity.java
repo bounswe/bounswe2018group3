@@ -3,7 +3,10 @@ package com.culturalactivities.robin.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     public static Typeface ubuntuRegular, ubuntuBold;
     public static ProgressBar progressBar;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setView() {
         progressBar = findViewById(R.id.progressBar);
         token = getIntent().getStringExtra("token");
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         ubuntuRegular = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Regular.ttf");
         ubuntuBold = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Bold.ttf");
+
         setNavigation();
     }
 

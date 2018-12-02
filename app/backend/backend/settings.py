@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import datetime
 
 from django.urls import reverse_lazy
 
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
 
+    'corsheaders',
+
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
 
@@ -56,6 +59,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,7 +143,7 @@ STATIC_URL = '/static/'
 # User Model for authentication.
 AUTH_USER_MODEL = 'users.CustomUser'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True   
 ACCOUNT_USERNAME_REQUIRED = False
 #ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
@@ -161,6 +166,10 @@ REST_FRAMEWORK = {
    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser',
    ),
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
 REST_USE_JWT = True

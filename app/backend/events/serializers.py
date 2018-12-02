@@ -11,7 +11,7 @@ class EventSerializerReadWrite(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get("request")
         if request and hasattr(request, "user"):
-            return Event.objects.create( creator=request.user ,**validated_data)
+            return models.Event.objects.create( creator=request.user ,**validated_data)
 
 #        instance.name = validated_data.get('name', instance.name)
 #        instance.info = validated_data.get('info', instance.info)
@@ -27,8 +27,6 @@ class EventSerializerReadWrite(serializers.ModelSerializer):
 #        instance.images = validated_data.get('images', instance.images)
 #        instance.attendants = validated_data.get('attendants', instance.attendants)
         
-
-
     def update(self, instance, validated_data):
         request = self.context.get("request")
         if request and hasattr(request, "user"):
@@ -45,7 +43,7 @@ class EventSerializerReadWrite(serializers.ModelSerializer):
                 #instance.comments = validated_data.get('comments', instance.comments)
                 instance.rating = validated_data.get('rating', instance.rating)
                 #instance.images = validated_data.get('images', instance.images)
-                instance.attendants = validated_data.get('attendants', instance.attendants)
+                #instance.attendants = validated_data.get('attendants', instance.attendants)
                 instance.save()
                 return instance
 
@@ -55,3 +53,10 @@ class EventSerializerReadOnly(serializers.ModelSerializer):
         model = models.Event
         fields = '__all__'
         read_only_fields = ('__all__', )
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            if "attendants" in validated_data:
+                del validated_data["attendants"]
+            return models.Event.objects.create(creator=request.user,**validated_data)

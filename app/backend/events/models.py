@@ -1,8 +1,7 @@
 from django.core import validators
-from django.db import models
+from djongo import models
 from django import forms
 from users.models import CustomUser
-
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
@@ -21,4 +20,4 @@ class Event(models.Model):
     #images = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True) 
     #images = models.ListField()
     #attendants = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    attendants = models.ManyToManyField(CustomUser, related_name='event_set')
+    attendants = models.ManyToManyField(CustomUser, related_name='event_set', blank=True)

@@ -16,6 +16,7 @@ django-rest-auth = "*"
 django-allauth = "*"
 djangorestframework-jwt = "*"
 pillow = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.6"

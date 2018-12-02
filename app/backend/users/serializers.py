@@ -105,3 +105,11 @@ class ProfilePicSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
         fields = ('profile_pic',)
+
+class UserRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CustomUser
+        fields = ('id', 'rating', 'ratingNum',)
+        
+    

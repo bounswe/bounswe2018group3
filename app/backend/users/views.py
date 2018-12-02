@@ -21,6 +21,20 @@ class UserEditView(generics.UpdateAPIView):
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRWSerializer
 
+class UserRateView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.UserRatingSerializer
+
+    def rate(self, *args, **kwargs):
+        user = models.CustomUser.objects.get(pk=self.kwargs['user_id'])
+        totalRating = user.rating * user.ratingNum
+        user.ratingNum = user.ratingNum + 1
+        user.rating = (totalRating + self.kwargs['new_rating']) / user.ratingNum
+        user.save()
+
+        return HttpResponse(user.rating)
+
 class UserRetrieveView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.CustomUser.objects.all()

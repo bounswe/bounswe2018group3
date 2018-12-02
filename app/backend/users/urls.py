@@ -8,4 +8,5 @@ urlpatterns = [
     path('search/', views.UserSearchView.as_view()),
     path('<int:pk>/', views.UserRetrieveView.as_view()),
     path('getpic/<int:user_id>/', views.UserPicView.as_view({'get': 'getpic'})),
+    path('rate/<int:user_id>/<int:new_rating>', views.UserRateView.as_view({'get': 'rate'})),
 ]

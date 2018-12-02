@@ -47,3 +47,9 @@ class EventRWSerializer(serializers.ModelSerializer):
             if "attendants" in validated_data:
                 del validated_data["attendants"]
             return models.Event.objects.create(creator=request.user,**validated_data)
+
+class EventRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Event
+        fields = ('id', 'rating', 'ratingNum',)

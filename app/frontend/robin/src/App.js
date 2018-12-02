@@ -10,6 +10,7 @@ import HomePage from "./pages/homepage/index"
 import Profile from "./pages/profile/index"
 import PrivateProfile from "./pages/privateprofile/index";
 import Event from "./pages/eventpage/index"
+import CreateEvent from "./pages/eventpage/create-event"
 import Terms from "./pages/terms/index";
 
 class App extends React.Component {
@@ -27,6 +28,7 @@ class App extends React.Component {
         <Route path="/profile" component={Profile} />
         <Route path="/privateprofile" component={PrivateProfile}/>
         <Route path="/event" component={Event} />
+        <Route path="/create-event" component={CreateEvent} />
         <Route path="/terms" component={Terms} />
       </Switch>
     );

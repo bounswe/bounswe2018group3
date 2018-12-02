@@ -3,6 +3,10 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
 import django_filters
 
 from . import models
@@ -42,3 +46,18 @@ class EventSearchView(generics.ListAPIView):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("info", "name", "country", "city", "artist", )
     #filter_class = EventFilter
+
+class EventUserRelated(APIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Event.objects.all()
+
+    def get(self, request, page, format=None):
+        
+        event_set = models.Event.objects.all()
+        events = []
+        for event in event_set:
+            events.append(event)
+        events.sort(key=lambda x: x.date, reverse=True)
+        
+        events_serialized = [(serializers.EventRWSerializer(event).data) for event in events]
+        return Response(events_serialized[page*10:(page+1)*10])

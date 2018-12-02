@@ -5,6 +5,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
         fields = (
+            'id',
             'email', 
             'username',
             'first_name',
@@ -17,8 +18,11 @@ class UserSerializer(serializers.ModelSerializer):
             'birthday', 
             'colorScheme',
             'rating',
+            'ratingNum',
             'followedUsers',
-            'blockedUsers')
+            'followers',
+            'blockedUsers',
+            'blockers')
 
     def create(self, validated_data):
         return Users.objects.create(**validated_data)
@@ -49,6 +53,7 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser
         fields = fields = (
+            'id',
             'email', 
             'username',
             'first_name',
@@ -59,8 +64,10 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'profile_pic',
             'birthday', 
             'colorScheme',
-            'rating')
+            'rating',
+            'ratingNum')
         read_only_fields = fields = (
+            'id',
             'email', 
             'username',
             'first_name',
@@ -71,7 +78,8 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'profile_pic',
             'birthday', 
             'colorScheme',
-            'rating')
+            'rating',
+            'ratingNum')
 
 class ProfilePicSerializer(serializers.ModelSerializer):
 

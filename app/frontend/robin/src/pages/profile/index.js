@@ -2,9 +2,12 @@ import React from 'react';
 import {Redirect} from "react-router-dom";
 
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
+
+import {USERS_URL} from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -69,7 +72,31 @@ export default class ProfileCard extends React.Component{
   }
 
   componentDidMount(){
-
+    var data = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    console.log("JWT " + Cookies.get("token"))
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "GET",
+      url: USERS_URL,
+      //data: data,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);
+        console.log(Cookies.get("token"))
+        this.setState({redirect: "/home", error: false});
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
   }
 
   async handleChange(e) {

@@ -9,11 +9,18 @@ export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        eventName: "",
+        eventInfo: "",
+        artistName: "",
+        eventDate: "",
+        eventTime: "",
+        eventPrice: "",
         isGoing: true,
         numberOfGuests: 2
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
     }
   
@@ -27,6 +34,10 @@ export default class CreateEvent extends React.Component {
       });
     }
 
+    handleCheckboxChange(){
+      this.setState({isGoing: !this.state.isGoing})
+    }
+
     handleNameChange(event) {
         const target = event.target;
         const value = target.type === 'text' ? target.value : "";
@@ -35,6 +46,7 @@ export default class CreateEvent extends React.Component {
         this.setState({
           [name]: value
         });
+        console.log(this.state)
       }
   
     render() {
@@ -55,7 +67,7 @@ export default class CreateEvent extends React.Component {
                 className="col-10 col-md-8 col-lg-12 w-80"
                 name="eventName"
                 type="text"
-                value={this.state.value}
+                value={this.state.eventName}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
           </label>
@@ -69,7 +81,7 @@ export default class CreateEvent extends React.Component {
             <input
                 name="eventInfo"
                 type="text"
-                value={this.state.value}
+                value={this.state.eventInfo}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
                 </div>
@@ -85,7 +97,7 @@ export default class CreateEvent extends React.Component {
             <input
                 name="artistName"
                 type="text"
-                value={this.state.value}
+                value={this.state.artistName}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
                 </div>
@@ -101,7 +113,7 @@ export default class CreateEvent extends React.Component {
             <input
                 name="eventDate"
                 type="text"
-                value={this.state.value}
+                value={this.state.eventDate}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
                 </div>
@@ -117,7 +129,7 @@ export default class CreateEvent extends React.Component {
             <input
                 name="eventTime"
                 type="text"
-                value={this.state.value}
+                value={this.state.eventTime}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
                 </div>
@@ -133,7 +145,7 @@ export default class CreateEvent extends React.Component {
             <input
                 name="eventPrice"
                 type="text"
-                value={this.state.value}
+                value={this.state.eventPrice}
                 placeholder="Enter text"
                 onChange={this.handleNameChange}/>
                 </div>
@@ -146,7 +158,7 @@ export default class CreateEvent extends React.Component {
               name="isGoing"
               type="checkbox"
               checked={this.state.isGoing}
-              onChange={this.handleInputChange} />
+              onChange={this.handleCheckboxChange} />
           </label>
           </div>
           <br />

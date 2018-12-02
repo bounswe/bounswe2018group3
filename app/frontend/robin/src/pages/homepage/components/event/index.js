@@ -20,8 +20,6 @@ export default class Event extends React.Component {
         <img width="100%" src={this.props.eventPhoto} alt="Card image cap" />
         <div class="card-body">
           <div class="card-text">{this.props.eventDetails}</div>
-          <a href="#">Event Tickets</a>
-          <a href="#">Detailed Info</a>
         </div>
       </div>
       </div>

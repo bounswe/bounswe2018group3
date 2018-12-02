@@ -11,12 +11,23 @@ from . import serializers
 # Create your views here..
 
 #Read and write event models
-class EventListViewReadWrite(generics.UpdateAPIView):
+class EventListEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     queryset = models.Event.objects.all()
-    serializer_class = serializers.EventSerializerReadWrite
-    
+    serializer_class = serializers.EventEditSerializer
+
+
+class EventListCreateView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventRWSerializer
+
+class EventRetrieveView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventRWSerializer
+
 
 class EventFilter(django_filters.FilterSet):
     class Meta:
@@ -24,10 +35,10 @@ class EventFilter(django_filters.FilterSet):
         fields = '__all__'
 
 #Read only event models,
-class EventListViewReadOnly(generics.ListCreateAPIView):
+class EventSearchView(generics.ListAPIView):
     permission_classes = ()#(IsAuthenticated,)
     queryset = models.Event.objects.all()
-    serializer_class = serializers.EventSerializerReadOnly
-    #filter_backends = (filters.SearchFilter,)
-    #search_fields = ("info", "name", "location", "artist", )
+    serializer_class = serializers.EventRWSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("info", "name", "country", "city", "artist", )
     #filter_class = EventFilter

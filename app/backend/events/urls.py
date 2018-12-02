@@ -3,7 +3,10 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('edit/<int:pk>/', views.EventListViewReadWrite.as_view()),
-    path('edit/', views.EventListViewReadWrite.as_view()),
-    path('', views.EventListViewReadOnly.as_view()),
+    path('edit/<int:pk>/', views.EventListEditView.as_view()),
+    path('search/', views.EventSearchView.as_view()),
+    path('<int:pk>/', views.EventRetrieveView.as_view()),
+    path('', views.EventListCreateView.as_view()),
+
+
 ]

@@ -3,7 +3,7 @@ from . import models
 
 
 #Read and write event models
-class EventSerializerReadWrite(serializers.ModelSerializer):
+class EventEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = '__all__'
@@ -34,14 +34,15 @@ class EventSerializerReadWrite(serializers.ModelSerializer):
                 return instance
 
 #Read only event models
-class EventSerializerReadOnly(serializers.ModelSerializer):
+class EventRWSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
-        fields = ('name','info','images',)
+        fields = '__all__'
         #read_only_fields = ('__all__', )
 
     def create(self, validated_data):
         request = self.context.get("request")
+        print(validated_data)
         if request and hasattr(request, "user"):
             if "attendants" in validated_data:
                 del validated_data["attendants"]

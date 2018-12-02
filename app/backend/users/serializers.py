@@ -47,7 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerReadOnly(serializers.ModelSerializer):
     class Meta:
-        model = models.User
+        model = models.CustomUser
         fields = fields = (
             'email', 
             'username',

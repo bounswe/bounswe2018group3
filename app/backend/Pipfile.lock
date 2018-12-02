@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0845ec23499d0c6625347f6aa75ac646a6844c4addc38aa5658ff24fb2e2849e"
+            "sha256": "7eed5d524a38a1b3a2c2cc967f058c4e174bfbb52eeb4de7a776d324995928ce"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,10 +18,10 @@
     "default": {
         "certifi": {
             "hashes": [
-                "sha256:339dc09518b07e2fa7eda5450740925974815557727d6bd35d319c1524a04a4c",
-                "sha256:6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
+                "sha256:47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7",
+                "sha256:993f830721089fef441cdfeb4b2c8c9df86f0c63239f06bd025a76a7daddb033"
             ],
-            "version": "==2018.10.15"
+            "version": "==2018.11.29"
         },
         "chardet": {
             "hashes": [
@@ -67,6 +67,13 @@
             ],
             "index": "pypi",
             "version": "==2.0.0"
+        },
+        "django-filters": {
+            "hashes": [
+                "sha256:1a9799a41106dc53ed894e952a24e8dee9b4fb37f010f22d178c09c90c61d711"
+            ],
+            "index": "pypi",
+            "version": "==0.2.1"
         },
         "django-rest-auth": {
             "hashes": [
@@ -151,10 +158,10 @@
         },
         "pyjwt": {
             "hashes": [
-                "sha256:30b1380ff43b55441283cc2b2676b755cca45693ae3097325dea01f3d110628c",
-                "sha256:4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176"
+                "sha256:00414bfef802aaecd8cc0d5258b6cb87bd8f553c2986c2c5f29b19dd5633aeb7",
+                "sha256:ddec8409c57e9d371c6006e388f91daf3b0b43bdf9fcbf99451fb7cf5ce0a86d"
             ],
-            "version": "==1.6.4"
+            "version": "==1.7.0"
         },
         "python3-openid": {
             "hashes": [
@@ -258,11 +265,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:8e645abc9572749f0256f05db86af81ea2e3d583086cc2b73d241a64ecf571b7",
-                "sha256:f70e1b78240ba7fea809ecc00fbfbc51615ab531ef3f76f0548072c732358453"
+                "sha256:689de29ae747642ab230c6d37be2b969bf75663176658851f456619aacf27492",
+                "sha256:771467c434d0d9f081741fec1d64dfb011ed26e65e12a28fe06ca2f61c4d556c"
             ],
             "index": "pypi",
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         },
         "six": {
             "hashes": [

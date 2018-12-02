@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.models.Event;
@@ -35,10 +34,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public RatingBar ratingBar;
         ViewHolder(View v) {
             super(v);
-            tvName = v.findViewById(R.id.tvEventName);
+            tvName = v.findViewById(R.id.tvName);
             tvArtist = v.findViewById(R.id.tvArtistName);
             tvDate = v.findViewById(R.id.tvEventDate);
-            ivBanner = v.findViewById(R.id.ivBanner);
+            ivBanner = v.findViewById(R.id.ivProfile);
             tvDescription = v.findViewById(R.id.tvDescription);
             ratingBar = v.findViewById(R.id.ratingBar);
 
@@ -62,7 +61,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         View view;
         assert inflater != null;
         if(adapterType==0){
-
             view = inflater.inflate(R.layout.simple_event, parent, false);
         }else{
             view = inflater.inflate(R.layout.simple_user_event, parent, false);

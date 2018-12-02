@@ -15,7 +15,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/ivBanner"
+                android:id="@+id/ivProfile"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivBanner" />
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
             <RatingBar
                 android:id="@+id/rbEvent"
@@ -50,7 +50,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ivBanner" />
+                app:layout_constraintTop_toTopOf="@+id/ivProfile" />
 
 
             <TextView
@@ -61,7 +61,7 @@
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
                 android:text="@string/organizer"
-                app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
@@ -72,7 +72,7 @@
                 android:text="@string/price"
                 android:background="@color/colorFacebook"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="MissingConstraints" />
         </android.support.constraint.ConstraintLayout>

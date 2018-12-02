@@ -22,6 +22,7 @@ import com.culturalactivities.robin.fragments.CreateEventFragment;
 import com.culturalactivities.robin.fragments.EventsFragment;
 import com.culturalactivities.robin.fragments.MainPageFragment;
 import com.culturalactivities.robin.fragments.ProfileFragment;
+import com.culturalactivities.robin.fragments.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.my_events, R.drawable.calendar, R.color.colorPrimaryLigth);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.search, R.drawable.search, R.color.colorPrimaryLigth);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.profile, R.drawable.profile, R.color.colorPrimaryLigth);
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
-        bottomNavigation.setCurrentItem(1);
+        bottomNavigation.setCurrentItem(2);
 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.replace(R.id.fragment, EventsFragment.newInstance()).commit();
                         break;
                     case 1:
-                        fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
+                        fragmentTransaction.replace(R.id.fragment, SearchFragment.newInstance()).commit();
                         break;
                     case 2:
                         fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();

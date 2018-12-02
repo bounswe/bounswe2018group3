@@ -44,4 +44,5 @@
         completions."
     </string>
     <string name="add_new_event">Create New Event</string>
+    <string name="search">Search</string>
 </resources>

@@ -86,7 +86,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
 
     private void setView(View view) {
         activity.getSupportActionBar().setSubtitle(event.getEventName());
-        ivBanner = view.findViewById(R.id.ivBanner);
+        ivBanner = view.findViewById(R.id.ivProfile);
         tvTitle = view.findViewById(R.id.tvTitle);
         tvOrganizer = view.findViewById(R.id.tvOrganizer);
         tvPrice = view.findViewById(R.id.tvPrice);

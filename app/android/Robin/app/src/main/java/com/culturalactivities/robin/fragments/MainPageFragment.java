@@ -2,29 +2,22 @@ package com.culturalactivities.robin.fragments;
 
 
 import android.content.Context;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.drawable.AnimatedStateListDrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,7 +30,6 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.models.Event;
-import com.culturalactivities.robin.models.Image;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,9 +47,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
-
-    private ImageView imageView;
-
 
     RequestQueue queue;
     private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
@@ -85,10 +74,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
         setView(view);
-
-        imageView = view.findViewById(R.id.ivDeneme);
-        AnimatedVectorDrawable avd = (AnimatedVectorDrawable) imageView.getDrawable();
-        avd.start();
 
         return view;
     }
@@ -192,7 +177,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int position = recyclerView.getChildLayoutPosition(view);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.addSharedElement(view.findViewById(R.id.ivBanner), ViewCompat.getTransitionName(view.findViewById(R.id.ivBanner)));
+        transaction.addSharedElement(view.findViewById(R.id.ivProfile), ViewCompat.getTransitionName(view.findViewById(R.id.ivProfile)));
         transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
         transaction.addToBackStack("addEF");
         transaction.commit();

@@ -78,12 +78,14 @@ export default class Register extends React.Component {
   }
 
   validatePassword(){
+    var upperCaseLetters = /[A-Z]/g;
+    var numbers = /[0-9]/g;
     if(this.state.password === ""){
       return (
         <input type="password" className="form-control" placeholder="Password" required name="password" value={this.state.password} onChange={this.handleChange}/>
       );
     }
-    else if(this.state.password.length < 8 || this.state.password.length > 20){
+    else if(this.state.password.length < 8 || this.state.password.length > 20 || (!this.state.password.match(upperCaseLetters)) || (!this.state.password.match(numbers))){
       return (
         <input type="password" className="form-control is-invalid" placeholder="Password" required name="password" value={this.state.password} onChange={this.handleChange}/>
       );
@@ -115,7 +117,38 @@ export default class Register extends React.Component {
   }
 
   handleErrorMessage(){
-    if(this.state.error){
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var upperCaseLetters = /[A-Z]/g;
+    var numbers = /[0-9]/g;
+    if(this.state.email !== "" && !re.test(String(this.state.email).toLowerCase())){
+      return(
+        <div className="text-danger text-center ">
+          Invalid Email
+        </div>      
+      );
+    }
+    else if(this.state.password !== "" && (this.state.password.length < 8 || this.state.password.length > 20)){
+      return(
+        <div className="text-danger text-center ">
+          Password must be 8-20 characters
+        </div>      
+      );
+    }
+    else if(this.state.password !== "" && (!this.state.password.match(upperCaseLetters))){
+      return(
+        <div className="text-danger text-center ">
+          Password must contain upper-case letter
+        </div>      
+      );
+    }
+    else if(this.state.password !== "" && (!this.state.password.match(numbers))){
+      return(
+        <div className="text-danger text-center ">
+          Password must contain numbers
+        </div>      
+      );
+    }
+    else if(this.state.error){
       return(
         <div className="text-danger text-center ">
           Email already in use
@@ -185,7 +218,7 @@ export default class Register extends React.Component {
                 {this.validateEmail()}
                 {this.validatePassword()}
                 <div className="terms">
-                  <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept terms and conditions
+                  <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> I accept <Link to="/terms">terms and conditions</Link>
                 </div>
                 {this.handleErrorMessage()}
                 {this.enableButton()}

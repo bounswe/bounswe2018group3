@@ -329,7 +329,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_homepage, menu);
+        if(!MainActivity.isGuest) {
+            inflater.inflate(R.menu.menu_homepage, menu);
+        }else{
+            inflater.inflate(R.menu.menu_homepage_guest, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

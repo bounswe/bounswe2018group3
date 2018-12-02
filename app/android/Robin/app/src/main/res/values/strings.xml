@@ -16,9 +16,10 @@
     <string name="username">Username</string>
     <string name="please_enter_username">Please enter username!</string>
     <string name="please_enter_email">Please enter email address!</string>
+    <string name="please_enter_a_valid_email">Please enter a valid email address!</string>
     <string name="please_enter_password">Please enter password</string>
     <string name="please_enter_password_again">Please enter password again</string>
-    <string name="please_enter_password_again_correctly">Please enter password correctly</string>
+    <string name="passwords_do_not_match">Passwords do not match!</string>
     <string name="account_is_being_created">Account is being created</string>
     <string name="connection_error">Connection Error</string>
     <string name="successfully_signed_in">Successfully Signed In.</string>

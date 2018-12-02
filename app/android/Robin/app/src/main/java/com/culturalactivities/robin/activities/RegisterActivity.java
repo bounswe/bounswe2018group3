@@ -77,9 +77,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, this.getString(R.string.please_enter_username), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(email)){
-            // email is empty
-            Toast.makeText(this, this.getString(R.string.please_enter_email), Toast.LENGTH_SHORT).show();
+        if (!isValidEmail(email)){
+            // email is not valid
+            Toast.makeText(this, this.getString(R.string.please_enter_a_valid_email), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (!password1.equals(password2)){
-            Toast.makeText(this, this.getString(R.string.please_enter_password_again_correctly), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.passwords_do_not_match), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -141,6 +141,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         };
         // Add the request to the RequestQueue.
         queue.add(jsonObjReq);
+    }
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
 }

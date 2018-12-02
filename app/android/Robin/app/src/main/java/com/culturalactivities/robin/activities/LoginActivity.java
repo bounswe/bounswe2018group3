@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText etEmail, etPassword;
     private Button buttonLogin, buttonFacebook;
-    private TextView tvRegister, tvForgotPassword;
+    private TextView tvRegister, tvForgotPassword, tvGuestUser;
 
     RequestQueue queue;
     private SharedPreferences preferences;
@@ -53,11 +53,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String pk = preferences.getString("pk", null);
             String username = preferences.getString("username", null);
             String email = preferences.getString("email", null);
-            openMainActivity(token, pk, username, email);
+            openMainActivity(token, pk, username, email,false);
         }
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+
+        tvGuestUser = findViewById(R.id.tvGuestUser);
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonFacebook = findViewById(R.id.buttonFacebook);
@@ -70,16 +72,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         tvRegister.setOnClickListener(this);
         tvForgotPassword.setOnClickListener(this);
+        tvGuestUser.setOnClickListener(this);
     }
 
-    private void openMainActivity(String token, String pk, String username, String email){
+    private void openMainActivity(String token, String pk, String username, String email,boolean isGuest){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("pk", pk);
         intent.putExtra("username", username);
         intent.putExtra("email", email);
+        intent.putExtra("isGuest",isGuest);
         startActivity(intent);
-        finish();
+        if(!isGuest){
+            finish();
+        }
     }
 
     @Override
@@ -96,6 +102,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.tvForgotPassword:
                 //login();
                 break;
+            case R.id.tvGuestUser:
+                openMainActivity(null,null,null,null,true);
+                break;
         }
     }
 
@@ -103,8 +112,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Email can not be empty", Toast.LENGTH_SHORT).show();
+        if (!isValidEmail(email)){
+            Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -135,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             preferences.edit().putString("username", username).apply();
                             preferences.edit().putString("email", email).apply();
 
-                            openMainActivity(token, pk, username, email);
+                            openMainActivity(token, pk, username, email,false);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -160,5 +169,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         };
         // Add the request to the RequestQueue.
         queue.add(jsonObjReq);
+    }
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }

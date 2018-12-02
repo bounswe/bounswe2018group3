@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
                         break;
-                    case 3:
+                    case 2:
                         fragmentTransaction.replace(R.id.fragment, ProfileFragment.newInstance()).commit();
                         break;
                 }

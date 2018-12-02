@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private void setNavigation(){
         bottomNavigation = findViewById(R.id.xbottom_navigation);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        bottomNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
-        bottomNavigation.setInactiveColor(Color.WHITE);
+        bottomNavigation.setAccentColor(Color.WHITE);
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorAccent));
 
         // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.my_events, R.drawable.calendar, R.color.colorPrimaryLigth);

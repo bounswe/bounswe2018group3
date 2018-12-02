@@ -12,6 +12,7 @@ import PrivateProfile from "./pages/privateprofile/index";
 import Event from "./pages/eventpage/index"
 import CreateEvent from "./pages/eventpage/create-event"
 import Terms from "./pages/terms/index";
+import SearchResults from "./pages/searchResults/index";
 
 class App extends React.Component {
 
@@ -30,6 +31,7 @@ class App extends React.Component {
         <Route path="/event" component={Event} />
         <Route path="/create-event" component={CreateEvent} />
         <Route path="/terms" component={Terms} />
+        <Route path="/searchResults" component={SearchResults} />
       </Switch>
     );
   }

@@ -15,11 +15,11 @@ class Comment(models.Model):
        abstract = True
 
 class EventComment(Comment) :
-    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="writtenEventComments") #may also use EmbeddedModelField
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="writtenEventComments")
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comment_set")
 
 class UserComment(Comment) :
-    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="writtenUserComments") #may also use EmbeddedModelField
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="writtenUserComments")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comment_set")
 
 class Tag(models.Model):
@@ -30,3 +30,16 @@ class Tag(models.Model):
     events = models.ManyToManyField(Event, related_name="tags")
     watchers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="watchingTags")
     blockers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="blockedTags")
+
+class Image(models.Model):
+    #id = models.IntegerField(unique=True,db_index=True)
+    content = models.ImageField(upload_to = 'pic_folder/');
+
+    class Meta:
+       abstract = True
+
+class EventImage(Image) :
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="images")
+
+class UserImage(Image) :
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="images")

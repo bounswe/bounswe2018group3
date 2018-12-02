@@ -37,8 +37,8 @@ class EventSerializerReadWrite(serializers.ModelSerializer):
 class EventSerializerReadOnly(serializers.ModelSerializer):
     class Meta:
         model = models.Event
-        fields = '__all__'
-        read_only_fields = ('__all__', )
+        fields = ('name','info','images',)
+        #read_only_fields = ('__all__', )
 
     def create(self, validated_data):
         request = self.context.get("request")

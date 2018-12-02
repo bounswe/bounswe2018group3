@@ -24,10 +24,10 @@ class EventFilter(django_filters.FilterSet):
         fields = '__all__'
 
 #Read only event models,
-class EventListViewReadOnly(generics.ListAPIView):
+class EventListViewReadOnly(generics.ListCreateAPIView):
     permission_classes = ()#(IsAuthenticated,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventSerializerReadOnly
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ("info", "name", "location", "artist", )
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ("info", "name", "location", "artist", )
     #filter_class = EventFilter

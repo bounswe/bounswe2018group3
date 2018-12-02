@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     country = models.CharField(blank=True, max_length=255)
     email = models.EmailField()
     username = models.CharField(max_length=255, unique=True)
-    photo = models.ImageField(blank=True) #may set a default profile pic
+    profile_pic = models.ImageField(upload_to = 'pic_folder/profile_pics/', default = '/default_profile.png')
     birthday = models.DateField(blank=True, null=True)
     colorScheme = models.SmallIntegerField(default=0)
     rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)

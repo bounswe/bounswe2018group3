@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             'bio', 
             'city', 
             'country',
-            'photo',
+            'profile_pic',
             'birthday', 
             'colorScheme',
             'rating',
@@ -36,7 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
                 instance.country = validated_data.get('country', instance.country)
                 instance.email = validated_data.get('email', instance.email)
                 instance.username = validated_data.get('username', instance.username)
-                instance.photo = validated_data.get('photo', instance.photo)
+                instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)
                 instance.birthday = validated_data.get('birthday', instance.birthday)
                 instance.colorScheme = validated_data.get('colorScheme', instance.colorScheme)
                 instance.rating = validated_data.get('rating', instance.rating)
@@ -56,7 +56,7 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'bio', 
             'city', 
             'country',
-            'photo',
+            'profile_pic',
             'birthday', 
             'colorScheme',
             'rating')
@@ -68,7 +68,13 @@ class UserSerializerReadOnly(serializers.ModelSerializer):
             'bio', 
             'city', 
             'country',
-            'photo',
+            'profile_pic',
             'birthday', 
             'colorScheme',
             'rating')
+
+class ProfilePicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CustomUser
+        fields = ('profile_pic',)

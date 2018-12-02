@@ -40,7 +40,7 @@ export default class SearchResults extends React.Component{
   componentDidMount(e){
     // var data = {
     //   // TODO: Change here according to API
-    //   query: Cookies.get("searchQ")
+    //   search: Cookies.get("searchQ")
     // };
     // var headers= {
     //   "Content-Type": "application/json"
@@ -80,7 +80,6 @@ export default class SearchResults extends React.Component{
         {this.state.events.map(comp => {
               return <EventComp title={comp.title} subtitle={comp.subtitle}
               eventPhoto={comp.eventPhoto} eventDetails={comp.eventDetails}/>
-          
             })}
         </div>
       </div>

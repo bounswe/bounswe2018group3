@@ -18,7 +18,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.fragments.EventsFragment;
 import com.culturalactivities.robin.fragments.ProfileFragment;
-import com.culturalactivities.robin.fragments.SearchFragment;
+import com.culturalactivities.robin.fragments.MainPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, SearchFragment.newInstance()).commit();
+        fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         if(isGuest){
-                            fragmentTransaction.replace(R.id.fragment, SearchFragment.newInstance()).commit();
+                            fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
                         }else{
                             fragmentTransaction.replace(R.id.fragment, EventsFragment.newInstance()).commit();
                         }
                         break;
                     case 1:
-                        fragmentTransaction.replace(R.id.fragment, SearchFragment.newInstance()).commit();
+                        fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
                         break;
                     case 3:
                         fragmentTransaction.replace(R.id.fragment, ProfileFragment.newInstance()).commit();

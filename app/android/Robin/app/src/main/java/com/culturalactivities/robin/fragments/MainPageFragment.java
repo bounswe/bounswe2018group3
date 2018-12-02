@@ -47,7 +47,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment implements View.OnClickListener {
+public class MainPageFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
@@ -72,12 +72,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         super.onAttach(context);
     }
 
-    public SearchFragment() {
+    public MainPageFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFragment newInstance(){
-        return new SearchFragment();
+    public static MainPageFragment newInstance(){
+        return new MainPageFragment();
     }
 
 
@@ -86,7 +86,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_main_page, container, false);
         setView(view);
 
         return view;
@@ -99,12 +99,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.home_page));
         recyclerView = view.findViewById(R.id.rvEvents);
-        eventAdapter = new EventAdapter(activity, events, SearchFragment.this,0);
+        eventAdapter = new EventAdapter(activity, events, MainPageFragment.this,0);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
         getEvents();
 
-        userAdapter = new SearchUserAdapter(activity, users, SearchFragment.this);
+        userAdapter = new SearchUserAdapter(activity, users, MainPageFragment.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         //recyclerView.setAdapter(userAdapter);
 

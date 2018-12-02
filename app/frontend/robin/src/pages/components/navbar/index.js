@@ -17,10 +17,13 @@ export default class NavBar extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      redirect: ""
+      redirect: "",
+      searchQuery : ""
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleProfile = this.handleProfile.bind(this);
+    this.handleNavbarChange = this.handleNavbarChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   toggle() {
     this.setState({
@@ -41,6 +44,23 @@ export default class NavBar extends React.Component {
     }
     else
       this.setState({redirect: "/profile"});
+  }
+
+  handleNavbarChange(e) {
+    this.setState({...this.state, searchQuery: e.target.value});
+  }
+
+  handleSearch(e){
+    e.preventDefault();
+    if(this.props.currentPath === "/searchresults"){
+      Cookies.set("searchQ", this.state.searchQuery);
+      console.log(Cookies.get("searchQ"));
+      window.location.reload();
+      return;
+    }
+    else
+      Cookies.set("searchQ", this.state.searchQuery);
+      this.setState({...this.state,redirect: "/searchresults"});
   }
 
   render() {
@@ -66,9 +86,9 @@ export default class NavBar extends React.Component {
               <li className="nav-item active mx-auto w-100">
                 <div className="float-left w-80">
                   <form className="form-inline my-2 my-lg-0 mx-0 w-100">
-                    <input className="form-control col-10 col-md-8 col-lg-10" type="search" aria-label="Search" placeholder="search"/>
+                    <input className="form-control col-10 col-md-8 col-lg-10" type="search" value={this.state.searchQuery} onChange={this.handleNavbarChange} aria-label="Search" placeholder="search"/>
                     <span className="input-group-btn float-right">
-                      <button className="btn btn-default" type="submit">
+                      <button className="btn btn-default" type="submit" onClick={e => this.handleSearch(e)}>
                         <i className="fa fa-search"></i>
                       </button>
                     </span>

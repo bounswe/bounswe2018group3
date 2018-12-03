@@ -6,6 +6,8 @@ from rest_auth.registration.views import VerifyEmailView
 from .views import CompleteView, VerificationSentView
 from django.views.generic import TemplateView
 
+from . import views
+
 urlpatterns = [
     path('users/', include('users.urls')),
     path('events/', include('events.urls')),
@@ -16,4 +18,18 @@ urlpatterns = [
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/ExampleView/', ExampleView.as_view()),
+    
+    # Comment-related views
+    path('usercomments/', views.UserCommentCreateView.as_view()),
+    path('eventcomments/', views.EventCommentCreateView.as_view()),
+    path('usercomments/edit/<int:pk>', views.UserCommentEditView.as_view()),
+    path('eventcomments/edit/<int:pk>', views.EventCommentEditView.as_view()),
+    path('usercomments/<int:pk>', views.UserCommentRetrieveView.as_view()),
+    path('eventcomments/<int:pk>', views.EventCommentRetrieveView.as_view()),
+    path('usercomments/delete/<int:pk>', views.UserCommentDeleteView.as_view({'delete': 'delete'})),
+    path('eventcomments/delete/<int:pk>', views.EventCommentDeleteView.as_view({'delete': 'delete'})),
+    path('usercomments/search/', views.UserCommentSearchView.as_view()),
+    path('eventcomments/search/', views.EventCommentSearchView.as_view()),
+    path('usercomments/rate/<int:pk>/<int:new_rating>', views.UserCommentRateView.as_view({'post': 'rate'})),
+    path('eventcomments/rate/<int:pk>/<int:new_rating>', views.EventCommentRateView.as_view({'post': 'rate'})),
 ]

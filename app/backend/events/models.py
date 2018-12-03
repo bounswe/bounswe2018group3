@@ -22,3 +22,6 @@ class Event(models.Model):
     ratingNum = models.IntegerField(default=0)
     #attendants = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     attendants = models.ManyToManyField(CustomUser, related_name='event_set', blank=True)
+
+    def __str__(self):
+        return self.name + " : " + self.info

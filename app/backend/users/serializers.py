@@ -11,6 +11,7 @@ class UserRWSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name', 
             'password',
+            'is_superuser',
             'bio', 
             'city', 
             'country',

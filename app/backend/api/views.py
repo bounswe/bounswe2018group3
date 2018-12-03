@@ -96,7 +96,7 @@ class UserCommentDeleteView(viewsets.ModelViewSet):
 
     def delete(self, request, pk):
         comment = models.UserComment.objects.get(pk=pk)
-        if(comment.author == request.user):
+        if(comment.author == request.user or request.user.is_superuser == 'true'):
             comment.delete()
             return HttpResponse("Item deleted")
         return HttpResponse("Only the author can delete their comments")
@@ -138,7 +138,7 @@ class EventCommentDeleteView(viewsets.ModelViewSet):
 
     def delete(self, request, pk):
         comment = models.EventComment.objects.get(pk=pk)
-        if(comment.author == request.user):
+        if(comment.author == request.user or request.user.is_superuser == 'true'):
             comment.delete()
             return HttpResponse("Item deleted")
         return HttpResponse("Only the author can delete their comments")

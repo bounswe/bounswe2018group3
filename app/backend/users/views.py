@@ -21,6 +21,18 @@ class UserEditView(generics.UpdateAPIView):
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRWSerializer
 
+class UserDeleteView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.UserRWSerializer
+
+    def delete(self, request, pk):
+        user = models.CustomUser.objects.get(pk=pk)
+        if(request.user.is_superuser == 'true'):
+            user.delete()
+            return HttpResponse("User deleted")
+        return HttpResponse("Only a superuser can delete users")
+
 class UserRateView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = models.CustomUser.objects.all()

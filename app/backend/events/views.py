@@ -16,14 +16,26 @@ from . import serializers
 # Create your views here..
 
 #Read and write event models
-class EventListEditView(generics.UpdateAPIView):
+class EventEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventEditSerializer
 
+class EventDeleteView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.EventRWSerializer
 
-class EventListCreateView(generics.ListCreateAPIView):
+    def delete(self, request, pk):
+        event = models.Event.objects.get(pk=pk)
+        if(request.user == event.creator or request.user.is_superuser == 'true'):
+            event.delete()
+            return HttpResponse("Event deleted")
+        return HttpResponse("Only the creator can delete their events")
+
+
+class EventCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer

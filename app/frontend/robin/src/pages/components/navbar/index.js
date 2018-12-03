@@ -31,16 +31,17 @@ export default class NavBar extends React.Component {
   handleLogout(e){
     e.preventDefault();
     Cookies.remove("token");
+    Cookies.remove("userid");
     this.setState({redirect: "/login"});
   }
 
   handleProfile(e){
     e.preventDefault();
-    if(this.props.currentPath === "/profile"){
+    if(this.props.currentPath.substring(0,8) === "/profile"){
       return;
     }
     else
-      this.setState({redirect: "/profile"});
+      this.setState({redirect: "/profile/" + Cookies.get("userid")});
   }
 
   render() {

@@ -10,7 +10,7 @@ import "./index.css"
 import logo from '../../images/robin.svg';
 import androidApp from "../../images/google-play.png"
 
-import { LOGIN_URL } from "../constants/backend-urls";
+import { LOGIN_URL, USERS_URL } from "../constants/backend-urls";
 
 export default class Login extends React.Component {
 
@@ -82,6 +82,26 @@ export default class Login extends React.Component {
         console.log(Cookies.get("token"))
         this.setState({redirect: "/home", error: false});
       }
+    }).then(() => {
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + "1",
+        //data: data,
+        headers: headers,
+      };
+      axios(options).then(response => {
+        if(response.status === 200){
+          Cookies.set("userid", response.data.id)
+          this.setState({redirect: "/home", error: false});
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
     }).catch(error => {
       console.error(error);
       this.setState({error: true});

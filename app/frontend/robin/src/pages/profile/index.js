@@ -43,6 +43,31 @@ var examplePeople = [
   },
 ]
 
+var exampleProfile = {
+  email: "",
+      firstName: "Furkan Enes",
+      lastName: "Yalçın",
+      password: "",
+      city: "Istanbul",
+      country: "Turkey",
+      birthday: "01.01.1996",
+      //gender: "",
+      //relationshipStatus: "",
+      //occupation: "",
+      //education: "",
+      //languages: "",
+      //about: "",
+      bio: "I am a professional Europa Universalis player. I also love to write codes and eat meat. I like girls",
+      interests: "games, girls",
+      //likes: "",
+      //hates: "",
+      //favourites: "",
+      attendedEvents: "Istanbul Coffee Fest",
+      willAttendEvents: "Cmpe451 Milestone",
+      createdEvents: "Europa Universalis IV Night",
+      profilePic: "",
+}
+
 export default class ProfileCard extends React.Component{
   constructor(props){
     super(props);
@@ -71,6 +96,7 @@ export default class ProfileCard extends React.Component{
       attendedEvents: "",
       willAttendEvents: "",
       createdEvents: "",
+      profilePic: "",
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -80,7 +106,7 @@ export default class ProfileCard extends React.Component{
     this.listFriends = this.listFriends.bind(this);
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
@@ -90,7 +116,7 @@ export default class ProfileCard extends React.Component{
       url: USERS_URL + Cookies.get("userid"),
       headers: headers,
     };
-    axios(options).then(response => {
+    await axios(options).then(response => {
       if(response.status === 200){
         console.log(response)
         this.setState({
@@ -111,6 +137,8 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+    //this.setState(exampleProfile);
+
   }
 
   async handleChange(e) {

@@ -8,27 +8,48 @@ import skyGif from "./T9L0.gif"
 import gazaSurf from "./gazaSurf.jpg"
 import "./index.css"
 import Cookies from 'js-cookie';
+import { compose } from 'redux';
+import axios from 'axios';
+
+import { SEARCH_URL } from "../constants/backend-urls";
 
 export default class SearchResults extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       redirect: "",
+      query: this.props.location.query,
       token: Cookies.get("token"),
-      events : [{title:'Boris Brejcha for Cercle',
-                subtitle:'Château de Fontainebleau, 24 Oct 2018',
-                eventPhoto:borisPhoto,
-                eventDetails:'This is the masterpiece..' },
-              {title:'Boris Brejcha for Cercle',
-              subtitle:'Château de Fontainebleau, 25 Oct 2018',
-              eventPhoto:borisPhoto,
-              eventDetails:'This is the mastedsdfrpiece..' },
-              {title:'Boris Brejcha for Cercle',
-              subtitle:'Château de Fontainebleau, 24 Oct 2018',
-              eventPhoto:borisPhoto,
-              eventDetails:'This is the qweqwemasterpiece..' }]
-    }
+      events : []
+    };
   }
+
+  componentDidMount(e){
+    var data = {
+      // TODO: Change here according to API
+      search: Cookies.get("searchQ")
+    };
+    var headers= {
+      "Content-Type": "application/json"
+    };
+    var options = {
+      method: "GET",
+      // TODO: Update search url page.
+      url: SEARCH_URL,
+      data: data,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        var eventList = response.data;
+        console.log(eventList);
+        this.setState({events: eventList});
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  } 
 
   render(){
     if(this.state.token === undefined){
@@ -36,6 +57,7 @@ export default class SearchResults extends React.Component{
         <Redirect to="/login"/>
       )
     }
+    console.log(Cookies.get("searchQ"))
     return (
       <div>
         <div className="mb-70">
@@ -43,9 +65,8 @@ export default class SearchResults extends React.Component{
         </div>
         <div className="eventContainer col-md-6">
         {this.state.events.map(comp => {
-              return <EventComp title={comp.title} subtitle={comp.subtitle}
-              eventPhoto={comp.eventPhoto} eventDetails={comp.eventDetails}/>
-          
+              return <EventComp title={comp.name} subtitle={comp.locatio}
+              eventPhoto="https://i.hizliresim.com/J36Rjq.jpg" eventDetails={comp.info}/>
             })}
         </div>
       </div>

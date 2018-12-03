@@ -4,6 +4,7 @@ import "./eventpage.css"
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
 
+const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minutes: "numeric", month: "numeric", year: "numeric" })
 
   export default class Comment extends React.Component {
 
@@ -19,6 +20,7 @@ import StarRatingComponent from 'react-star-rating-component';
     }
   
     render() {
+      const { userName, text, date } = this.props;
       const { rating } = this.state;
 
         return (
@@ -31,7 +33,7 @@ import StarRatingComponent from 'react-star-rating-component';
             <div class="col-sm-10">
             <div class="row"> 
             <div class="col-sm-10">
-            <div class="card-title">User Name</div>
+            <div class="card-title">{ userName } - { dateTimeFormat.format(date) }</div>
             </div>
             <div class="col-sm-2">
                 <StarRatingComponent 
@@ -42,7 +44,7 @@ import StarRatingComponent from 'react-star-rating-component';
               />
             </div>
             </div>
-            <p class="card-text shadow-sm bg-white rounded" style={{marginRight:'30px', marginTop:'20px'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet quam in sem molestie semper. Integer et tellus vitae neque viverra mattis sit amet ut orci. Praesent blandit urna justo, in viverra magna dapibus a. Nunc et consequat augue. Cras id dolor lectus. Nam blandit tristique leo interdum tristique. Nunc at elit enim. Phasellus ut est condimentum, molestie odio tincidunt, malesuada neque. Nulla ligula eros, semper in efficitur ut, tempor et turpis.</p>
+            <p class="card-text shadow-sm bg-white rounded" style={{marginRight:'30px', marginTop:'20px'}}>{ text }</p>
             </div>
             </div>
           </div>

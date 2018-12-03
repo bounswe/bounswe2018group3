@@ -10,7 +10,7 @@ import HomePage from "./pages/homepage/index"
 import Profile from "./pages/profile/index"
 import PrivateProfile from "./pages/privateprofile/index";
 import Event from "./pages/eventpage/index"
-import CreateEvent from "./pages/eventpage/create-event"
+import CreateEvent from "./pages/createevent/"
 import Terms from "./pages/terms/index";
 import SearchResults from "./pages/searchResults/index";
 

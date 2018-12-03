@@ -13,6 +13,7 @@ import Event from "./pages/eventpage/index"
 import CreateEvent from "./pages/createevent/"
 import Terms from "./pages/terms/index";
 import SearchResults from "./pages/searchResults/index";
+import CreateEventSuccess from "./pages/createeventsuccess/index";
 
 class App extends React.Component {
 
@@ -32,6 +33,7 @@ class App extends React.Component {
         <Route path="/create-event" component={CreateEvent} />
         <Route path="/terms" component={Terms} />
         <Route path="/searchResults" component={SearchResults} />
+        <Route path="/createEventSuccess" component={CreateEventSuccess}/>
       </Switch>
     );
   }

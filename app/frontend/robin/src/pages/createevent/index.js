@@ -1,6 +1,7 @@
 import Navbar from "../components/navbar/index"
 import React from 'react';
 import "./index.css";
+import Cookies from 'js-cookie';
 
 
 export default class CreateEvent extends React.Component {
@@ -14,12 +15,16 @@ export default class CreateEvent extends React.Component {
         eventTime: "",
         eventPrice: "",
         isGoing: true,
-        numberOfGuests: 2
+        numberOfGuests: 2,
+        submitClicked: false,
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
+      this.handleErrorMessage = this.handleErrorMessage.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.checkError = this.checkError.bind(this);
     }
   
     handleInputChange(event) {
@@ -45,7 +50,55 @@ export default class CreateEvent extends React.Component {
           [name]: value
         });
         console.log(this.state)
+    }
+
+    handleSubmit(){
+      this.setState({submitClicked: true});
+      if(this.checkError()){
+        Cookies.set("eventName", this.state.eventName);
+        Cookies.set("eventInfo", this.state.eventInfo);
+        Cookies.set("eventDate", this.state.eventDate);
+        Cookies.set("eventTime", this.state.eventTime);
+        Cookies.set("eventPrice", this.state.eventPrice);
+        Cookies.set("numberOfGuests", this.state.numberOfGuests);
       }
+      else
+        return;
+    }
+
+    checkError(){
+      if(this.state.eventName === "" || this.state.eventDate === "" || this.state.eventTime === ""){
+        return false;
+      }
+      else return true;
+    }
+
+    handleErrorMessage(){
+      if(this.state.submitClicked){
+        if(this.state.eventName === ""){
+          return(
+            <div className="text-danger text-center ">
+              Event name cannot be empty
+            </div>
+          );
+        }
+        else if(this.state.eventDate === ""){
+          return(
+            <div className="text-danger text-center ">
+              Event date cannot be empty
+            </div>
+          );
+        }
+        else if(this.state.eventTime === ""){
+          return(
+            <div className="text-danger text-center ">
+              Event time cannot be empty
+            </div>
+          );
+        }
+      }
+      return;
+    }
   
     render() {
       return (
@@ -54,6 +107,7 @@ export default class CreateEvent extends React.Component {
             <Navbar currentPath={this.props.location.pathname}/>
           </div>
           <div className="container-event col-xs-12 col-sm-10 col-md-6">
+            <h2 className="text-center">Create an Event</h2>
             <form className="form-event">
             <div className="row">
                 <div className="col-lg-6">
@@ -171,9 +225,10 @@ export default class CreateEvent extends React.Component {
                     onChange={this.handleCheckboxChange} />
                 </label>
               </div>
+              {this.handleErrorMessage()}
               <div className="row">
                 <div className="col-xs-2 mx-auto">
-                  <button type="button" className="btn btn-success mx-auto">Create</button>
+                  <button type="button" className="btn btn-success mx-auto" onClick={this.handleSubmit}>Create</button>
                 </div>
               </div>
             </form>

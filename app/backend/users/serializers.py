@@ -67,7 +67,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followedUsers',
             'blockedUsers',
             'blockers',
-            'followers')
+            'followers',)
         read_only_fields = fields = (
             'id',
             'email', 
@@ -85,7 +85,16 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followedUsers',
             'blockedUsers',
             'blockers',
-            'followers')
+            'followers',)
+
+class UserAttendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = (
+            'id',
+            'username',
+            'event_set',
+        )
 
 class UserSearchSerializer(serializers.ModelSerializer):
     class Meta:

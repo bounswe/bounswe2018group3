@@ -28,11 +28,11 @@ class UserComment(Comment) :
 class Tag(models.Model):
     #id = models.IntegerField(unique=True,db_index=True)
     name = models.CharField(max_length=255,unique=True,db_index=True)
-    connectedTags = models.ManyToManyField("self")
-    followerNumber = models.PositiveIntegerField()
-    events = models.ManyToManyField(Event, related_name="tags")
-    watchers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="watchingTags")
-    blockers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="blockedTags")
+    connectedTags = models.ManyToManyField("self",blank=True)
+    watcherNumber = models.PositiveIntegerField(default=0)
+    events = models.ManyToManyField(Event, related_name="tags",blank=True)
+    watchers = models.ManyToManyField(CustomUser, related_name="watchingTags", blank=True)
+    blockers = models.ManyToManyField(CustomUser, related_name="blockedTags", blank=True)
 
 class Image(models.Model):
     #id = models.IntegerField(unique=True,db_index=True)

@@ -182,3 +182,39 @@ class EventCommentSearchView(generics.ListAPIView):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("title", "content",)
     #filter_class = EventFilter
+
+# Tag related views
+
+class TagCreateView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagRWSerializer
+
+class TagEditView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagRWSerializer
+
+class TagDeleteView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagRWSerializer
+
+    def delete(self, request, pk):
+        tag = models.Tag.objects.get(pk=pk)
+        if(request.user.is_superuser == 'true'):
+            tag.delete()
+            return HttpResponse("Tag deleted")
+        return HttpResponse("Only a superuser can delete tags")
+
+class TagRetrieveView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagReadOnlySerializer
+
+class TagSearchView(generics.ListAPIView):
+    permission_classes = ()#(IsAuthenticated,)
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagSearchSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("name", )

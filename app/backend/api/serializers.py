@@ -133,7 +133,45 @@ class EventCommentSearchSerializer(serializers.ModelSerializer):
             'date',
             'rating')
 
-class TagSerializer(serializers.ModelSerializer):
+# Tag related serializers
+
+class TagRWSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
         fields = '__all__'
+
+    def create(self, validated_data):
+        instance =  models.Tag.objects.create()
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        return instance
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        return instance
+
+class TagReadOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tag
+        fields = '__all__'
+        read_only_fields = (
+            'id',
+            'name',
+            'events',
+            'connectedTags',
+            'watcherNumber',
+            'blockers',
+            'watchers')
+
+class TagSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tag
+        fields = (
+            'id',
+            'name',
+            'events',
+            'connectedTags',
+            'watcherNumber',
+            'blockers',
+            'watchers')

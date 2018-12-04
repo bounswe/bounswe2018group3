@@ -66,7 +66,7 @@ export default class SearchResults extends React.Component{
         <div className="eventContainer col-md-6">
         {this.state.events.map(comp => {
               return <EventComp title={comp.name} subtitle={comp.locatio}
-              eventPhoto="https://i.hizliresim.com/J36Rjq.jpg" eventDetails={comp.info}/>
+              eventPhoto={comp.country} eventDetails={comp.info}/>
             })}
         </div>
       </div>

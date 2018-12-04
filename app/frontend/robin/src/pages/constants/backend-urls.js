@@ -6,3 +6,5 @@ export const SEARCH_URL = "http://139.59.128.92:8080/api/v1/events/search/"
 export const USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
 export const EDIT_USER_URL = "http://139.59.128.92:8080/api/v1/users/edit/"
 export const EVENT_URL = "http://139.59.128.92:8080/api/v1/events/"
+export const HOMEPAGE_URL = "http://139.59.128.92:8080/api/v1/events/homepage/"
+

@@ -323,7 +323,7 @@ export default class ProfileCard extends React.Component{
                           <h5>Events I will attend to</h5>
                           <p>{this.state.willAttendEvents}</p>
                           <hr/>
-                          <h5>Things I have created</h5>
+                          <h5>Events I have created</h5>
                           <p>{this.state.createdEvents}</p>
                           <hr/>
                         </div>
@@ -702,7 +702,7 @@ export default class ProfileCard extends React.Component{
                           <h5>Events I will attend to</h5>
                           <p>{this.state.willAttendEvents}</p>
                           <hr/>
-                          <h5>Things I have created</h5>
+                          <h5>Events I have created</h5>
                           <p>{this.state.createdEvents}</p>
                           <hr/>
                         </div>

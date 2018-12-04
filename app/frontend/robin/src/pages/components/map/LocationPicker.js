@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LocationPicker from 'react-location-picker';
- 
+import "./location.css"
+
 /* Default position */
 const defaultPosition = {
   lat: 27.9878,

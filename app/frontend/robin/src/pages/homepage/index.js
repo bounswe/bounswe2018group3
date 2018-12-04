@@ -21,7 +21,7 @@ export default class Home extends React.Component{
       query: this.props.location.query,
       token: Cookies.get("token"),
       events : [],
-      page : 1
+      page : 0
     };
   }
 

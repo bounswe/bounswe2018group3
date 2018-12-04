@@ -155,7 +155,6 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
             </div>
             </div>
           </div>
-
         </div>
       )
     }

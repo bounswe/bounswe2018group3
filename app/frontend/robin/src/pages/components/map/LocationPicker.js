@@ -14,10 +14,10 @@ export default class LocationPickerExample extends Component {
     super(props);
  
     this.state = {
-      address: "Kala Pattar Ascent Trail, Khumjung 56000, Nepal",
+      address: "MT Everest",
       position: {
-         lat: 0,
-         lng: 0
+         lat: 27.9878,
+         lng: 86.9250
       }
     };
  

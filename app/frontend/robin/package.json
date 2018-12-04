@@ -14,6 +14,7 @@
     "js-cookie": "^2.2.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
+    "react-google-maps": "^9.4.5",
     "react-location-picker": "^1.3.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",

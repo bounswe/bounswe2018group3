@@ -3,6 +3,7 @@
     <color name="colorPrimary">#705662</color>
     <color name="colorPrimaryDark">#563946</color>
     <color name="colorPrimaryLigth">#976d81</color>
+    <color name="colorPrimaryWhite">#ccabbb</color>
     <color name="colorFacebook">#49639f</color>
     <color name="colorAccent">#201f1f</color>
 </resources>

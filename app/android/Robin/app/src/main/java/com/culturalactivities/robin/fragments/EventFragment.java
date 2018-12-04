@@ -1,13 +1,8 @@
 package com.culturalactivities.robin.fragments;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
@@ -30,19 +24,21 @@ import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
 
-public class EventFragment extends Fragment implements View.OnClickListener {
+public class EventFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
     private Event event;
     private ImageView ivBanner;
-    private TextView tvTitle, tvDescription, tvOrganizer, tvPrice;
+    private TextView tvTitle, tvDescription, tvOrganizer, tvPrice, tvDate;
     private RatingBar rbEvent;
 
 
@@ -55,6 +51,10 @@ public class EventFragment extends Fragment implements View.OnClickListener {
     // image gallery
     private RecyclerView rvGallery;
     private ImageAdapter imageAdapter;
+
+    //Google Map
+    GoogleMap map;
+    MapView mapView;
 
 
     private AppCompatActivity activity;
@@ -98,25 +98,27 @@ public class EventFragment extends Fragment implements View.OnClickListener {
 
     private void setView(View view) {
         activity.getSupportActionBar().setSubtitle(event.getEventName());
-        ivBanner = view.findViewById(R.id.ivProfile);
+        ivBanner = view.findViewById(R.id.ivEvent);
         tvTitle = view.findViewById(R.id.tvTitle);
         tvOrganizer = view.findViewById(R.id.tvArtist);
         tvPrice = view.findViewById(R.id.tvPrice);
         tvDescription = view.findViewById(R.id.tvDescription);
         rbEvent = view.findViewById(R.id.rbEvent);
+        tvDate = view.findViewById(R.id.tvDate);
 
-        //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
+        Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
-        rbEvent.setRating(3);
-        tvOrganizer.setText("MFÖ");
-        tvPrice.setText("50 ₺");
+        rbEvent.setRating(event.getRating());
+        tvOrganizer.setText(event.getArtistInfo());
+        tvPrice.setText(String.valueOf(event.getPrice()));
+        tvDate.setText(event.getDate());
         
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
         imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
         rvGallery.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        //rvGallery.setAdapter(imageAdapter);
+        rvGallery.setAdapter(imageAdapter);
 
         //comments part
         recyclerView = view.findViewById(R.id.rvComments);
@@ -124,6 +126,13 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(commentAdapter);
         getComments();
+
+        mapView = view.findViewById(R.id.map);
+        if (mapView != null){
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+        }
     }
 
     private void getComments() {
@@ -142,5 +151,15 @@ public class EventFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(activity);
+        map = googleMap;
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.addMarker(new MarkerOptions().position(new LatLng(41.085830, 29.046891)).title(event.getEventName()).snippet("huhuu"));
+        CameraPosition position = CameraPosition.builder().target(new LatLng(41.085830, 29.046891)).zoom(14).build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 }

@@ -4,6 +4,7 @@ package com.culturalactivities.robin.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +15,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
+import com.culturalactivities.robin.adapters.SearchUserAdapter;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
+import com.culturalactivities.robin.models.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -34,6 +52,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private EventAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
 
+    RequestQueue queue;
+    private String USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
+    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
+
+    private SearchUserAdapter userAdapter;
+    private ArrayList<User> users = new ArrayList<>();
+
+    private ImageView ivProfile;
+    private TextView tvName, tvBio;
+
+    private TabLayout tabLayout;
 
     private AppCompatActivity activity;
     @Override
@@ -60,29 +89,222 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setView(View view) {
+        queue = Volley.newRequestQueue(activity);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.profile));
         recyclerView = view.findViewById(R.id.rvEvents);
         eventAdapter = new EventAdapter(activity, events, this,1);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
-        getEvents();
+
+
+        userAdapter = new SearchUserAdapter(activity, users, ProfileFragment.this);
+
+
+        ivProfile = view.findViewById(R.id.ivEvent);
+        tvName = view.findViewById(R.id.tvName);
+        tvBio = view.findViewById(R.id.tvBio);
+        getProfile(MainActivity.pk);
+        getEvents(null);
+
+        tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        getEvents(null);
+                        break;
+                    case 1:
+                        getFollowings();
+                        break;
+                    case 2:
+                        getFollowings();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
-    private void getEvents() {
-        events.clear();
-        Image image = new Image("https://cappadociaballoonflights.com/blog/img/cappadocia%20balloon%20ride.JPG", null);
-        ArrayList<Image> images = new ArrayList<>();
-        images.add(image);
-        for (int i = 0; i < 3; i++) {
-            Event event = new Event();
-            event.setImages(images);
-            event.setRating(3);
-            event.setEventInfo("MY Event description");
-            events.add(event);
+    private void getEvents(String query) {
+        String EURL = EVENTS_URL;
+        if (query != null){
+            EURL = EVENTS_URL + "search/?search=" + query;
         }
-        eventAdapter.notifyDataSetChanged();
-        MainActivity.progressBar.setVisibility(View.INVISIBLE);
+        events.clear();
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                EURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
+                                String name = jsonObject.getString("name");
+                                String info = jsonObject.getString("info");
+                                String artist = jsonObject.getString("artist");
+                                String date = jsonObject.getString("date");
+                                String image = jsonObject.getString("country"); // TODO: 04.12.2018 Here will change
+                                Double price = Double.valueOf(jsonObject.getString("price"));
+                                Float rating = Float.valueOf(jsonObject.getString("rating"));
+                                ArrayList<Image> images = new ArrayList<>();
+                                images.add(new Image(image, null));
+                                events.add(new Event(id, name, info, artist, date, price, rating, null, null, null, null, images));
+                            }
+                            recyclerView.setAdapter(eventAdapter);
+                            eventAdapter.notifyDataSetChanged();
+                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    private void getProfile(String id) {
+        String UURL = USERS_URL + id;
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                UURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String username = jsonObject.getString("username");
+                            String fname = jsonObject.getString("first_name");
+                            String lname = jsonObject.getString("last_name");
+                            String bio = jsonObject.getString("bio");
+                            String image = jsonObject.getString("profile_pic");
+
+                            tvName.setText(fname + " " + lname);
+                            //Glide.with(activity).load(image).into(ivProfile);
+                            // TODO: 05.12.2018 Waiting for profile picture link from backend
+                            tvBio.setText(bio);
+                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("type", "post");
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    private void getFollowings() {
+        users.clear();
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                USERS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String username = jsonObject.getString("username");
+                                String fname = jsonObject.getString("first_name");
+                                String lname = jsonObject.getString("last_name");
+                                String bio = jsonObject.getString("bio");
+                                //String colorScheme = jsonObject.getString("colorScheme");
+                                //String userimage = jsonObject.getString("profile_pic");
+                                double rating = Double.parseDouble(jsonObject.getString("rating"));
+                                users.add(new User("", username, fname, lname, bio, null, "", rating));
+                            }
+                            recyclerView.setAdapter(userAdapter);
+                            userAdapter.notifyDataSetChanged();
+                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("type", "post");
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     @Override

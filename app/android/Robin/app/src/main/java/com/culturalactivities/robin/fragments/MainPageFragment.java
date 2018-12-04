@@ -12,7 +12,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,11 +34,8 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
-import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
-import com.culturalactivities.robin.models.Location;
-import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
 
 import org.json.JSONArray;
@@ -69,7 +65,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
     RequestQueue queue;
     private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
-    private String USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
+    private String USERS_URL = "http://139.59.128.92:8080/api/v1/users/search/?search=";
 
     private AppCompatActivity activity;
     @Override
@@ -108,7 +104,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         eventAdapter = new EventAdapter(activity, events, MainPageFragment.this,0);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
-        getEvents();
+        getEvents(null);
 
         userAdapter = new SearchUserAdapter(activity, users, MainPageFragment.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
@@ -122,9 +118,9 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isUserSearch = isChecked;
                 if (isChecked){
-                    searchView.setQueryHint("Search User");
+                    searchView.setQueryHint("Search a user");
                 }else {
-                    searchView.setQueryHint("Search Event");
+                    searchView.setQueryHint("Search an event");
                 }
             }
         });
@@ -135,7 +131,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                 if (isUserSearch){
                     getSearchUser(query);
                 }else {
-                    getSearchEvent(query);
+                    getEvents(query);
                 }
                 return false;
             }
@@ -148,12 +144,11 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getSearchUser(String query) {
-        String newUrl = USERS_URL + "search/search=" + query;
-        // TODO: 02.12.2018 url will be edit after backend works
+        String UURL = USERS_URL + query.trim();
         users.clear();
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                newUrl,
+                UURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -161,9 +156,14 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String name = jsonObject.getString("name");
-                                String info = jsonObject.getString("info");
-                                // users.add...
+                                String username = jsonObject.getString("username");
+                                String fname = jsonObject.getString("first_name");
+                                String lname = jsonObject.getString("last_name");
+                                String bio = jsonObject.getString("bio");
+                                //String colorScheme = jsonObject.getString("colorScheme");
+                                //String userimage = jsonObject.getString("profile_pic");
+                                double rating = Double.parseDouble(jsonObject.getString("rating"));
+                                users.add(new User("", username, fname, lname, bio, null, "", rating));
                             }
                             recyclerView.setAdapter(userAdapter);
                             userAdapter.notifyDataSetChanged();
@@ -200,24 +200,33 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         queue.add(jsonObjReq);
     }
 
-    private void getSearchEvent(String query) {
-        String newUrl = EVENTS_URL + "search/search=" + query;
-        // TODO: 02.12.2018 url will be edit after backend works
+    private void getEvents(String query) {
+        String EURL = EVENTS_URL;
+        if (query != null){
+            EURL = EVENTS_URL + "search/?search=" + query;
+        }
         events.clear();
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                newUrl,
+                EURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("RESSS", response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
                                 String name = jsonObject.getString("name");
                                 String info = jsonObject.getString("info");
-                                events.add(new Event(name, info));
+                                String artist = jsonObject.getString("artist");
+                                String date = jsonObject.getString("date");
+                                String image = jsonObject.getString("country"); // TODO: 04.12.2018 Here will change
+                                Double price = Double.valueOf(jsonObject.getString("price"));
+                                Float rating = Float.valueOf(jsonObject.getString("rating"));
+                                ArrayList<Image> images = new ArrayList<>();
+                                images.add(new Image(image, null));
+                                events.add(new Event(id, name, info, artist, date, price, rating, null, null, null, null, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();
@@ -239,59 +248,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                return params;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
-            }
-        };
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjReq);
-    }
-
-    private void getEvents() {
-        events.clear();
-        MainActivity.progressBar.setVisibility(View.VISIBLE);
-        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                EVENTS_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = jsonObject.getString("id");
-                                String name = jsonObject.getString("name");
-                                String info = jsonObject.getString("info");
-                                String artist = jsonObject.getString("artist");
-                                Double price = Double.valueOf(jsonObject.getString("price"));
-                                Float rating = Float.valueOf(jsonObject.getString("rating"));
-                                events.add(new Event(id, name, info, artist, "", price, rating, null, null, null, null, new ArrayList<Image>()));
-                            }
-                            eventAdapter.notifyDataSetChanged();
-                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("type", "post");
-                params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
@@ -309,17 +265,21 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         int position = recyclerView.getChildLayoutPosition(view);
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.addSharedElement(view.findViewById(R.id.ivProfile), ViewCompat.getTransitionName(view.findViewById(R.id.ivProfile)));
-        transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
-        transaction.addToBackStack("addEF");
-        transaction.commit();
+        if (isUserSearch){
+            // TODO: 04.12.2018  here will be edit
+            Toast.makeText(activity, "It is cominggg... " + users.get(position).getUsername(), Toast.LENGTH_SHORT).show();
+        }else {
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.addSharedElement(view.findViewById(R.id.ivEvent), ViewCompat.getTransitionName(view.findViewById(R.id.ivEvent)));
+            transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
+            transaction.addToBackStack("addEF");
+            transaction.commit();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_create_event){
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.fragment, CreateEventFragment.newInstance());

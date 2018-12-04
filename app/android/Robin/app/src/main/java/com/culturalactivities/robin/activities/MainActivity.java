@@ -17,8 +17,8 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.fragments.EventsFragment;
-import com.culturalactivities.robin.fragments.ProfileFragment;
 import com.culturalactivities.robin.fragments.MainPageFragment;
+import com.culturalactivities.robin.fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.my_events, R.drawable.calendar, R.color.colorPrimaryLigth);
             bottomNavigation.addItem(item0);
         }
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.search, R.drawable.search, R.color.colorPrimaryLigth);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
         bottomNavigation.addItem(item1);
 
         if (!isGuest){

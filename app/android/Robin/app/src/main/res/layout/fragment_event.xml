@@ -15,7 +15,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/ivProfile"
+                android:id="@+id/ivEvent"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
@@ -37,9 +37,9 @@
                 android:layout_marginRight="8dp"
                 android:text="Title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
             <RatingBar
                 android:id="@+id/rbEvent"
@@ -50,7 +50,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ivProfile" />
+                app:layout_constraintTop_toTopOf="@+id/ivEvent" />
 
 
             <TextView
@@ -61,7 +61,7 @@
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
                 android:text="@string/organizer"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
@@ -72,9 +72,20 @@
                 android:text="@string/price"
                 android:background="@color/colorFacebook"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="00:00:0000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivEvent" />
         </android.support.constraint.ConstraintLayout>
 
         <TextView
@@ -83,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Description"/>
+
         <TextView
             android:id="@+id/tvArtistTitle"
             android:layout_width="match_parent"
@@ -102,6 +114,12 @@
             android:id="@+id/rvGallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+
         <TextView
             android:id="@+id/tvComments"
             android:layout_width="match_parent"
@@ -109,9 +127,7 @@
             android:layout_margin="8dp"
             android:textColor="@android:color/black"
             style="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="@string/comments"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+            android:text="@string/comments"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvComments"

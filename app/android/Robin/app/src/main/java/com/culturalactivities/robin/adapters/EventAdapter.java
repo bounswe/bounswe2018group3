@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.models.Event;
@@ -37,7 +38,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             tvName = v.findViewById(R.id.tvName);
             tvArtist = v.findViewById(R.id.tvArtist);
             tvDate = v.findViewById(R.id.tvEventDate);
-            ivBanner = v.findViewById(R.id.ivProfile);
+            ivBanner = v.findViewById(R.id.ivEvent);
             tvDescription = v.findViewById(R.id.tvDescription);
             ratingBar = v.findViewById(R.id.ratingBar);
             tvPrice = v.findViewById(R.id.tvPrice);
@@ -80,7 +81,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         Event event = events.get(position);
         holder.tvName.setText(event.getEventName());
         holder.tvName.setTypeface(MainActivity.ubuntuRegular);
-        //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
 
         if(adapterType==0){
             holder.ratingBar.setRating(event.getRating());
@@ -88,9 +88,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.tvDescription.setText(event.getEventInfo());
             holder.tvArtist.setText(event.getArtistInfo());
             holder.tvPrice.setText(event.getPrice() + " ₺");
+            Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
         }else{
             holder.tvDate.setText(event.getDate());
             holder.tvArtist.setText(event.getArtistInfo());
+            Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
         }
 
     }

@@ -47,4 +47,7 @@
     <string name="add_new_event">Create New Event</string>
     <string name="search">Search</string>
     <string name="artist">Artist</string>
+    <string name="events">Events</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
 </resources>

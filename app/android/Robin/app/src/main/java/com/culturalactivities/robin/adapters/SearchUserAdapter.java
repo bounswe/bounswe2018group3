@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
-import com.culturalactivities.robin.activities.MainActivity;
-import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.User;
 
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
         ViewHolder(View v) {
             super(v);
             tvName = v.findViewById(R.id.tvName);
-            ivProfile = v.findViewById(R.id.ivProfile);
+            ivProfile = v.findViewById(R.id.ivEvent);
         }
     }
 
@@ -54,7 +51,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
         LayoutInflater inflater =(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
         assert inflater != null;
-        view = inflater.inflate(R.layout.simple_comment, parent, false);
+        view = inflater.inflate(R.layout.simple_search_user, parent, false);
         view.setOnClickListener(onClickListener);
         return new SearchUserAdapter.ViewHolder(view);
     }
@@ -66,8 +63,10 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         User user = users.get(position);
-        holder.tvName.setText(user.getName());
-        Glide.with(context).load(user.getProfilePhoto()).into(holder.ivProfile);
+        holder.tvName.setText(user.getFullName());
+        if (user.getProfileImage() != null){
+            Glide.with(context).load(user.getProfileImage()).into(holder.ivProfile);
+        }
 
     }
 

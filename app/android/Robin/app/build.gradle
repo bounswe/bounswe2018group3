@@ -33,5 +33,5 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
 
-    implementation 'com.google.android.gms:play-services-maps:12.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
 }

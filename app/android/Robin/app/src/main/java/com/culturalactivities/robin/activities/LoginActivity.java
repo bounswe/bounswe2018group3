@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             Log.d("TOKEE", token);
                             preferences.edit().putString("token", token).apply();
-                            preferences.edit().putString("pk", token).apply();
+                            preferences.edit().putString("pk", pk).apply();
                             preferences.edit().putString("username", username).apply();
                             preferences.edit().putString("email", email).apply();
 

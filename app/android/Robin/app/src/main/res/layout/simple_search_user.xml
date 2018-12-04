@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/ivProfile"
+        android:id="@+id/ivEvent"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/logo" />
+        app:srcCompat="@drawable/sample_profile" />
 
     <TextView
         android:id="@+id/tvName"
@@ -24,8 +24,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
-        app:layout_constraintStart_toEndOf="@+id/ivProfile"
-        app:layout_constraintTop_toTopOf="@+id/ivProfile" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
+        app:layout_constraintStart_toEndOf="@+id/ivEvent"
+        app:layout_constraintTop_toTopOf="@+id/ivEvent" />
 
 </android.support.constraint.ConstraintLayout>

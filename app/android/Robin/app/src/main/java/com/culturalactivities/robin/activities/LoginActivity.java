@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     RequestQueue queue;
     private SharedPreferences preferences;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

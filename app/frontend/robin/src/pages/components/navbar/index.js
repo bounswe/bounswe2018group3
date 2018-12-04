@@ -47,6 +47,15 @@ export default class NavBar extends React.Component {
       this.setState({redirect: "/profile/" + Cookies.get("userid")});
   }
 
+  handleCreateEvent(e){
+    e.preventDefault();
+    if(this.props.currentPath.substring(0,13) === "/create-event"){
+      return;
+    }
+    else
+      this.setState({redirect: "/create-event"});
+  }
+
   handleNavbarChange(e) {
     this.setState({...this.state, searchQuery: e.target.value});
   }
@@ -103,6 +112,9 @@ export default class NavBar extends React.Component {
           </div>
           <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
             <ul className="navbar-nav ml-auto">
+            <li className="nav-item mr-1">
+                <button className="btn" onClick={e => this.handleCreateEvent(e)}><i className="fa fa-edit"/></button>
+              </li>
               <li className="nav-item mr-1">
                 <button className="btn" onClick={e => this.handleProfile(e)}><i className="fa fa-user"/></button>
               </li>

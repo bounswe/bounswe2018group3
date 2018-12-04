@@ -52,7 +52,7 @@ export default class EventPage extends React.Component{
         <GuestBar/>
       </div>
       <Event />
-      <Location />
+     
         <h2></h2>
         <h2 style={{margin:'22px'}}>
         Comments:

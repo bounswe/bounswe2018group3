@@ -3,13 +3,17 @@ import React from 'react';
 import "./index.css";
 import Cookies from 'js-cookie';
 
+import { Link, Redirect } from "react-router-dom";
+
 import axios from 'axios';
+import { push } from 'react-router-redux';
 
 import { EVENT_URL } from "../constants/backend-urls";
 export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        redirect: "",
         eventName: "",
         eventInfo: "",
         artistName: "",
@@ -53,10 +57,19 @@ export default class CreateEvent extends React.Component {
         this.setState({
           [name]: value
         });
-        console.log(this.state)
     }
     // TODO : I'm getting bad request 400 over here.
     handleCreate(e){
+      if(this.checkError()){
+        Cookies.set("eventName", this.state.eventName);
+        Cookies.set("eventInfo", this.state.eventInfo);
+        Cookies.set("eventDate", this.state.eventDate);
+        Cookies.set("eventTime", this.state.eventTime);
+        Cookies.set("eventPrice", this.state.eventPrice);
+        Cookies.set("numberOfGuests", this.state.numberOfGuests);
+      }
+      else
+        return;
       var data = {
        name : this.state.eventName,
        info : this.state.eventInfo,
@@ -77,27 +90,17 @@ export default class CreateEvent extends React.Component {
         headers: headers,
       };
       axios(options).then(response => {
-        if(response.status === 200){
+        if(response.status === 201){
           console.log(response);
+          console.log("Im here")
+          this.setState({redirect: "/createEventSuccess"});
+          //window.location.reload();
         }
       }).catch(error => {
         console.error(error);
         this.setState({error: true});
       })
     }
-//     handleSubmit(){
-//       this.setState({submitClicked: true});
-//       if(this.checkError()){
-//         Cookies.set("eventName", this.state.eventName);
-//         Cookies.set("eventInfo", this.state.eventInfo);
-//         Cookies.set("eventDate", this.state.eventDate);
-//         Cookies.set("eventTime", this.state.eventTime);
-//         Cookies.set("eventPrice", this.state.eventPrice);
-//         Cookies.set("numberOfGuests", this.state.numberOfGuests);
-//       }
-//       else
-//         return;
-//     }
 
     checkError(){
       if(this.state.eventName === "" || this.state.eventDate === "" || this.state.eventTime === ""){
@@ -134,6 +137,9 @@ export default class CreateEvent extends React.Component {
     }
   
     render() {
+      if(this.state.redirect === "/createEventSuccess"){
+        return (<Redirect to={this.state.redirect}/>)
+      }
       return (
         <React.Fragment>
           <div>
@@ -248,31 +254,9 @@ export default class CreateEvent extends React.Component {
                 </label>
               </div>
               
-              <div className="row">
-                <div className="col-lg-6">
-                  Number of guests:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventPrice"
-                      type="number"
-                      value={this.state.numberOfGuests}
-                      onChange={this.handleInputChange}/>
-                  </div>
-                </label>
-              </div>
+
               <br />
-              <div class="row-event">
-                <label>
-                  Is going:
-                  <input
-                    name="isGoing"
-                    type="checkbox"
-                    checked={this.state.isGoing}
-                    onChange={this.handleCheckboxChange} />
-                </label>
-              </div>
+              
               {this.handleErrorMessage()}
               <div className="row">
                 <div className="col-xs-2 mx-auto">

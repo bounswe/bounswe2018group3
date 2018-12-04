@@ -68,7 +68,7 @@ export default class Home extends React.Component{
         <div className="eventContainer col-md-6">
         {this.state.events.map(comp => {
               return <EventComp title={comp.name} subtitle={comp.locatio}
-              eventPhoto={comp.country} eventDetails={comp.info}/>
+              eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
             })}
         </div>
       </div>

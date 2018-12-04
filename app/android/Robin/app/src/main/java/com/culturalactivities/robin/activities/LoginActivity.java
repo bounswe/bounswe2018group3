@@ -153,7 +153,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Not authorized!", Toast.LENGTH_SHORT).show();
             }
         }) {
 

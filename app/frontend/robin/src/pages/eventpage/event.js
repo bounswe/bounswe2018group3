@@ -3,23 +3,26 @@ import "./eventpage.css";
 import borisPhoto from "../homepage/boris.png";
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
-
+import { Link, Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { compose } from 'redux';
 import axios from 'axios';
-import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
+import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backend-urls";
 
   export default class Event extends React.Component {
 
     constructor(props){
       super(props);
       this.state = {
+        redirect : "",
           event: 1,
           creator : "",
           rating : ""
       }
       this.onStarClick = this.onStarClick.bind(this);
       this.getUser = this.getUser.bind(this);
+      this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
+
     }
     onStarClick(nextValue, prevValue, name) {     
       var data = {
@@ -107,12 +110,41 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
       })
 
     } 
-
+    handleDeleteEvent(e){
+      var data = {
+        // TODO: Change here according to API
+        //id: Cookies.get("clickedEvent")
+      };
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "DELETE",
+        // TODO: Update search url page.
+        url: DELETE_URL + this.state.event.id,
+        data: data,
+        headers: headers,
+      };
+      axios(options).then(response => {
+        if(response.status === 200){
+          var resp = response.data;
+          console.log(resp);
+          this.setState({redirect: "/home"});
+          
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    }
 
   
     render() {
       const { rating } = this.state;
-
+        if(this.state.redirect === "/home"){
+          return (<Redirect to={this.state.redirect}/>)
+        }
         return (
 
           <div class="card">
@@ -152,6 +184,7 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
                 </div>
                 <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
                 <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Mark as Interested</a>
+                <a href="#" class="btn btn-primary"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete Event</a>
             </div>
             </div>
           </div>

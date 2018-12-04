@@ -14,7 +14,7 @@
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 5px;
     left: 50%;
-    max-width: 375px;
+    max-width: 205px;
     position: absolute;
     transform: translateX(-50%);
     width: calc(100% - 10px);

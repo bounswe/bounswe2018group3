@@ -33,12 +33,12 @@ export default class LocationPickerExample extends Component {
  
   render () {
     return (
-      <div>
+      <div className="col-8 mx-auto">
         <h1>{this.state.address}</h1>
         <div>
           <LocationPicker
             containerElement={ <div style={ {height: '25%'} } /> }
-            mapElement={ <div style={ {height: '100px'} } /> }
+            mapElement={ <div style={ {height: '200px'} } /> }
             defaultPosition={defaultPosition}
             onChange={this.handleLocationChange}
           />

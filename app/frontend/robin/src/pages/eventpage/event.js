@@ -16,10 +16,16 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
       this.state = {
           event: 1,
           creator : "",
-          rating : ""
+          rating : "",
+          joined: false,
+          interested: false,
       }
       this.onStarClick = this.onStarClick.bind(this);
       this.getUser = this.getUser.bind(this);
+      this.handleJoin = this.handleJoin.bind(this);
+      this.handleInterested = this.handleInterested.bind(this);
+      this.handleJoinClick = this.handleJoinClick.bind(this);
+      this.handleInterestedClick = this.handleInterestedClick.bind(this);
     }
     onStarClick(nextValue, prevValue, name) {     
       var data = {
@@ -108,6 +114,42 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
 
     } 
 
+    handleJoinClick(){
+      this.setState({joined: !this.state.joined})
+    }
+
+    handleInterestedClick(){
+      this.setState({interested: !this.state.interested})
+    }
+
+    handleJoin(){
+      if(!this.state.joined){
+        return(
+          <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
+        )
+      }
+      else{
+        return(
+          <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
+
+        )
+      }
+    }
+
+    handleInterested(){
+      if(!this.state.interested){
+        return(
+          <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
+        )
+      }
+      else{
+        return(
+          <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
+
+        )
+      }
+    }
+
 
   
     render() {
@@ -150,9 +192,9 @@ import { EVENT_URL, USERS_URL, RATING_URL } from "../constants/backend-urls";
                 <p class="card-text shadow-sm bg-white rounded" style={{marginLeft:'30px', marginRight:'30px', marginTop:'20px'}}>{this.state.event.info}</p>
                 </div>
                 </div>
-                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
-                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Mark as Interested</a>
-            </div>
+                {this.handleJoin()}
+                {this.handleInterested()}
+              </div>
             </div>
           </div>
         </div>

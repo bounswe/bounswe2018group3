@@ -1,8 +1,13 @@
 package com.culturalactivities.robin.fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
@@ -22,6 +28,12 @@ import com.culturalactivities.robin.adapters.ImageAdapter;
 import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -88,12 +100,12 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         activity.getSupportActionBar().setSubtitle(event.getEventName());
         ivBanner = view.findViewById(R.id.ivProfile);
         tvTitle = view.findViewById(R.id.tvTitle);
-        tvOrganizer = view.findViewById(R.id.tvOrganizer);
+        tvOrganizer = view.findViewById(R.id.tvArtist);
         tvPrice = view.findViewById(R.id.tvPrice);
         tvDescription = view.findViewById(R.id.tvDescription);
         rbEvent = view.findViewById(R.id.rbEvent);
 
-        Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
+        //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
         rbEvent.setRating(3);
@@ -104,7 +116,7 @@ public class EventFragment extends Fragment implements View.OnClickListener {
         rvGallery = view.findViewById(R.id.rvGallery);
         imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
         rvGallery.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        rvGallery.setAdapter(imageAdapter);
+        //rvGallery.setAdapter(imageAdapter);
 
         //comments part
         recyclerView = view.findViewById(R.id.rvComments);

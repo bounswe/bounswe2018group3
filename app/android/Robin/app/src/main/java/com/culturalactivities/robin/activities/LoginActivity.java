@@ -138,6 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String username = jsonUser.getString("username");
                             String email = jsonUser.getString("email");
 
+                            Log.d("TOKEE", token);
                             preferences.edit().putString("token", token).apply();
                             preferences.edit().putString("pk", token).apply();
                             preferences.edit().putString("username", username).apply();

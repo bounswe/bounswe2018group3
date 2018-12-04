@@ -3,7 +3,7 @@ package com.culturalactivities.robin.models;
 import java.util.ArrayList;
 
 public class Event {
-    private String eventName, eventInfo, artistInfo, date;
+    private String id, eventName, eventInfo, artistInfo, date;
     private double price;
     private float rating;
     private Location location;
@@ -31,6 +31,21 @@ public class Event {
         this.images = images;
     }
 
+    public Event(String id, String eventName, String eventInfo, String artistInfo, String date, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
+        this.id = id;
+        this.eventName = eventName;
+        this.eventInfo = eventInfo;
+        this.artistInfo = artistInfo;
+        this.date = date;
+        this.price = price;
+        this.rating = rating;
+        this.location = location;
+        this.comments = comments;
+        this.goingUser = goingUser;
+        this.tags = tags;
+        this.images = images;
+    }
+
     public Event(String name, String info) {
         this.eventName = name;
         this.eventInfo = info;
@@ -43,6 +58,14 @@ public class Event {
         this.goingUser = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEventName() {

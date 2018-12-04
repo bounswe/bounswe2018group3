@@ -60,13 +60,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvOrganizer"
+            android:id="@+id/tvArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@color/colorAccent"
             android:textColor="@android:color/white"
-            android:text="@string/organizer"
+            android:text="@string/artist"
             app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
             app:layout_constraintStart_toStartOf="parent" />
 

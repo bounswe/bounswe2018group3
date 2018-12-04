@@ -29,17 +29,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView tvName, tvDescription, tvDate, tvArtist;
+        public TextView tvName, tvDescription, tvDate, tvArtist, tvPrice;
         public ImageView ivBanner;
         public RatingBar ratingBar;
         ViewHolder(View v) {
             super(v);
             tvName = v.findViewById(R.id.tvName);
-            tvArtist = v.findViewById(R.id.tvArtistName);
+            tvArtist = v.findViewById(R.id.tvArtist);
             tvDate = v.findViewById(R.id.tvEventDate);
             ivBanner = v.findViewById(R.id.ivProfile);
             tvDescription = v.findViewById(R.id.tvDescription);
             ratingBar = v.findViewById(R.id.ratingBar);
+            tvPrice = v.findViewById(R.id.tvPrice);
 
         }
     }
@@ -85,6 +86,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.ratingBar.setRating(event.getRating());
             holder.tvDescription.setTypeface(MainActivity.ubuntuRegular);
             holder.tvDescription.setText(event.getEventInfo());
+            holder.tvArtist.setText(event.getArtistInfo());
+            holder.tvPrice.setText(event.getPrice() + " ₺");
         }else{
             holder.tvDate.setText(event.getDate());
             holder.tvArtist.setText(event.getArtistInfo());

@@ -46,4 +46,5 @@
     </string>
     <string name="add_new_event">Create New Event</string>
     <string name="search">Search</string>
+    <string name="artist">Artist</string>
 </resources>

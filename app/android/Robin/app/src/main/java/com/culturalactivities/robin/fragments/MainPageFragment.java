@@ -33,7 +33,11 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
+import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
+import com.culturalactivities.robin.models.Image;
+import com.culturalactivities.robin.models.Location;
+import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
 
 import org.json.JSONArray;
@@ -259,9 +263,13 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
                                 String name = jsonObject.getString("name");
                                 String info = jsonObject.getString("info");
-                                events.add(new Event(name, info));
+                                String artist = jsonObject.getString("artist");
+                                Double price = Double.valueOf(jsonObject.getString("price"));
+                                Float rating = Float.valueOf(jsonObject.getString("rating"));
+                                events.add(new Event(id, name, info, artist, "", price, rating, null, null, null, null, new ArrayList<Image>()));
                             }
                             eventAdapter.notifyDataSetChanged();
                             MainActivity.progressBar.setVisibility(View.INVISIBLE);

@@ -137,7 +137,7 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    //this.setState(exampleProfile);
+    this.setState(exampleProfile);
 
   }
 

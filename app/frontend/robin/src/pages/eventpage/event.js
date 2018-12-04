@@ -17,12 +17,17 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
         redirect : "",
           event: 1,
           creator : "",
-          rating : ""
+          rating : "",
+          joined: false,
+          interested: false,
       }
       this.onStarClick = this.onStarClick.bind(this);
       this.getUser = this.getUser.bind(this);
       this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
-
+      this.handleJoin = this.handleJoin.bind(this);
+      this.handleInterested = this.handleInterested.bind(this);
+      this.handleJoinClick = this.handleJoinClick.bind(this);
+      this.handleInterestedClick = this.handleInterestedClick.bind(this);
     }
     onStarClick(nextValue, prevValue, name) {     
       var data = {
@@ -110,6 +115,7 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       })
 
     } 
+
     handleDeleteEvent(e){
       var data = {
         // TODO: Change here according to API
@@ -137,6 +143,41 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
         console.error(error);
         this.setState({error: true});
       })
+    }
+    handleJoinClick(){
+      this.setState({joined: !this.state.joined})
+    }
+
+    handleInterestedClick(){
+      this.setState({interested: !this.state.interested})
+    }
+
+    handleJoin(){
+      if(!this.state.joined){
+        return(
+          <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
+        )
+      }
+      else{
+        return(
+          <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
+
+        )
+      }
+    }
+
+    handleInterested(){
+      if(!this.state.interested){
+        return(
+          <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
+        )
+      }
+      else{
+        return(
+          <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
+
+        )
+      }
     }
 
   
@@ -182,13 +223,15 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
                 <p class="card-text shadow-sm bg-white rounded" style={{marginLeft:'30px', marginRight:'30px', marginTop:'20px'}}>{this.state.event.info}</p>
                 </div>
                 </div>
-                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Join Event</a>
-                <a href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}}>Mark as Interested</a>
+              {this.handleJoin()}
+              {this.handleInterested()}
                 <a href="#" class="btn btn-primary"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete Event</a>
             </div>
+                
+              </div>
             </div>
           </div>
-        </div>
+        
       )
     }
   }

@@ -10,7 +10,25 @@
 }
 
 .addComment {
-    margin: 30px;
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: relative;
+    font-size: 16px;
+    width:780px;
+    margin: 0 auto;
+
+}
+
+.addCommentContainer{
+    margin-top: 30px;
+    padding: 40px 0px 0px 0px;
+    background-color: #f7f7f7 !important;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    width: 900px;
+    margin: 0 auto;
 }
 
 .h2{

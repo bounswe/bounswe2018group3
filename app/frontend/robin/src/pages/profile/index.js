@@ -137,7 +137,6 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    //this.setState(exampleProfile);
 
   }
 
@@ -546,7 +545,7 @@ export default class ProfileCard extends React.Component{
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">About Me</label>
                           <div className="col-lg-9">
-                            <input className="form-control" type="text" name="about" value={this.state.bio} onChange={e => this.handleChange(e)}/>
+                            <input className="form-control" type="text" name="bio" value={this.state.bio} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div> 
                         {/*

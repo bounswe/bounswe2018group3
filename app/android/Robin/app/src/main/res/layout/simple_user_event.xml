@@ -25,12 +25,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/tvArtistName"
+        app:layout_constraintBottom_toTopOf="@+id/tvArtist"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
         app:layout_constraintTop_toTopOf="@+id/ivProfile" />
 
     <TextView
-        android:id="@+id/tvArtistName"
+        android:id="@+id/tvArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

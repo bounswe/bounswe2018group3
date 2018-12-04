@@ -8,7 +8,7 @@ const defaultPosition = {
 };
  
  
-class LocationPickerExample extends Component {
+export default class LocationPickerExample extends Component {
   constructor (props) {
     super(props);
  

@@ -36,8 +36,8 @@ export default class LocationPickerExample extends Component {
         <h1>{this.state.address}</h1>
         <div>
           <LocationPicker
-            containerElement={ <div style={ {height: '100%'} } /> }
-            mapElement={ <div style={ {height: '400px'} } /> }
+            containerElement={ <div style={ {height: '25%'} } /> }
+            mapElement={ <div style={ {height: '100px'} } /> }
             defaultPosition={defaultPosition}
             onChange={this.handleLocationChange}
           />

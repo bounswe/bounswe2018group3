@@ -27,7 +27,7 @@ export default class CreateEvent extends React.Component {
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleCreate = this.handleCreate.bind(this);
       this.handleErrorMessage = this.handleErrorMessage.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      //this.handleSubmit = this.handleSubmit.bind(this);
       this.checkError = this.checkError.bind(this);
     }
   
@@ -84,7 +84,7 @@ export default class CreateEvent extends React.Component {
         console.error(error);
         this.setState({error: true});
       })
-
+    }
 //     handleSubmit(){
 //       this.setState({submitClicked: true});
 //       if(this.checkError()){

@@ -24,11 +24,52 @@ export default class NavBar extends React.Component {
     this.handleProfile = this.handleProfile.bind(this);
     this.handleNavbarChange = this.handleNavbarChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleButtons = this.handleButtons.bind(this);
   }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
+  }
+
+  handleButtons(){
+    console.log(Cookies.get("token"));
+    if(Cookies.get("token") === undefined || Cookies.get("userid") === undefined){
+      return(
+        <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
+            
+          </div>
+      )
+    }
+    else{
+      return(
+        <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
+            <ul className="navbar-nav ml-auto">
+            <li className="nav-item mr-1">
+                <button className="btn" onClick={e => this.handleCreateEvent(e)}><i className="fa fa-edit"/></button>
+              </li>
+              <li className="nav-item mr-1">
+                <button className="btn" onClick={e => this.handleProfile(e)}><i className="fa fa-user"/></button>
+              </li>
+              <li className="nav-item mr-1">
+                <button className="btn"><i className="fa fa-bell"/></button>
+              </li>
+              <li className="nav-item mr-1">
+                <button className="btn"><i className="fa fa-envelope"/></button>
+              </li>
+              <li className="nav-item dropdown mr-5">
+                <button className="btn  dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                  <i className="fa fa-bars"/>
+                </button>
+                <div className="dropdown-menu">
+                  <button className="btn"><i className="fa fa-cogs mr-1"/>Settings</button>
+                  <button className="btn" onClick={e => this.handleLogout(e)}><i className="fa fa-sign-out mr-1"/>Logout</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+      )
+    }
   }
 
   handleLogout(e){
@@ -110,31 +151,7 @@ export default class NavBar extends React.Component {
               </li>
             </ul>
           </div>
-          <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
-            <ul className="navbar-nav ml-auto">
-            <li className="nav-item mr-1">
-                <button className="btn" onClick={e => this.handleCreateEvent(e)}><i className="fa fa-edit"/></button>
-              </li>
-              <li className="nav-item mr-1">
-                <button className="btn" onClick={e => this.handleProfile(e)}><i className="fa fa-user"/></button>
-              </li>
-              <li className="nav-item mr-1">
-                <button className="btn"><i className="fa fa-bell"/></button>
-              </li>
-              <li className="nav-item mr-1">
-                <button className="btn"><i className="fa fa-envelope"/></button>
-              </li>
-              <li className="nav-item dropdown mr-5">
-                <button className="btn  dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                  <i className="fa fa-bars"/>
-                </button>
-                <div className="dropdown-menu">
-                  <button className="btn"><i className="fa fa-cogs mr-1"/>Settings</button>
-                  <button className="btn" onClick={e => this.handleLogout(e)}><i className="fa fa-sign-out mr-1"/>Logout</button>
-                </div>
-              </li>
-            </ul>
-          </div>
+          {this.handleButtons()}
         </nav>
       </div>
     );

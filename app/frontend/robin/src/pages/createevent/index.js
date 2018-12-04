@@ -60,7 +60,7 @@ export default class CreateEvent extends React.Component {
        date : this.state.eventDate,
        time : this.state.eventTime,
        price : this.state.eventPrice,
-       1 : this.state.imageLink
+       country : this.state.imageLink
       };
       var headers= {
         "Content-Type": "application/json",

@@ -35,7 +35,7 @@ export default class SearchResults extends React.Component{
     var options = {
       method: "GET",
       // TODO: Update search url page.
-      url: SEARCH_URL,
+      url: SEARCH_URL + "?search=" + Cookies.get("searchQ"),
       data: data,
       headers: headers,
     };
@@ -66,7 +66,7 @@ export default class SearchResults extends React.Component{
         <div className="eventContainer col-md-6">
         {this.state.events.map(comp => {
               return <EventComp title={comp.name} subtitle={comp.locatio}
-              eventPhoto={comp.country} eventDetails={comp.info}/>
+              eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
             })}
         </div>
       </div>

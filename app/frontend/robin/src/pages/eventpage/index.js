@@ -3,6 +3,7 @@ import Comment from "./comment"
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 import React from 'react';
+import Location from "../components/map/LocationPicker"
 import "./eventpage.css"
 
 export default class EventPage extends React.Component{
@@ -50,7 +51,8 @@ export default class EventPage extends React.Component{
       <div className="wrapper position-absolute">
         <GuestBar/>
       </div>
-        <Event />
+      <Event />
+      <Location />
         <h2></h2>
         <h2 style={{margin:'22px'}}>
         Comments:

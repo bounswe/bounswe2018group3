@@ -12,6 +12,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -63,7 +65,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
     private SearchView searchView;
     private Switch switchSearch;
-    private boolean isUserSearch = true;
+    private boolean isUserSearch = false;
 
     RequestQueue queue;
     private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
@@ -146,12 +148,12 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getSearchUser(String query) {
-        //String newUrl = USERS_URL + "...." + query;
+        String newUrl = USERS_URL + "search/search=" + query;
         // TODO: 02.12.2018 url will be edit after backend works
         users.clear();
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                USERS_URL,
+                newUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -199,15 +201,16 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getSearchEvent(String query) {
-        //String newUrl = EVENTS_URL + "...." + query;
+        String newUrl = EVENTS_URL + "search/search=" + query;
         // TODO: 02.12.2018 url will be edit after backend works
         events.clear();
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                EVENTS_URL,
+                newUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("RESSS", response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -235,9 +238,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("type", "post");
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
 

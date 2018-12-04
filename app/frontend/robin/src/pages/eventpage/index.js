@@ -55,7 +55,7 @@ export default class EventPage extends React.Component{
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>
-        <form action="" onSubmit={e => e.preventDefault()}>
+        <form className="addComment" action="" onSubmit={e => e.preventDefault()}>
           <input type="text" value={this.state.commentValue} onChange={e => this.setState({ commentValue: e.target.value })} placeholder="Add a comment"/>
           <button onClick={this.handleAddCommentClick}>Add comment</button>
         </form>

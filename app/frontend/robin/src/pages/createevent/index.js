@@ -3,7 +3,9 @@ import React from 'react';
 import "./index.css";
 import Cookies from 'js-cookie';
 
+import axios from 'axios';
 
+import { EVENT_URL } from "../constants/backend-urls";
 export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
@@ -14,6 +16,7 @@ export default class CreateEvent extends React.Component {
         eventDate: "",
         eventTime: "",
         eventPrice: "",
+        imageLink: "",
         isGoing: true,
         numberOfGuests: 2,
         submitClicked: false,
@@ -22,6 +25,7 @@ export default class CreateEvent extends React.Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
+      this.handleCreate = this.handleCreate.bind(this);
       this.handleErrorMessage = this.handleErrorMessage.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.checkError = this.checkError.bind(this);
@@ -51,20 +55,49 @@ export default class CreateEvent extends React.Component {
         });
         console.log(this.state)
     }
+    // TODO : I'm getting bad request 400 over here.
+    handleCreate(e){
+      var data = {
+       name : this.state.eventName,
+       info : this.state.eventInfo,
+       artist : this.state.artistName,
+       date : this.state.eventDate,
+       time : this.state.eventTime,
+       price : this.state.eventPrice,
+       country : this.state.imageLink
+      };
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "POST",
+        url: EVENT_URL,
+        data: data,
+        headers: headers,
+      };
+      axios(options).then(response => {
+        if(response.status === 200){
+          console.log(response);
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
 
-    handleSubmit(){
-      this.setState({submitClicked: true});
-      if(this.checkError()){
-        Cookies.set("eventName", this.state.eventName);
-        Cookies.set("eventInfo", this.state.eventInfo);
-        Cookies.set("eventDate", this.state.eventDate);
-        Cookies.set("eventTime", this.state.eventTime);
-        Cookies.set("eventPrice", this.state.eventPrice);
-        Cookies.set("numberOfGuests", this.state.numberOfGuests);
-      }
-      else
-        return;
-    }
+//     handleSubmit(){
+//       this.setState({submitClicked: true});
+//       if(this.checkError()){
+//         Cookies.set("eventName", this.state.eventName);
+//         Cookies.set("eventInfo", this.state.eventInfo);
+//         Cookies.set("eventDate", this.state.eventDate);
+//         Cookies.set("eventTime", this.state.eventTime);
+//         Cookies.set("eventPrice", this.state.eventPrice);
+//         Cookies.set("numberOfGuests", this.state.numberOfGuests);
+//       }
+//       else
+//         return;
+//     }
 
     checkError(){
       if(this.state.eventName === "" || this.state.eventDate === "" || this.state.eventTime === ""){
@@ -186,6 +219,21 @@ export default class CreateEvent extends React.Component {
               </div>
               <div className="row">
                 <div className="col-lg-6">
+                  Image link for event:
+                </div>
+                <label>
+                  <div className="col-lg-6 event-in">
+                    <input
+                      name="imageLink"
+                      type="text"
+                      value={this.state.imageLink}
+                      placeholder="Image Link"
+                      onChange={this.handleNameChange}/>
+                  </div>
+                </label>
+              </div>
+              <div className="row">
+                <div className="col-lg-6">
                   Price of the event:
                 </div>
                 <label>
@@ -228,7 +276,7 @@ export default class CreateEvent extends React.Component {
               {this.handleErrorMessage()}
               <div className="row">
                 <div className="col-xs-2 mx-auto">
-                  <button type="button" className="btn btn-success mx-auto" onClick={this.handleSubmit}>Create</button>
+                  <button type="button" onClick={e => this.handleCreate(e)} className="btn btn-success mx-auto">Create</button>
                 </div>
               </div>
             </form>

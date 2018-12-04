@@ -77,8 +77,10 @@ export default class Login extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.token;
+        console.log(response)
         console.log(token);
         Cookies.set("token", token);
+        Cookies.set("userid", response.data.user.pk);
         console.log(Cookies.get("token"))
         this.setState({redirect: "/home", error: false});
       }
@@ -93,15 +95,6 @@ export default class Login extends React.Component {
         //data: data,
         headers: headers,
       };
-      axios(options).then(response => {
-        if(response.status === 200){
-          Cookies.set("userid", response.data.id)
-          this.setState({redirect: "/home", error: false});
-        }
-      }).catch(error => {
-        console.error(error);
-        this.setState({error: true});
-      })
     }).catch(error => {
       console.error(error);
       this.setState({error: true});

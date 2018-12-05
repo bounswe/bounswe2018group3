@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivEvent"
+                android:id="@+id/ivProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
@@ -36,9 +36,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
-                app:layout_constraintStart_toEndOf="@+id/ivEvent"
-                app:layout_constraintTop_toTopOf="@+id/ivEvent" />
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintStart_toEndOf="@+id/ivProfile"
+                app:layout_constraintTop_toTopOf="@+id/ivProfile" />
 
             <TextView
                 android:id="@+id/tvBio"
@@ -47,10 +47,10 @@
                 android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/ivEvent"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/ivEvent" />
+                app:layout_constraintStart_toEndOf="@+id/ivProfile" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvEvents"
@@ -79,7 +79,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivEvent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile"
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabTextColor="@android:color/black">
 

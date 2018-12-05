@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private AHBottomNavigation bottomNavigation;
     private FragmentTransaction fragmentTransaction;
     public static String email, username, pk, token;
-    public static Typeface ubuntuRegular, ubuntuBold;
+    public static Typeface ubuntuRegular, ubuntuBold, ubuntuItalic;
     public static ProgressBar progressBar;
     public static boolean isGuest;
 
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         isGuest = getIntent().getBooleanExtra("isGuest",true);
         ubuntuRegular = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Regular.ttf");
         ubuntuBold = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Bold.ttf");
+        ubuntuItalic = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Italic.ttf");
 
         setNavigation();
     }

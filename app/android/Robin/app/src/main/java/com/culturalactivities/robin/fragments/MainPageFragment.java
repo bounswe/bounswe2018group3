@@ -270,7 +270,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(activity, "It is cominggg... " + users.get(position).getUsername(), Toast.LENGTH_SHORT).show();
         }else {
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-            transaction.addSharedElement(view.findViewById(R.id.ivEvent), ViewCompat.getTransitionName(view.findViewById(R.id.ivEvent)));
             transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
             transaction.addToBackStack("addEF");
             transaction.commit();

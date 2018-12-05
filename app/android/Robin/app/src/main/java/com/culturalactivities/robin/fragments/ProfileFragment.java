@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         userAdapter = new SearchUserAdapter(activity, users, ProfileFragment.this);
 
 
-        ivProfile = view.findViewById(R.id.ivEvent);
+        ivProfile = view.findViewById(R.id.ivProfile);
         tvName = view.findViewById(R.id.tvName);
         tvBio = view.findViewById(R.id.tvBio);
         getProfile(MainActivity.pk);

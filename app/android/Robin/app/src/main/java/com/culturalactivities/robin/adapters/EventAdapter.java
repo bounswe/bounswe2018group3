@@ -38,7 +38,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             tvName = v.findViewById(R.id.tvName);
             tvArtist = v.findViewById(R.id.tvArtist);
             tvDate = v.findViewById(R.id.tvEventDate);
-            ivBanner = v.findViewById(R.id.ivEvent);
+            ivBanner = v.findViewById(R.id.ivProfile);
             tvDescription = v.findViewById(R.id.tvDescription);
             ratingBar = v.findViewById(R.id.ratingBar);
             tvPrice = v.findViewById(R.id.tvPrice);
@@ -80,19 +80,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         // - replace the contents of the view with that element
         Event event = events.get(position);
         holder.tvName.setText(event.getEventName());
-        holder.tvName.setTypeface(MainActivity.ubuntuRegular);
+        holder.tvName.setTypeface(MainActivity.ubuntuBold);
+        holder.tvDate.setText(event.getDate());
+        holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
+        Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
+        holder.tvArtist.setText(event.getArtistInfo());
+        holder.tvArtist.setTypeface(MainActivity.ubuntuItalic);
 
         if(adapterType==0){
             holder.ratingBar.setRating(event.getRating());
-            holder.tvDescription.setTypeface(MainActivity.ubuntuRegular);
             holder.tvDescription.setText(event.getEventInfo());
+            holder.tvDescription.setTypeface(MainActivity.ubuntuItalic);
             holder.tvArtist.setText(event.getArtistInfo());
             holder.tvPrice.setText(event.getPrice() + " ₺");
-            Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
-        }else{
-            holder.tvDate.setText(event.getDate());
-            holder.tvArtist.setText(event.getArtistInfo());
-            Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
+            holder.tvPrice.setTypeface(MainActivity.ubuntuRegular);
         }
 
     }

@@ -36,6 +36,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="Title"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +61,7 @@
                 android:padding="8dp"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:text="@string/organizer"
+                android:text="@string/artist_info"
                 app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -94,21 +95,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Description"/>
-
-        <TextView
-            android:id="@+id/tvArtistTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textColor="@android:color/black"
-            style="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Artist Info" />
-        <TextView
-            android:id="@+id/tvArtist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/lorem_ipsum_base"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvGallery"

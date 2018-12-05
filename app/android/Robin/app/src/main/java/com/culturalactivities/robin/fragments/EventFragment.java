@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.CommentAdapter;
 import com.culturalactivities.robin.adapters.ImageAdapter;
 import com.culturalactivities.robin.models.Comment;
@@ -38,7 +39,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     private Event event;
     private ImageView ivBanner;
-    private TextView tvTitle, tvDescription, tvOrganizer, tvPrice, tvDate;
+    private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
     private RatingBar rbEvent;
 
 
@@ -100,17 +101,23 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         activity.getSupportActionBar().setSubtitle(event.getEventName());
         ivBanner = view.findViewById(R.id.ivProfile);
         tvTitle = view.findViewById(R.id.tvTitle);
-        tvOrganizer = view.findViewById(R.id.tvArtist);
+        tvArtistInfo = view.findViewById(R.id.tvArtistInfo);
         tvPrice = view.findViewById(R.id.tvPrice);
         tvDescription = view.findViewById(R.id.tvDescription);
         rbEvent = view.findViewById(R.id.rbEvent);
         tvDate = view.findViewById(R.id.tvDate);
 
+        tvTitle.setTypeface(MainActivity.ubuntuBold);
+        tvDescription.setTypeface(MainActivity.ubuntuItalic);
+        tvDate.setTypeface(MainActivity.ubuntuRegular);
+        tvArtistInfo.setTypeface(MainActivity.ubuntuRegular);
+
+
         Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
         rbEvent.setRating(event.getRating());
-        tvOrganizer.setText(event.getArtistInfo());
+        tvArtistInfo.setText(event.getArtistInfo());
         tvPrice.setText(String.valueOf(event.getPrice()));
         tvDate.setText(event.getDate());
         

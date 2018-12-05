@@ -73,7 +73,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.tvDate.setText(comment.getDate());
         holder.rbComment.setRating(comment.getRating());
         holder.tvAuthor.setTypeface(MainActivity.ubuntuRegular);
-        holder.tvComment.setTypeface(MainActivity.ubuntuRegular);
+        holder.tvComment.setTypeface(MainActivity.ubuntuItalic);
+        holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
         //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
 
     }

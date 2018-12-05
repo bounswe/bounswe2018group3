@@ -29,13 +29,14 @@
             style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:background="@color/colorPrimaryWhite"
+            android:padding="8dp"
             android:text="Event Title"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArtist" />
 
         <TextView
             android:id="@+id/tvDescription"
@@ -65,25 +66,26 @@
 
         <TextView
             android:id="@+id/tvArtist"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:background="@color/colorAccent"
-            android:textColor="@android:color/white"
+            android:padding="8dp"
             android:text="@string/artist"
-            app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorFacebook"
             android:padding="8dp"
             android:text="@string/price"
-            android:background="@color/colorFacebook"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile"
             tools:ignore="MissingConstraints" />
 
         <TextView

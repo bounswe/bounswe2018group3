@@ -1,5 +1,6 @@
 package com.culturalactivities.robin.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -97,6 +98,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void setView(View view) {
         activity.getSupportActionBar().setSubtitle(event.getEventName());
         ivBanner = view.findViewById(R.id.ivProfile);
@@ -111,14 +113,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         tvDescription.setTypeface(MainActivity.ubuntuItalic);
         tvDate.setTypeface(MainActivity.ubuntuRegular);
         tvArtistInfo.setTypeface(MainActivity.ubuntuRegular);
-
+        tvPrice.setTypeface(MainActivity.ubuntuRegular);
 
         Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
         rbEvent.setRating(event.getRating());
         tvArtistInfo.setText(event.getArtistInfo());
-        tvPrice.setText(String.valueOf(event.getPrice()));
+        tvPrice.setText(event.getPrice()+ " ₺");
         tvDate.setText(event.getDate());
         
         // image gallery

@@ -85,7 +85,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
         Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
         holder.tvArtist.setText(event.getArtistInfo());
-        holder.tvArtist.setTypeface(MainActivity.ubuntuItalic);
+        holder.tvArtist.setTypeface(MainActivity.ubuntuRegular);
 
         if(adapterType==0){
             holder.ratingBar.setRating(event.getRating());

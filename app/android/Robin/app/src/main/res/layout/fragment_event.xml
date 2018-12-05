@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -56,25 +57,26 @@
 
             <TextView
                 android:id="@+id/tvArtistInfo"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:background="@color/colorAccent"
-                android:textColor="@android:color/white"
+                android:padding="8dp"
                 android:text="@string/artist_info"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/colorFacebook"
                 android:padding="8dp"
                 android:text="@string/price"
-                android:background="@color/colorFacebook"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile"
                 tools:ignore="MissingConstraints" />
 
             <TextView
@@ -86,7 +88,7 @@
                 android:layout_marginRight="8dp"
                 android:text="00:00:0000"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
         </android.support.constraint.ConstraintLayout>
 
         <TextView

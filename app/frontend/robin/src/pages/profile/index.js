@@ -205,53 +205,46 @@ export default class ProfileCard extends React.Component{
       var profileLink = "/profile/" + people[i].id;
       if(i % 2 === 1){
         ret.push(
-          <Link to={profileLink}>
 
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-            
-              <label className="name lead mb-0">
+              <Link to={profileLink}>
+                <label className="name lead mb-0">
                   {people[i].firstName + " " + people[i].lastName}
-              </label>
+                </label>
+              </Link>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
             </div>
           </li>
-          </Link>
 
         )
       }
       else{
         ret.push(
-          <Link to={profileLink}>
           <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-
-          
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-            
-            <label className="name lead mb-0">
-                
+              <Link to={profileLink}>
+                <label className="name lead mb-0">
                   {people[i].firstName + " " + people[i].lastName}
-              </label>
+                </label>
+              </Link>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
             </div>
           </li>
-          </Link>
-
         )
       }
     }
     return ret;
-    
   }
 
   render(){
@@ -756,6 +749,8 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
+                                {this.listFriends(examplePeople)}
+                                {/*
                                   <li className="list-item col-xs-12 col-lg-6 float-left my-3">
                                     <div className="col-sm-4 col-md-2 px-0 float-left">
                                       <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
@@ -800,6 +795,7 @@ export default class ProfileCard extends React.Component{
                                       <br/>
                                     </div>
                                   </li>
+                                */}
                                 </ul>
                               </div>
                             </div>
@@ -815,6 +811,8 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
+                                {this.listFriends(examplePeople)}
+                                {/*
                                   <li className="list-item col-xs-12 col-lg-6 float-left my-3">
                                     <div className="col-sm-4 col-md-2 px-0 float-left">
                                       <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
@@ -859,6 +857,7 @@ export default class ProfileCard extends React.Component{
                                       <br/>
                                     </div>
                                   </li>
+                                */}
                                 </ul>
                               </div>
                             </div>

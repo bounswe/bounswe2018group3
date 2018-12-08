@@ -77,11 +77,8 @@ export default class Login extends React.Component {
     axios(options).then(response => {
       if(response.status === 200){
         var token = response.data.token;
-        console.log(response)
-        console.log(token);
         Cookies.set("token", token);
         Cookies.set("userid", response.data.user.pk);
-        console.log(Cookies.get("token"))
         this.setState({redirect: "/home", error: false});
       }
     }).then(() => {

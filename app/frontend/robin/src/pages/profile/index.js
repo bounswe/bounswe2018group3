@@ -7,7 +7,7 @@ import axios from 'axios';
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 
-import { USERS_URL, EDIT_USER_URL } from "../constants/backend-urls"
+import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -118,7 +118,6 @@ export default class ProfileCard extends React.Component{
     };
     await axios(options).then(response => {
       if(response.status === 200){
-        console.log(response)
         this.setState({
           ...this.state,
           bio: response.data.bio,
@@ -132,6 +131,20 @@ export default class ProfileCard extends React.Component{
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
         });
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+    options = {
+      method: "GET",
+      url: GET_USER_PIC_URL + Cookies.get("userid"),
+      headers: headers,
+    }
+    await axios(options).then(response => {
+      console.log("*************" + response);
+      if(response.status === 200){
+        this.setState({profilePic: response.data.profile_pic})
       }
     }).catch(error => {
       console.error(error);
@@ -176,7 +189,6 @@ export default class ProfileCard extends React.Component{
     };
     await axios(options).then(response => {
       if(response.status === 200){
-        console.log(response);
       }
       }).catch(error => {
       console.error(error);

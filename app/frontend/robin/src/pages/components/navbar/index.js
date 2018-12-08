@@ -33,7 +33,6 @@ export default class NavBar extends React.Component {
   }
 
   handleButtons(){
-    console.log(Cookies.get("token"));
     if(Cookies.get("token") === undefined || Cookies.get("userid") === undefined){
       return(
         <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
@@ -105,7 +104,6 @@ export default class NavBar extends React.Component {
     e.preventDefault();
     if(this.props.currentPath === "/searchresults"){
       Cookies.set("searchQ", this.state.searchQuery);
-      console.log(Cookies.get("searchQ"));
       window.location.reload();
       return;
     }

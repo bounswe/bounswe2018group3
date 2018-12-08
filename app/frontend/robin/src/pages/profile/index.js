@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -107,13 +107,16 @@ export default class ProfileCard extends React.Component{
   }
 
   async componentDidMount(){
+    if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === "")
+      return;
+
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
       method: "GET",
-      url: USERS_URL + Cookies.get("userid"),
+      url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
     await axios(options).then(response => {
@@ -138,7 +141,7 @@ export default class ProfileCard extends React.Component{
     })
     options = {
       method: "GET",
-      url: GET_USER_PIC_URL + Cookies.get("userid"),
+      url: GET_USER_PIC_URL + this.props.location.pathname.substring(9),
       headers: headers,
     }
     await axios(options).then(response => {
@@ -199,34 +202,51 @@ export default class ProfileCard extends React.Component{
   listFriends(people){
     var ret = [];
     for(let i = 0; i < people.length; i++){
+      var profileLink = "/profile/" + people[i].id;
       if(i % 2 === 1){
         ret.push(
+          <Link to={profileLink}>
+
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-              <label className="name lead mb-0">{people[i].firstName + " " + people[i].lastName}</label>
+            
+              <label className="name lead mb-0">
+                  {people[i].firstName + " " + people[i].lastName}
+              </label>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
             </div>
           </li>
+          </Link>
+
         )
       }
       else{
         ret.push(
+          <Link to={profileLink}>
           <li className="list-item col-xs-12 col-lg-6 float-left my-3">
+
+          
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-              <label className="name lead mb-0">{people[i].firstName + " " + people[i].lastName}</label>
+            
+            <label className="name lead mb-0">
+                
+                  {people[i].firstName + " " + people[i].lastName}
+              </label>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
             </div>
           </li>
+          </Link>
+
         )
       }
     }
@@ -235,7 +255,16 @@ export default class ProfileCard extends React.Component{
   }
 
   render(){
-    if(this.state.id === Cookies.get("userid")){
+    if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === ""){
+      return(
+        <div>
+          <h2>
+            User not found!
+          </h2>
+        </div>
+      )
+    }
+    if(this.state.id === this.props.location.pathname.substring(9)){
     return (
       <div>
         <div className="mb-70">

@@ -36,7 +36,14 @@ export default class NavBar extends React.Component {
     if(Cookies.get("token") === undefined || Cookies.get("userid") === undefined){
       return(
         <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
-            
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item mr-1">
+                <button className="btn btn-primary" onClick={e => this.handleLogin(e)}>Login</button>
+              </li>
+              <li className="nav-item mr-1">
+                <button className="btn btn-success" onClick={e => this.handleRegister(e)}>Register</button>
+              </li>
+            </ul>
           </div>
       )
     }
@@ -69,6 +76,16 @@ export default class NavBar extends React.Component {
           </div>
       )
     }
+  }
+
+  handleLogin(e){
+    e.preventDefault();
+    this.setState({redirect: "/login"});
+  }
+
+  handleRegister(e){
+    e.preventDefault();
+    this.setState({redirect: "/register"});
   }
 
   handleLogout(e){

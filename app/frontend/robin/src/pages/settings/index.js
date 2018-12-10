@@ -14,15 +14,7 @@ export default class CreateEvent extends React.Component {
       super(props);
       this.state = {
         redirect: "",
-        eventName: "",
-        eventInfo: "",
-        artistName: "",
-        eventDate: "",
-        eventTime: "",
-        eventPrice: "",
-        imageLink: "",
-        isGoing: true,
-        numberOfGuests: 2,
+        private: false,
         submitClicked: false,
       };
   
@@ -46,7 +38,7 @@ export default class CreateEvent extends React.Component {
     }
 
     handleCheckboxChange(){
-      this.setState({isGoing: !this.state.isGoing})
+      this.setState({private: !this.state.private})
     }
 
     handleNameChange(event) {
@@ -149,114 +141,14 @@ export default class CreateEvent extends React.Component {
             <h2 className="text-center">Settings</h2>
             <form className="form-event">
             <div className="row">
-            <h5>Privacy Settings</h5>
-                <div className="col-lg-6">
-                  Name of the event:
-                  
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventName"
-                      type="text"
-                      value={this.state.eventName}
-                      placeholder="Name"
-                      selectBoxOptions="other"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Info about the event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventInfo"
-                      type="text"
-                      value={this.state.eventInfo}
-                      placeholder="Info"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Artist of the event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="artistName"
-                      type="text"
-                      value={this.state.artistName}
-                      placeholder="Artist"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Date of the event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventDate"
-                      type="text"
-                      value={this.state.eventDate}
-                      placeholder="Date"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Time of the event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventTime"
-                      type="text"
-                      value={this.state.eventTime}
-                      placeholder="Time"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Image link for event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="imageLink"
-                      type="text"
-                      value={this.state.imageLink}
-                      placeholder="Image Link"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <div className="row">
-                <div className="col-lg-6">
-                  Price of the event:
-                </div>
-                <label>
-                  <div className="col-lg-6 event-in">
-                    <input
-                      name="eventPrice"
-                      type="text"
-                      value={this.state.eventPrice}
-                      placeholder="Price"
-                      onChange={this.handleNameChange}/>
-                  </div>
-                </label>
-              </div>
-              <br />
+              <h5>Privacy Settings</h5><br/>
+            </div>
+            <div className="row">
+              <p>
+                <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
+              </p>
+            </div>
+              
               <select>
                 <option></option>
                 <option value="one">one</option>

@@ -52,49 +52,52 @@ export default class CreateEvent extends React.Component {
           <div className="container-event col-xs-12 col-sm-10 col-md-6">
             <h2 className="text-center">Settings</h2>
             <form className="form-event">
-            <div className="row">
-              <h5>Privacy Settings</h5><br/>
-            </div>
-            <div className="row">
-              <p>
-                <input type="checkbox" name="private" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
-              </p>
-            </div>
+              <div className="row">
+                <h5>Privacy Settings</h5><br/>
+              </div>
+              <div className="row">
+                <p>
+                  <input type="checkbox" name="private" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
+                </p>
+              </div>
 
-            <br/>
+              <br/>
 
-            <div className="row">
-              <h5>Event Notification Settings</h5><br/>
-            </div>
-            <div className="row">
-              <h6>Interested Event Settings</h6>
-            </div>
-            <div className="row">
-            Notify when
-            </div>
-            <div className="row">
-              <select>
-                <option value="one">Event gets modified</option>
-                <option value="two">Events gets canceled</option>
-                <option value="three">Never</option>
-              </select>
-            </div>  
+              <div className="row">
+                <h5>Event Notification Settings</h5><br/>
+              </div>
+              <div className="row">
+                <h6>Interested Event Settings</h6>
+              </div>
+              <div className="row">
+              Notify when
+              </div>
+              <div className="row">
+                <select>
+                  <option value="one">Event gets modified</option>
+                  <option value="two">Events gets canceled</option>
+                  <option value="three">Never</option>
+                </select>
+              </div>  
 
-            <br/>
+              <br/>
             
-            <div className="row">
-              <h6>Attending Event Settings</h6>
-            </div>
-            <div className="row">
-            Notify when
-            </div>
-            <div className="row">
-              <select>
-                <option value="one">Event gets modified</option>
-                <option value="two">Events gets canceled</option>
-                <option value="three">Never</option>
-              </select>
-            </div>         
+              <div className="row">
+                <h6>Attending Event Settings</h6>
+              </div>
+              <div className="row">
+              Notify when
+              </div>
+              <div className="row">
+                <select>
+                  <option value="one">Event gets modified</option>
+                  <option value="two">Events gets canceled</option>
+                  <option value="three">Never</option>
+                </select>
+              </div>  
+
+              <br/>
+       
               <div className="row">
                 <div className="col-xs-2 mx-auto">
                   <button type="button" onClick={e => this.handleSave(e)} className="btn btn-success mx-auto">Save</button>

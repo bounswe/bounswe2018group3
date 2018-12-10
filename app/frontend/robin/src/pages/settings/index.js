@@ -9,6 +9,7 @@ import axios from 'axios';
 import { push } from 'react-router-redux';
 
 import { EVENT_URL } from "../constants/backend-urls";
+
 export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);

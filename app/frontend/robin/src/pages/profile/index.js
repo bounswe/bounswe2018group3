@@ -23,7 +23,8 @@ var examplePeople = [
     lastName: "Smith",
     city: "New York",
     country: "NY",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg",
+    private: true,
   },
   {
     id: 4,
@@ -31,7 +32,9 @@ var examplePeople = [
     lastName: "Anderson",
     city: "Boston",
     country: "MA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
+    private: false,
+
   },
   {
     id: 5,
@@ -39,7 +42,9 @@ var examplePeople = [
     lastName: "Schlansky",
     city: "Los Angeles",
     country: "CA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
+    private: false,
+
   },
 ]
 
@@ -72,8 +77,9 @@ export default class ProfileCard extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+      redirect: "",
       propsToken: this.props.location.token,
-      id: Cookies.get("userid"),
+      id: this.props.location.pathname.substring(9),
       email: "",
       firstName: "",
       lastName: "",
@@ -119,10 +125,11 @@ export default class ProfileCard extends React.Component{
       url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
-    await axios(options).then(response => {
+    await axios(options).then(async response => {
       if(response.status === 200){
         this.setState({
           ...this.state,
+          id: response.data.id,
           bio: response.data.bio,
           birthday: response.data.birthday,
           city: response.data.city,
@@ -133,7 +140,13 @@ export default class ProfileCard extends React.Component{
           profilePic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
+          private: response.data.private,
         });
+        //if(response.data.private || this.state.private){
+        if(this.state.id === 3){
+          await this.setState({redirect: "/privateprofile/" + this.state.id});
+          console.log("true");
+        }
       }
     }).catch(error => {
       console.error(error);
@@ -205,7 +218,6 @@ export default class ProfileCard extends React.Component{
       var profileLink = "/profile/" + people[i].id;
       if(i % 2 === 1){
         ret.push(
-
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
@@ -221,7 +233,6 @@ export default class ProfileCard extends React.Component{
               <br/>
             </div>
           </li>
-
         )
       }
       else{
@@ -257,7 +268,17 @@ export default class ProfileCard extends React.Component{
         </div>
       )
     }
-    if(this.state.id === this.props.location.pathname.substring(9)){
+    if(this.state.redirect !== ""){
+      return(
+        <Redirect to={this.state.redirect}/>
+      )
+    }
+    if(this.state.private){
+      return(
+        <Redirect to={"/privateprofile" + this.state.id}/>
+      )
+    }
+    if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
     return (
       <div>
         <div className="mb-70">

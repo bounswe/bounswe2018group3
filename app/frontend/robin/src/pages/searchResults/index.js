@@ -73,7 +73,6 @@ export default class SearchResults extends React.Component{
         <Redirect to="/login"/>
       )
     }
-    console.log(Cookies.get("searchQ"))
     return (
       <div>
         <div className="mb-70">

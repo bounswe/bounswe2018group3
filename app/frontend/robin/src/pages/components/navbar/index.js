@@ -96,13 +96,14 @@ export default class NavBar extends React.Component {
     this.setState({redirect: "/login"});
   }
 
-  handleProfile(e){
+  async handleProfile(e){
     e.preventDefault();
-    if(this.props.currentPath.substring(0,8) === "/profile"){
+    if(this.props.currentPath.substring(0,9) === "/profile/"  && this.props.currentPath.substring(9) === Cookies.get("userid")){
       return;
     }
     else
-      this.setState({redirect: "/profile/" + Cookies.get("userid")});
+      await this.setState({redirect: "/profile/" + Cookies.get("userid")});
+    console.log(this.state);
   }
 
   handleCreateEvent(e){

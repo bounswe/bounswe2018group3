@@ -13,28 +13,16 @@ export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        id: Cookies.get("userid"),
         redirect: "",
         private: false,
         submitClicked: false,
       };
   
-      this.handleInputChange = this.handleInputChange.bind(this);
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
-      this.handleCreate = this.handleCreate.bind(this);
-      this.handleErrorMessage = this.handleErrorMessage.bind(this);
-      //this.handleSubmit = this.handleSubmit.bind(this);
-      this.checkError = this.checkError.bind(this);
-    }
-  
-    handleInputChange(event) {
-      const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
-  
-      this.setState({
-        [name]: value
-      });
+
+      
     }
 
     handleCheckboxChange(){
@@ -50,87 +38,11 @@ export default class CreateEvent extends React.Component {
           [name]: value
         });
     }
-    // TODO : I'm getting bad request 400 over here.
-    handleCreate(e){
-      if(this.checkError()){
-        Cookies.set("eventName", this.state.eventName);
-        Cookies.set("eventInfo", this.state.eventInfo);
-        Cookies.set("eventDate", this.state.eventDate);
-        Cookies.set("eventTime", this.state.eventTime);
-        Cookies.set("eventPrice", this.state.eventPrice);
-        Cookies.set("numberOfGuests", this.state.numberOfGuests);
-      }
-      else
-        return;
-      var data = {
-       name : this.state.eventName,
-       info : this.state.eventInfo,
-       artist : this.state.artistName,
-       date : this.state.eventDate,
-       time : this.state.eventTime,
-       price : this.state.eventPrice,
-       country : this.state.imageLink
-      };
-      var headers= {
-        "Content-Type": "application/json",
-        "Authorization" : "JWT " + Cookies.get("token")
-      };
-      var options = {
-        method: "POST",
-        url: EVENT_URL,
-        data: data,
-        headers: headers,
-      };
-      axios(options).then(response => {
-        if(response.status === 201){
-          console.log(response);
-          console.log("Im here")
-          this.setState({redirect: "/createEventSuccess"});
-          //window.location.reload();
-        }
-      }).catch(error => {
-        console.error(error);
-        this.setState({error: true});
-      })
-    }
-
-    checkError(){
-      if(this.state.eventName === "" || this.state.eventDate === "" || this.state.eventTime === ""){
-        return false;
-      }
-      else return true;
-    }
-
-    handleErrorMessage(){
-      if(this.state.submitClicked){
-        if(this.state.eventName === ""){
-          return(
-            <div className="text-danger text-center ">
-              Event name cannot be empty
-            </div>
-          );
-        }
-        else if(this.state.eventDate === ""){
-          return(
-            <div className="text-danger text-center ">
-              Event date cannot be empty
-            </div>
-          );
-        }
-        else if(this.state.eventTime === ""){
-          return(
-            <div className="text-danger text-center ">
-              Event time cannot be empty
-            </div>
-          );
-        }
-      }
-      return;
-    }
+    handleSave(){}
   
     render() {
-      if(this.state.redirect === "/createEventSuccess"){
-        return (<Redirect to={this.state.redirect}/>)
+      if(this.state.id === undefined || this.state.id === ""){
+        return (<Redirect to="/login" />)
       }
       return (
         <React.Fragment>
@@ -145,20 +57,47 @@ export default class CreateEvent extends React.Component {
             </div>
             <div className="row">
               <p>
-                <input type="checkbox" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
+                <input type="checkbox" name="private" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
               </p>
             </div>
-              
+
+            <br/>
+
+            <div className="row">
+              <h5>Event Notification Settings</h5><br/>
+            </div>
+            <div className="row">
+              <h6>Interested Event Settings</h6>
+            </div>
+            <div className="row">
+            Notify when
+            </div>
+            <div className="row">
               <select>
-                <option></option>
-                <option value="one">one</option>
-                <option value="two">two</option>
-                <option value="three">three</option>
+                <option value="one">Event gets modified</option>
+                <option value="two">Events gets canceled</option>
+                <option value="three">Never</option>
               </select>
-              {this.handleErrorMessage()}
+            </div>  
+
+            <br/>
+            
+            <div className="row">
+              <h6>Attending Event Settings</h6>
+            </div>
+            <div className="row">
+            Notify when
+            </div>
+            <div className="row">
+              <select>
+                <option value="one">Event gets modified</option>
+                <option value="two">Events gets canceled</option>
+                <option value="three">Never</option>
+              </select>
+            </div>         
               <div className="row">
                 <div className="col-xs-2 mx-auto">
-                  <button type="button" onClick={e => this.handleCreate(e)} className="btn btn-success mx-auto">Create</button>
+                  <button type="button" onClick={e => this.handleSave(e)} className="btn btn-success mx-auto">Save</button>
                 </div>
               </div>
             </form>

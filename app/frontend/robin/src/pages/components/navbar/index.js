@@ -25,6 +25,7 @@ export default class NavBar extends React.Component {
     this.handleNavbarChange = this.handleNavbarChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleButtons = this.handleButtons.bind(this);
+    this.handleSettings = this.handleSettings.bind(this);
   }
   toggle() {
     this.setState({
@@ -68,7 +69,7 @@ export default class NavBar extends React.Component {
                   <i className="fa fa-bars"/>
                 </button>
                 <div className="dropdown-menu">
-                  <button className="btn"><i className="fa fa-cogs mr-1"/>Settings</button>
+                  <button className="btn" onClick={e => this.handleSettings(e)}><i className="fa fa-cogs mr-1" />Settings</button>
                   <button className="btn" onClick={e => this.handleLogout(e)}><i className="fa fa-sign-out mr-1"/>Logout</button>
                 </div>
               </li>
@@ -111,6 +112,15 @@ export default class NavBar extends React.Component {
     }
     else
       this.setState({redirect: "/create-event"});
+  }
+
+  handleSettings(e){
+    e.preventDefault();
+    if(this.props.currentPath.substring(0,9) === "/settings"){
+      return;
+    }
+    else
+      this.setState({redirect: "/settings"});
   }
 
   handleNavbarChange(e) {

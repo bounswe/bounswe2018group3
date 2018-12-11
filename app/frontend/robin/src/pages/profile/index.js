@@ -19,8 +19,8 @@ import "./index.css"
 var examplePeople = [
   {
     id: 3,
-    firstName: "Debbie",
-    lastName: "Smith",
+    first_name: "Debbie",
+    last_name: "Smith",
     city: "New York",
     country: "NY",
     pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg",
@@ -28,8 +28,8 @@ var examplePeople = [
   },
   {
     id: 4,
-    firstName: "Michael",
-    lastName: "Anderson",
+    first_name: "Michael",
+    last_name: "Anderson",
     city: "Boston",
     country: "MA",
     pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
@@ -38,8 +38,8 @@ var examplePeople = [
   },
   {
     id: 5,
-    firstName: "Jordan",
-    lastName: "Schlansky",
+    first_name: "Jordan",
+    last_name: "Schlansky",
     city: "Los Angeles",
     country: "CA",
     pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
@@ -50,8 +50,8 @@ var examplePeople = [
 
 var exampleProfile = {
   email: "",
-      firstName: "Furkan Enes",
-      lastName: "Yalçın",
+      first_name: "Furkan Enes",
+      last_name: "Yalçın",
       password: "",
       city: "Istanbul",
       country: "Turkey",
@@ -81,8 +81,8 @@ export default class ProfileCard extends React.Component{
       propsToken: this.props.location.token,
       id: this.props.location.pathname.substring(9),
       email: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       password: "",
       //cardSummary: "",
       city: "",
@@ -102,7 +102,7 @@ export default class ProfileCard extends React.Component{
       attendedEvents: "",
       willAttendEvents: "",
       createdEvents: "",
-      profilePic: "",
+      profile_pic: "",
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -126,6 +126,7 @@ export default class ProfileCard extends React.Component{
       headers: headers,
     };
     await axios(options).then(async response => {
+      console.log(response);
       if(response.status === 200){
         this.setState({
           ...this.state,
@@ -135,8 +136,8 @@ export default class ProfileCard extends React.Component{
           city: response.data.city,
           country: response.data.country,
           email: response.data.email,
-          firstName: response.data.first_name,
-          lastName: response.data.last_name,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
           profilePic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
@@ -191,9 +192,9 @@ export default class ProfileCard extends React.Component{
       city: this.state.city,
       country: this.state.country,
       email: this.state.email,
-      firstName: this.state.first_name,
-      lastName: this.state.last_name,
-      profilePic: this.state.profile_pic,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      profile_pic: this.state.profile_pic,
       followedUsers: this.state.followedUsers,
       followers: this.state.followers,
     };
@@ -203,7 +204,9 @@ export default class ProfileCard extends React.Component{
       headers: headers,
       body: body,
     };
+    console.log(options);
     await axios(options).then(response => {
+      console.log(response);
       if(response.status === 200){
       }
       }).catch(error => {
@@ -220,12 +223,12 @@ export default class ProfileCard extends React.Component{
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
               <Link to={profileLink}>
                 <label className="name lead mb-0">
-                  {people[i].firstName + " " + people[i].lastName}
+                  {people[i].first_name + " " + people[i].last_name}
                 </label>
               </Link>
               <br/>
@@ -239,12 +242,12 @@ export default class ProfileCard extends React.Component{
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-left my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
               <Link to={profileLink}>
                 <label className="name lead mb-0">
-                  {people[i].firstName + " " + people[i].lastName}
+                  {people[i].first_name + " " + people[i].last_name}
                 </label>
               </Link>
               <br/>
@@ -292,7 +295,7 @@ export default class ProfileCard extends React.Component{
                   <div className="card w-100" >
                     <img className="card-img-top w-100" src={this.state.profilePic} alt="Card image"  />
                     <div className="card-body">
-                      <h4 className="card-title">{this.state.firstName + " " + this.state.lastName}</h4>
+                      <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
                       <div className="address">								
                         <ul>
@@ -521,13 +524,13 @@ export default class ProfileCard extends React.Component{
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">First Name</label>
                           <div className="col-lg-9">
-                            <input className="form-control" type="text" name="firstName" value={this.state.firstName} onChange={e => this.handleChange(e)}/>
+                            <input className="form-control" type="text" name="first_name" value={this.state.first_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Last Name</label>
                           <div className="col-lg-9">
-                            <input className="form-control" type="text" name="lastName" value={this.state.lastName} onChange={e => this.handleChange(e)}/>
+                            <input className="form-control" type="text" name="last_name" value={this.state.last_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
                         <div className="form-group row">

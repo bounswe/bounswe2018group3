@@ -60,6 +60,7 @@ export default class CreateEvent extends React.Component {
     }
     // TODO : I'm getting bad request 400 over here.
     handleCreate(e){
+      this.setState({submitClicked: true});
       if(this.checkError()){
         Cookies.set("eventName", this.state.eventName);
         Cookies.set("eventInfo", this.state.eventInfo);
@@ -89,10 +90,10 @@ export default class CreateEvent extends React.Component {
         data: data,
         headers: headers,
       };
+      console.log(options);
       axios(options).then(response => {
         if(response.status === 201){
           console.log(response);
-          console.log("Im here")
           this.setState({redirect: "/createEventSuccess"});
           //window.location.reload();
         }

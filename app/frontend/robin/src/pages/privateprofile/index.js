@@ -113,7 +113,7 @@ export default class PrivateProfile extends React.Component{
               <p className="text-center">This user's profile is private</p>
               <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto">
                 <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                Add Friend
+                Follow
               </button>
               <button href="" className="btn btn-md btn-primary btn-block w-10 mx-auto">
                 <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>

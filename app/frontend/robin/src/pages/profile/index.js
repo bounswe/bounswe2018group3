@@ -48,31 +48,6 @@ var examplePeople = [
   },
 ]
 
-var exampleProfile = {
-  email: "",
-      first_name: "Furkan Enes",
-      last_name: "Yalçın",
-      password: "",
-      city: "Istanbul",
-      country: "Turkey",
-      birthday: "01.01.1996",
-      //gender: "",
-      //relationshipStatus: "",
-      //occupation: "",
-      //education: "",
-      //languages: "",
-      //about: "",
-      bio: "I am a professional Europa Universalis player. I also love to write codes and eat meat. I like girls",
-      interests: "games, girls",
-      //likes: "",
-      //hates: "",
-      //favourites: "",
-      attendedEvents: "Istanbul Coffee Fest",
-      willAttendEvents: "Cmpe451 Milestone",
-      createdEvents: "Europa Universalis IV Night",
-      profilePic: "",
-}
-
 export default class ProfileCard extends React.Component{
   constructor(props){
     super(props);
@@ -138,7 +113,7 @@ export default class ProfileCard extends React.Component{
           email: response.data.email,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          profilePic: response.data.profile_pic,
+          profile_pic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
           private: response.data.private,
@@ -161,7 +136,7 @@ export default class ProfileCard extends React.Component{
     await axios(options).then(response => {
       console.log("*************" + response);
       if(response.status === 200){
-        this.setState({profilePic: response.data.profile_pic})
+        this.setState({profile_pic: response.data.profile_pic})
       }
     }).catch(error => {
       console.error(error);
@@ -294,7 +269,7 @@ export default class ProfileCard extends React.Component{
               <div className="row">
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="card w-100" >
-                    <img className="card-img-top w-100" src={this.state.profilePic} alt="Card image"  />
+                    <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
                       <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
@@ -666,7 +641,7 @@ export default class ProfileCard extends React.Component{
               <div className="row">
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="card w-100" >
-                    <img className="card-img-top w-100" src={this.state.profilePic} alt="Card image"  />
+                    <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
                       <h4 className="card-title">{this.state.name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>

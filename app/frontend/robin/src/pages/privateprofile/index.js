@@ -12,20 +12,14 @@ import "./index.css";
 
 import { USERS_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
 
-
-var exampleProfile = {
-  first_name: "",
-  last_name: "",
-  cardSummary: "I am a software developer"
-}
-
 export default class PrivateProfile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       first_name: "",
       last_name: "",
-      bio: ""
+      bio: "",
+      profile_pic: "",
     }
 
     this.handleAddFriend = this.handleAddFriend.bind(this);
@@ -53,7 +47,7 @@ export default class PrivateProfile extends React.Component{
           bio: response.data.bio,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          profilePic: response.data.profile_pic,
+          profile_pic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
           private: response.data.private,
@@ -71,7 +65,7 @@ export default class PrivateProfile extends React.Component{
     await axios(options).then(response => {
       console.log("*************" + response);
       if(response.status === 200){
-        this.setState({profilePic: response.data.profile_pic})
+        this.setState({profile_pic: response.data.profile_pic})
       }
     }).catch(error => {
       console.error(error);
@@ -102,9 +96,9 @@ export default class PrivateProfile extends React.Component{
         <div className="mb-70">
           <Navbar currentPath={this.props.location.pathname}/>
         </div>
-        <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
+        <div className="mt-10 col-lg-4 col-md-6 col-sm-12 mx-auto">
         <div className="card" >
-          <img className="card-img-top w-100" src="https://lh3.googleusercontent.com/a8_ujXr3VWHstGkxgJL1TkqfrytP4r_52QhcvqRQVaQPRQ9DHdQ6seI99qc4jLjC0WDM=h900" alt="Card image"  />
+          <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
           <div className="card-body">
             <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
             {/*<p className="card-text">{this.state.bio}</p>*/}

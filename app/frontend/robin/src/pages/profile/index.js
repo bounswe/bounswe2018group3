@@ -218,7 +218,13 @@ export default class ProfileCard extends React.Component{
   listFriends(people){
     var ret = [];
     for(let i = 0; i < people.length; i++){
-      var profileLink = "/profile/" + people[i].id;
+      var profileLink;
+      if(people[i].private){
+        profileLink = "/privateprofile/" + people[i].id;
+      }
+      else{
+        profileLink = "/profile/" + people[i].id;
+      }
       if(i % 2 === 1){
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
@@ -274,11 +280,6 @@ export default class ProfileCard extends React.Component{
     if(this.state.redirect !== ""){
       return(
         <Redirect to={this.state.redirect}/>
-      )
-    }
-    if(this.state.private){
-      return(
-        <Redirect to={"/privateprofile" + this.state.id}/>
       )
     }
     if(Cookies.get("userid") === this.props.location.pathname.substring(9)){

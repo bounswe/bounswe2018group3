@@ -96,9 +96,9 @@ export default class PrivateProfile extends React.Component{
         <div className="mb-70">
           <Navbar currentPath={this.props.location.pathname}/>
         </div>
-        <div className="mt-10 col-lg-4 col-md-6 col-sm-12 mx-auto">
-        <div className="card" >
-          <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
+        <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
+        <div className="card " >
+          <img className="mt-20 card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
           <div className="card-body">
             <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
             {/*<p className="card-text">{this.state.bio}</p>*/}

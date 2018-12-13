@@ -18,16 +18,57 @@ export default class CreateEvent extends React.Component {
         redirect: "",
         private: false,
         submitClicked: false,
+        followingSettings: [true, true, true, false],
       };
   
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
-
+      this.handleFollowingCheckboxes = this.handleFollowingCheckboxes.bind(this);
+      this.handleFollowingCheckboxesChange = this.handleFollowingCheckboxesChange.bind(this);
       
     }
 
     handleCheckboxChange(){
       this.setState({private: !this.state.private})
+    }
+
+    handleFollowingCheckboxesChange(i){
+      if(i === 3){
+        if(!this.state.followingSettings[i]){
+          this.setState({
+            followingSettings: [false, false, false, true],
+          });
+        }
+        else{
+          var newFollowSettings = this.state.followingSettings;
+          newFollowSettings[i] = !newFollowSettings[i];
+          this.setState({
+            followingSettings: newFollowSettings,
+          })
+        }
+      }
+      else{
+        var newFollowSettings = this.state.followingSettings;
+        newFollowSettings[i] = !newFollowSettings[i];
+        newFollowSettings[3] = false;
+        this.setState({
+          followingSettings: newFollowSettings,
+        })
+      }
+    }
+
+    handleFollowingCheckboxes(){
+      return(
+        <p>
+          <input type="checkbox" checked={this.state.followingSettings[0]} onChange={() => this.handleFollowingCheckboxesChange(0)} onClick={() => {this.checked = !this.checked}}/> Someone I follow creates an event 
+          <br/> 
+          <input type="checkbox" checked={this.state.followingSettings[1]} onChange={() => this.handleFollowingCheckboxesChange(1)} onClick={() => {this.checked = !this.checked}}/> Someone I follow is interested in an event 
+          <br/>
+          <input type="checkbox" checked={this.state.followingSettings[2]} onChange={() => this.handleFollowingCheckboxesChange(2)} onClick={() => {this.checked = !this.checked}}/> Someone I follow is going to an event
+          <br/>
+          <input type="checkbox" checked={this.state.followingSettings[3]} onChange={() => this.handleFollowingCheckboxesChange(3)} onClick={() => {this.checked = !this.checked}}/> Never
+        </p>
+      )
     }
 
     handleNameChange(event) {
@@ -42,6 +83,7 @@ export default class CreateEvent extends React.Component {
     handleSave(){}
   
     render() {
+      console.log(this.state);
       if(this.state.id === undefined || this.state.id === ""){
         return (<Redirect to="/login" />)
       }
@@ -136,16 +178,7 @@ export default class CreateEvent extends React.Component {
               Notify when
               </div>
               <div className="row">
-              <p>
-                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow creates an event 
-                <br/> 
-                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow is interested in an event 
-                <br/>
-                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow is going to an event
-                <br/>
-                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Never
-                
-              </p>
+              {this.handleFollowingCheckboxes()}
               <p><i>
                   When you follow someone, you may also choose to get notifications about that person. You may choose to get
                   notifications whenever that person creates an event, is interested in an event, is attending an event or 

@@ -53,20 +53,38 @@ export default class CreateEvent extends React.Component {
           <div className="container-event col-xs-12 col-sm-10 col-md-6">
             <h2 className="text-center">Settings</h2>
             <form className="form-event">
-              <div className="row">
-                <h5>Privacy Settings</h5><br/>
-              </div>
+            <div class="or-seperator"><strong>Privacy Settings</strong></div>              
               <div className="row">
                 <p>
                   <input type="checkbox" name="private" onChange={this.handleCheckboxChange} onClick={() => {this.checked = !this.checked}}/> Private Profile
                 </p>
+                <br/>
+                <p><i>
+                  Setting your profile private will disable those who do not follow you from reaching to your personal info.
+                  The only info they can find will be your name and profile photo.
+                </i></p>
               </div>
-
               <br/>
-
               <div className="row">
-                <h5>Event Notification Settings</h5><br/>
+                <h6>Message Settings</h6>
               </div>
+              <div className="row">
+              Who can message me
+              </div>
+              <div className="row">
+                <select>
+                  <option value="one">Everybody</option>
+                  <option value="two">My followers</option>
+                  <option value="three">Nobody</option>
+                </select>
+                <p><i>
+                  <br/>
+                  You may change your message settings in order to specify who can message you. 
+                </i></p>
+              </div>  
+              
+
+              <div class="or-seperator"><strong>Notification Settings</strong></div> 
               <div className="row">
                 <h6>Interested Event Settings</h6>
               </div>
@@ -79,6 +97,12 @@ export default class CreateEvent extends React.Component {
                   <option value="two">Events gets canceled</option>
                   <option value="three">Never</option>
                 </select>
+                <p><i>
+                  <br/>
+                  Interested events are the events that you are interested in. You may choose to get notifications whenever 
+                  there is a modification about the event, when the event gets canceled or to never get any notifications about
+                  the event. 
+                </i></p>
               </div>  
 
               <br/>
@@ -95,6 +119,39 @@ export default class CreateEvent extends React.Component {
                   <option value="two">Events gets canceled</option>
                   <option value="three">Never</option>
                 </select>
+                <p><i>
+                  <br/>
+                  Going events are the events that you are going to attend. You may choose to get notifications whenever 
+                  there is a modification about the event, when the event gets canceled or to never get any notifications about
+                  the event. 
+                </i></p>
+              </div>  
+
+              <br/>
+
+              <div className="row">
+                <h6>Following Settings</h6>
+              </div>
+              <div className="row">
+              Notify when
+              </div>
+              <div className="row">
+              <p>
+                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow creates an event 
+                <br/> 
+                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow is interested in an event 
+                <br/>
+                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Someone I follow is going to an event
+                <br/>
+                <input type="checkbox" onClick={() => {this.checked = !this.checked}}/> Never
+                
+              </p>
+              <p><i>
+                  When you follow someone, you may also choose to get notifications about that person. You may choose to get
+                  notifications whenever that person creates an event, is interested in an event, is attending an event or 
+                  not to get any notifications at all.
+                </i></p>
+
               </div>  
 
               <br/>

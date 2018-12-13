@@ -93,7 +93,7 @@ export default class CreateEvent extends React.Component {
             <Navbar currentPath={this.props.location.pathname}/>
           </div>
           <div className="container-event col-xs-12 col-sm-10 col-md-6">
-            <h2 className="text-center">Settings</h2>
+            {/*<h2 className="text-center">Settings</h2>*/}
             <form className="form-event">
             <div class="or-seperator"><strong>Privacy Settings</strong></div>              
               <div className="row">

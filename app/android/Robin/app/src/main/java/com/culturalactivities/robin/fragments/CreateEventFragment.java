@@ -25,7 +25,7 @@ public class CreateEventFragment extends Fragment {
     private Button buttonSelectDate, buttonSelectHour;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private boolean isDateSelected=false, isHourSelected=false;
-    private String eventdate="0000.00.00", hour="00:00";
+    private String eventdate="00.00.0000", hour="00:00";
 
     private AppCompatActivity activity;
     @Override
@@ -78,6 +78,9 @@ public class CreateEventFragment extends Fragment {
                         onDateSetListener,
                         year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                dialog.setButton(DatePickerDialog.BUTTON_POSITIVE, "Select", dialog);
+                dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, "Cancel", dialog);
                 dialog.show();
             }
         });
@@ -111,12 +114,12 @@ public class CreateEventFragment extends Fragment {
                         hour = hod + ":" + m;
                         buttonSelectHour.setText(hour);
                         buttonSelectHour.setTextColor(Color.BLACK);
-                        buttonSelectHour.setBackgroundColor(activity.getResources().getColor(R.color.colorSecondaryLigth));
+                        buttonSelectHour.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                     }
 
                 }, h, minute, true);//true 24 saatli sistem için
-                timePicker.setButton(DatePickerDialog.BUTTON_POSITIVE, "Tamam", timePicker);
-                timePicker.setButton(DatePickerDialog.BUTTON_NEGATIVE, "İptal", timePicker);
+                timePicker.setButton(TimePickerDialog.BUTTON_POSITIVE, "Select", timePicker);
+                timePicker.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", timePicker);
                 timePicker.show();
             }
         });
@@ -138,10 +141,10 @@ public class CreateEventFragment extends Fragment {
                 }else {
                     day = "" + d;
                 }
-                eventdate = y + "." + month + "." + day;
+                eventdate = day + "." + month + "." + y;
                 buttonSelectDate.setText(eventdate);
                 buttonSelectDate.setTextColor(Color.BLACK);
-                buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorSecondaryLigth));
+                buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                 isDateSelected = true;
             }
         };

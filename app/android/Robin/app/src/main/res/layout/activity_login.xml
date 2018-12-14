@@ -80,9 +80,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/colorFacebook"
-        app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         android:text="LOGIN WITH FACEBOOK"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,11 +115,11 @@
 
     <TextView
         android:id="@+id/tvRegister"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -132,14 +130,17 @@
 
     <TextView
         android:id="@+id/tvGuestUser"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Use as Guest"
-        style="@style/Base.TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/tvRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+        app:layout_constraintStart_toStartOf="parent" />
     app:srcCompat="@drawable/robin" />
 </android.support.constraint.ConstraintLayout>

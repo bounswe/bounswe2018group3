@@ -26,12 +26,13 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/etTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:hint="Event Title"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
@@ -42,13 +43,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
                 android:text="Create Event"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayout4"
@@ -133,7 +134,7 @@
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText">
+                app:layout_constraintTop_toBottomOf="@+id/bDatePicker">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/etTags"
@@ -143,6 +144,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -161,20 +163,47 @@
                     android:hint="Location" />
             </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/editText"
+            <Button
+                android:id="@+id/bDatePicker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:ems="10"
-                android:inputType="date"
+                android:text="Date"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
+
+            <Button
+                android:id="@+id/bTimePicker"
+                android:layout_width="179dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Time"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="92dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@mipmap/logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 

@@ -60,7 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/colorPrimary"
-        android:text="Login"
+        android:text="LOGIN"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
@@ -83,7 +83,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/colorFacebook"
         app:layout_constraintBottom_toTopOf="@+id/tvRegister"
-        android:text="LOG IN WITH FACEBOOK"
+        android:text="LOGIN WITH FACEBOOK"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +111,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/forgot_password"
+        style="@style/Base.TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
@@ -133,10 +134,11 @@
         android:id="@+id/tvGuestUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="9dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="Use as Guest"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
     app:srcCompat="@drawable/robin" />

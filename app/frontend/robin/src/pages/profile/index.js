@@ -78,6 +78,7 @@ export default class ProfileCard extends React.Component{
       willAttendEvents: "",
       createdEvents: "",
       profile_pic: "",
+      photo: "",
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -85,6 +86,9 @@ export default class ProfileCard extends React.Component{
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.listFriends = this.listFriends.bind(this);
+    this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
+    this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
+    this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
   }
 
   async componentDidMount(){
@@ -101,7 +105,7 @@ export default class ProfileCard extends React.Component{
       headers: headers,
     };
     await axios(options).then(async response => {
-      console.log(response);
+      //console.log(response);
       if(response.status === 200){
         this.setState({
           ...this.state,
@@ -117,6 +121,7 @@ export default class ProfileCard extends React.Component{
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
           private: response.data.private,
+          photo: "",
         });
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){
@@ -188,6 +193,26 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+  }
+
+  uploadPhotoHandler(e){
+    e.preventDefault();
+    console.log(this.state);
+  }
+
+  uploadProfilePhotoHandler(e){
+    e.preventDefault();
+    console.log(this.state);
+  }
+
+  fileChangedHandler(event){
+    const file = event.target.files[0];
+    this.setState({photo: file})
+  }
+
+  profilePhotoHandler(event){
+    const file = event.target.files[0];
+    this.setState({profile_pic: file})
   }
 
   listFriends(people){
@@ -490,6 +515,15 @@ export default class ProfileCard extends React.Component{
                       <div className="row">
                         <div className="col-md-12">
                           <h5>Photos</h5>
+                          <form role="form">
+                            <div className="form-group row">
+                              <div className="col-lg-9">
+                                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)}/>
+                                <label value="choose a photo" for="photo">{this.state.photo==="" ? "Choose a file": this.state.photo.name}</label>
+                                <button className="btn btn-primary" onClick={e => this.uploadPhotoHandler(e)}>Upload</button>
+                              </div>
+                            </div>
+                          </form>
                           <p> </p>
                           <hr/>
                         </div>
@@ -529,6 +563,14 @@ export default class ProfileCard extends React.Component{
                           </div>
                         </div>
                         */}
+                        <div className="form-group row">
+                          <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
+                            <div className="col-lg-9">
+                              <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
+                              <label value="choose a photo" for="photo">{this.state.profile_pic==="" ? "Choose a file": this.state.profile_pic}</label>
+                              <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
+                            </div>
+                          </div>
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">City and Country</label>
                           <div className="col-lg-6">

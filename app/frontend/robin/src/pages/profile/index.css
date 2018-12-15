@@ -93,3 +93,29 @@ text-align:center;
 .w-10{
   width: 10%;
 }
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+  z-index: -1;
+  margin-right: 10px;
+}
+.inputfile + label {
+  font-size: 18px;
+  font-weight: 700;
+  color: black;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  margin-right: 10px;
+}
+
+.inputfile + label {
+  cursor: pointer; /* "hand" cursor */
+  margin-right: 10px;
+}

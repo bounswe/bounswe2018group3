@@ -1,6 +1,10 @@
 package com.culturalactivities.robin.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -9,6 +13,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -16,11 +22,12 @@ import android.widget.ProgressBar;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.culturalactivities.robin.R;
-import com.culturalactivities.robin.fragments.EventFragment;
-import com.culturalactivities.robin.fragments.EventsFragment;
 import com.culturalactivities.robin.fragments.MainPageFragment;
 import com.culturalactivities.robin.fragments.ProfileFragment;
 import com.culturalactivities.robin.fragments.SettingsFragment;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,10 +1,16 @@
 package com.culturalactivities.robin.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,17 +26,37 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.utilities.Constants;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private CallbackManager callbackManager;
+    public static  AccessTokenTracker accessTokenTracker;
+    public static  ProfileTracker profileTracker;
+
     private EditText etEmail, etPassword;
-    private Button buttonLogin, buttonFacebook;
+    private Button buttonLogin;
+    private LoginButton facebookLogin;
     private TextView tvRegister, tvForgotPassword, tvGuestUser;
 
     RequestQueue queue;
@@ -39,12 +65,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         setView();
     }
 
     private void setView() {
         queue = Volley.newRequestQueue(this);
+        callbackManager = CallbackManager.Factory.create();
+
         preferences = getSharedPreferences("login", MODE_PRIVATE);
         String token = preferences.getString("token", null);
 
@@ -61,10 +91,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvGuestUser = findViewById(R.id.tvGuestUser);
 
         buttonLogin = findViewById(R.id.buttonLogin);
-        buttonFacebook = findViewById(R.id.buttonFacebook);
+        facebookLogin = findViewById(R.id.buttonFacebook);
+
+        //facebookLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        facebookLogin.setReadPermissions(Arrays.asList("public_profile", "email"));
+        facebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Profile profile = Profile.getCurrentProfile();
+                if (profile != null){
+                    //loginWithFacebook(profile.getId(), profile.getFirstName(), profile.getLastName(), String.valueOf(profile.getProfilePictureUri(300, 300)));
+                }
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.please_try_again), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+            }
+        };
+
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile cp) {
+                if (cp != null){
+                    //loginWithFacebook(cp.getId(), cp.getFirstName(), cp.getLastName(), String.valueOf(cp.getProfilePictureUri(300, 300)));
+                }
+            }
+        };
 
         buttonLogin.setOnClickListener(this);
-        buttonFacebook.setOnClickListener(this);
 
         tvRegister = findViewById(R.id.tvRegister);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
@@ -72,9 +138,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvRegister.setOnClickListener(this);
         tvForgotPassword.setOnClickListener(this);
         tvGuestUser.setOnClickListener(this);
+
+
+        /*
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        */
+
     }
 
-    private void openMainActivity(String token, String pk, String username, String email,boolean isGuest){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void openMainActivity(String token, String pk, String username, String email, boolean isGuest){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("pk", pk);

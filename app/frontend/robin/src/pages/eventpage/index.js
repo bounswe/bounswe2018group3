@@ -42,7 +42,7 @@ export default class EventPage extends React.Component{
     this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
   }
 
-  componentDidMount(e){
+  async componentDidMount(e){
     console.log(this.state);
     var data = {
       // TODO: Change here according to API
@@ -60,7 +60,7 @@ export default class EventPage extends React.Component{
       headers: headers,
     };
     console.log(options);
-    axios(options).then(response => {
+    await axios(options).then(response => {
       console.log(response);
       if(response.status === 200){
         var eventList = response.data;
@@ -70,7 +70,7 @@ export default class EventPage extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    
+    this.getUser(this.state.event.creator)
   } 
 
   getUser(e){
@@ -166,7 +166,8 @@ handleInterested(){
 }
 
 handleDelete(){
-  if(Cookies.get("userid") === this.state.event.creator && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+  console.log(Cookies.get("userid") == this.state.creator.id)
+  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
     return(
       <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
     )
@@ -176,7 +177,7 @@ handleDelete(){
 }
 
 handleEdit(){
-  if(Cookies.get("userid") === this.state.event.creator && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
     return(
       <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
     )

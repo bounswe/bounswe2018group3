@@ -22,7 +22,7 @@ export default class EventPage extends React.Component{
       id: this.props.location.pathname.substring(7),
       redirect : "",
       event: 1,
-      creator : "",
+      creator : {},
       rating : "",
       joined: false,
       interested: false,
@@ -39,6 +39,7 @@ export default class EventPage extends React.Component{
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
+    this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
   }
 
   componentDidMount(e){
@@ -91,6 +92,7 @@ export default class EventPage extends React.Component{
   axios(options).then(response => {
     if(response.status === 200){
       var resp = response.data;
+      this.setState({creator: resp});
       return resp.username;
     }
   }).catch(error => {
@@ -241,9 +243,14 @@ handleEdit(){
     }
   }
 
+  handleRedirectToCreatorProfile(e){
+    e.preventDefault();
+    this.setState({redirect: "/profile/" + this.state.creator.id});
+  }
+
   render(){
     const { rating } = this.state;
-    if(this.state.redirect === "/home"){
+    if(this.state.redirect !== ""){
       return (<Redirect to={this.state.redirect}/>)
     }
     else if(this.state.id === "" || this.state.id === undefined){
@@ -281,6 +288,9 @@ handleEdit(){
             <div class="col-sm-6">
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
+                <div class="col-sm-9">
+                    Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.id}</a>
+                  </div>
                   <div class="col-sm-9">
                     Price: {this.state.event.price}
                   </div>

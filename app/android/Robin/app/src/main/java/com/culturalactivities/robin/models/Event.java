@@ -3,7 +3,7 @@ package com.culturalactivities.robin.models;
 import java.util.ArrayList;
 
 public class Event {
-    private String id, eventName, eventInfo, artistInfo, date;
+    private String id, eventName, eventInfo, artistInfo, date, time;
     private double price;
     private float rating;
     private Location location;
@@ -17,11 +17,12 @@ public class Event {
         images = new ArrayList<>();
     }
 
-    public Event(String eventName, String eventInfo, String artistInfo, String date, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Event(String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.eventName = eventName;
         this.eventInfo = eventInfo;
         this.artistInfo = artistInfo;
         this.date = date;
+        this.time = time;
         this.price = price;
         this.rating = rating;
         this.location = location;
@@ -31,12 +32,13 @@ public class Event {
         this.images = images;
     }
 
-    public Event(String id, String eventName, String eventInfo, String artistInfo, String date, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Event(String id, String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.id = id;
         this.eventName = eventName;
         this.eventInfo = eventInfo;
         this.artistInfo = artistInfo;
         this.date = date;
+        this.time = time;
         this.price = price;
         this.rating = rating;
         this.location = location;
@@ -51,6 +53,7 @@ public class Event {
         this.eventInfo = info;
         this.artistInfo = "";
         this.date = "";
+        this.time = "";
         this.price = 0;
         this.rating = 0;
         this.location = null;
@@ -58,6 +61,15 @@ public class Event {
         this.goingUser = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
+    }
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getId() {

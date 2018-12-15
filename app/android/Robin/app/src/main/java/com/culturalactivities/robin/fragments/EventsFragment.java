@@ -121,22 +121,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
         queue.add(jsonObjReq);
     }
 
-    /*private void getEvents2() {
-        events.clear();
-        Image image = new Image("https://cappadociaballoonflights.com/blog/img/cappadocia%20balloon%20ride.JPG", null);
-        ArrayList<Image> images = new ArrayList<>();
-        images.add(image);
-        for (int i = 0; i < 3; i++) {
-            Event event = new Event();
-            event.setImages(images);
-            event.setRating(3);
-            event.setEventInfo("MY Event description");
-            events.add(event);
-        }
-        eventAdapter.notifyDataSetChanged();
-        MainActivity.progressBar.setVisibility(View.INVISIBLE);
-    }*/
-
     @Override
     public void onClick(View view) {
 

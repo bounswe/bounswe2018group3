@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,16 +55,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ArrayList<Event> events = new ArrayList<>();
 
     RequestQueue queue;
+    public static final String USER_ID = "user_id";
     private String USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
     private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
+    private String userid;
 
     private SearchUserAdapter userAdapter;
     private ArrayList<User> users = new ArrayList<>();
 
     private ImageView ivProfile;
     private TextView tvName, tvBio;
-
+    private Button buttonProfile;
     private TabLayout tabLayout;
+
+    private boolean isMe = false, isFriend = false;
 
     private AppCompatActivity activity;
     @Override
@@ -74,8 +80,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public ProfileFragment() {}
 
-    public static ProfileFragment newInstance(){
-        return new ProfileFragment();
+    public static ProfileFragment newInstance(String userid){
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(USER_ID, userid);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -97,14 +107,33 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
 
-
         userAdapter = new SearchUserAdapter(activity, users, ProfileFragment.this);
+
+        buttonProfile = view.findViewById(R.id.buttonProfile);
+        if (userid.equals(MainActivity.pk)){
+            isMe = true;
+            buttonProfile.setText("EDIT");
+        } else {
+            isMe = false;
+        }
+
+        buttonProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMe){
+                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.fragment, EditProfileFragment.newInstance());
+                    transaction.addToBackStack("addEPF");
+                    transaction.commit();
+                }
+            }
+        });
 
 
         ivProfile = view.findViewById(R.id.ivProfile);
         tvName = view.findViewById(R.id.tvName);
         tvBio = view.findViewById(R.id.tvBio);
-        getProfile(MainActivity.pk);
+        getProfile(userid);
         getEvents(null);
 
         tabLayout = view.findViewById(R.id.tabLayout);
@@ -157,12 +186,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 String info = jsonObject.getString("info");
                                 String artist = jsonObject.getString("artist");
                                 String date = jsonObject.getString("date");
+                                String time = jsonObject.getString("time");
                                 String image = jsonObject.getString("country"); // TODO: 04.12.2018 Here will change
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
                                 images.add(new Image(image, null));
-                                events.add(new Event(id, name, info, artist, date, price, rating, null, null, null, null, images));
+                                events.add(new Event(id, name, info, artist, date, time, price, rating, null, null, null, null, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();
@@ -263,6 +293,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
                                 String username = jsonObject.getString("username");
                                 String fname = jsonObject.getString("first_name");
                                 String lname = jsonObject.getString("last_name");
@@ -270,7 +301,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 //String colorScheme = jsonObject.getString("colorScheme");
                                 //String userimage = jsonObject.getString("profile_pic");
                                 double rating = Double.parseDouble(jsonObject.getString("rating"));
-                                users.add(new User("", username, fname, lname, bio, null, "", rating));
+                                users.add(new User(id, "", username, fname, lname, bio, null, "", rating));
                             }
                             recyclerView.setAdapter(userAdapter);
                             userAdapter.notifyDataSetChanged();
@@ -308,20 +339,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+        if (getArguments() != null) {
+            userid = getArguments().getString(USER_ID);
+        }
     }
 
     @Override

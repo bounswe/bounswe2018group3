@@ -34,7 +34,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         ViewHolder(View v) {
             super(v);
             tvAuthor = v.findViewById(R.id.tvAuthor);
-            ivAuthor = v.findViewById(R.id.ivAuthor);
             tvComment = v.findViewById(R.id.tvComment);
             tvDate = v.findViewById(R.id.tvDate);
             rbComment = v.findViewById(R.id.rbComment);

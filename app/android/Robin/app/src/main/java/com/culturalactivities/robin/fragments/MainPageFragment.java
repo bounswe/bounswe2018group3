@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -36,6 +37,7 @@ import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
+import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
 
 import org.json.JSONArray;
@@ -156,6 +158,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
                                 String username = jsonObject.getString("username");
                                 String fname = jsonObject.getString("first_name");
                                 String lname = jsonObject.getString("last_name");
@@ -163,7 +166,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 //String colorScheme = jsonObject.getString("colorScheme");
                                 //String userimage = jsonObject.getString("profile_pic");
                                 double rating = Double.parseDouble(jsonObject.getString("rating"));
-                                users.add(new User("", username, fname, lname, bio, null, "", rating));
+                                users.add(new User(id, "", username, fname, lname, bio, null, "", rating));
                             }
                             recyclerView.setAdapter(userAdapter);
                             userAdapter.notifyDataSetChanged();
@@ -206,6 +209,12 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             EURL = EVENTS_URL + "search/?search=" + query;
         }
         events.clear();
+        // Some Test Tags
+        String[] tagsArray = {"concert", "istanbul", "event", "new", "smile", "newest", "notification", "tag", "comment"};
+        final ArrayList<Tag> tags = new ArrayList<>();
+        for(String s: tagsArray){
+            tags.add(new Tag(s, 0, null));
+        }
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 EURL,
@@ -221,12 +230,13 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 String info = jsonObject.getString("info");
                                 String artist = jsonObject.getString("artist");
                                 String date = jsonObject.getString("date");
+                                String time = jsonObject.getString("time");
                                 String image = jsonObject.getString("country"); // TODO: 04.12.2018 Here will change
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
                                 images.add(new Image(image, null));
-                                events.add(new Event(id, name, info, artist, date, price, rating, null, null, null, null, images));
+                                events.add(new Event(id, name, info, artist, date, time, price, rating, null, null, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();
@@ -264,15 +274,25 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        int position = recyclerView.getChildLayoutPosition(view);
-        if (isUserSearch){
-            // TODO: 04.12.2018  here will be edit
-            Toast.makeText(activity, "It is cominggg... " + users.get(position).getUsername(), Toast.LENGTH_SHORT).show();
-        }else {
-            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position)));
-            transaction.addToBackStack("addEF");
-            transaction.commit();
+        switch (view.getId()){
+            case R.id.simple_event:
+                int p1 = recyclerView.getChildLayoutPosition(view);
+                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment, EventFragment.newInstance(events.get(p1)));
+                transaction.addToBackStack("addEF");
+                transaction.commit();
+                break;
+            case R.id.simple_search_user:
+                int p2 = recyclerView.getChildLayoutPosition(view);
+                FragmentTransaction transaction2 = activity.getSupportFragmentManager().beginTransaction();
+                transaction2.add(R.id.fragment, ProfileFragment.newInstance(users.get(p2).getId()));
+                transaction2.addToBackStack("addPF");
+                transaction2.commit();
+                break;
+            case R.id.simple_textview:
+                String tag = String.valueOf(((TextView) view.findViewById(R.id.tvTag)).getText());
+                Toast.makeText(activity, tag, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

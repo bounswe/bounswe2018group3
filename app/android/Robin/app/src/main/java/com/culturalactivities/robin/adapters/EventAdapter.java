@@ -3,10 +3,12 @@ package com.culturalactivities.robin.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public TextView tvName, tvDescription, tvDate, tvArtist, tvPrice;
         public ImageView ivBanner;
         public RatingBar ratingBar;
+        private RecyclerView rvTags;
         ViewHolder(View v) {
             super(v);
             tvName = v.findViewById(R.id.tvName);
@@ -42,6 +45,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             tvDescription = v.findViewById(R.id.tvDescription);
             ratingBar = v.findViewById(R.id.ratingBar);
             tvPrice = v.findViewById(R.id.tvPrice);
+            rvTags = v.findViewById(R.id.rvTags);
 
         }
     }
@@ -81,7 +85,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         Event event = events.get(position);
         holder.tvName.setText(event.getEventName());
         holder.tvName.setTypeface(MainActivity.ubuntuBold);
-        holder.tvDate.setText(event.getDate());
+        holder.tvDate.setText(event.getTime() +" " + event.getDate());
         holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
         Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
         holder.tvArtist.setText(event.getArtistInfo());
@@ -94,6 +98,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.tvArtist.setText(event.getArtistInfo());
             holder.tvPrice.setText(event.getPrice() + " ₺");
             holder.tvPrice.setTypeface(MainActivity.ubuntuRegular);
+            holder.rvTags.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            holder.rvTags.setAdapter(new MyStringAdapter(context, event.getTags(), onClickListener));
         }
 
     }

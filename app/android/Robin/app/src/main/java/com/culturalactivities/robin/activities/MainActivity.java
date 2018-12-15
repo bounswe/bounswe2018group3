@@ -16,9 +16,11 @@ import android.widget.ProgressBar;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.fragments.EventFragment;
 import com.culturalactivities.robin.fragments.EventsFragment;
 import com.culturalactivities.robin.fragments.MainPageFragment;
 import com.culturalactivities.robin.fragments.ProfileFragment;
+import com.culturalactivities.robin.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,32 +54,29 @@ public class MainActivity extends AppCompatActivity {
         ubuntuBold = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Bold.ttf");
         ubuntuItalic = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Italic.ttf");
 
-        setNavigation();
+        if (isGuest){
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
+        }else {
+            setNavigation();
+        }
     }
 
     private void setNavigation(){
         bottomNavigation = findViewById(R.id.xbottom_navigation);
         bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
         bottomNavigation.setAccentColor(Color.WHITE);
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorAccent));
+        bottomNavigation.setInactiveColor(getResources().getColor(R.color.colorPrimaryLigth));
 
         // Create items
-        if (!isGuest){
-            AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.my_events, R.drawable.calendar, R.color.colorPrimaryLigth);
-            bottomNavigation.addItem(item0);
-        }
+        AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.settings, R.drawable.settings, R.color.colorPrimaryLigth);
+        bottomNavigation.addItem(item0);
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
         bottomNavigation.addItem(item1);
 
-        if (!isGuest){
-            AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.profile, R.drawable.profile, R.color.colorPrimaryLigth);
-            bottomNavigation.addItem(item3);
-            bottomNavigation.setCurrentItem(1);
-        }
-
-        if (isGuest){
-            bottomNavigation.setCurrentItem(0);
-        }
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.profile, R.drawable.profile, R.color.colorPrimaryLigth);
+        bottomNavigation.addItem(item3);
+        bottomNavigation.setCurrentItem(1);
 
         // Add items
 
@@ -90,17 +89,13 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 switch (position) {
                     case 0:
-                        if(isGuest){
-                            fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
-                        }else{
-                            fragmentTransaction.replace(R.id.fragment, EventsFragment.newInstance()).commit();
-                        }
+                        fragmentTransaction.replace(R.id.fragment, SettingsFragment.newInstance()).commit();
                         break;
                     case 1:
                         fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
                         break;
                     case 2:
-                        fragmentTransaction.replace(R.id.fragment, ProfileFragment.newInstance()).commit();
+                        fragmentTransaction.replace(R.id.fragment, ProfileFragment.newInstance(MainActivity.pk)).commit();
                         break;
                 }
                 return true;
@@ -134,6 +129,10 @@ public class MainActivity extends AppCompatActivity {
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.fragment, SettingsFragment.newInstance());
+            transaction.addToBackStack("addSF");
+            transaction.commit();
             return true;
         }
         //noinspection SimplifiableIfStatement

@@ -48,7 +48,8 @@
     <string name="search">Search</string>
     <string name="artist">Artist</string>
     <string name="events">Events</string>
-    <string name="following">Following</string>
-    <string name="followers">Followers</string>
+    <string name="following">FOLLOWING</string>
+    <string name="followers">FOLLOWERS</string>
     <string name="artist_info">Artist Info</string>
+    <string name="settings">Settings</string>
 </resources>

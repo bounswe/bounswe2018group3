@@ -8,22 +8,36 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
+import com.culturalactivities.robin.activities.LoginActivity;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.CommentAdapter;
 import com.culturalactivities.robin.adapters.ImageAdapter;
 import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.User;
+import com.culturalactivities.robin.utilities.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,15 +47,22 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class EventFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
+
+    RequestQueue queue;
     private Event event;
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
-    private RatingBar rbEvent;
+    private RatingBar rbEvent, rbMakeRate;
 
 
     //comments part
@@ -54,10 +75,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     private RecyclerView rvGallery;
     private ImageAdapter imageAdapter;
 
+
+    // for comment
+    private Button buttonComment;
+    private EditText etComment;
+
     //Google Map
     GoogleMap map;
     MapView mapView;
-
 
     private AppCompatActivity activity;
     @Override
@@ -100,6 +125,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     @SuppressLint("SetTextI18n")
     private void setView(View view) {
+        queue = Volley.newRequestQueue(activity);
         activity.getSupportActionBar().setSubtitle(event.getEventName());
         ivBanner = view.findViewById(R.id.ivProfile);
         tvTitle = view.findViewById(R.id.tvTitle);
@@ -107,6 +133,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         tvPrice = view.findViewById(R.id.tvPrice);
         tvDescription = view.findViewById(R.id.tvDescription);
         rbEvent = view.findViewById(R.id.rbEvent);
+        rbMakeRate = view.findViewById(R.id.rbMakeRate);
         tvDate = view.findViewById(R.id.tvDate);
 
         tvTitle.setTypeface(MainActivity.ubuntuBold);
@@ -119,9 +146,17 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
         rbEvent.setRating(event.getRating());
+
+        rbMakeRate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                rateEvent(rating);
+            }
+        });
+
         tvArtistInfo.setText(event.getArtistInfo());
         tvPrice.setText(event.getPrice()+ " ₺");
-        tvDate.setText(event.getDate());
+        tvDate.setText(event.getTime() +"-" + event.getDate());
         
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
@@ -142,16 +177,101 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             mapView.onResume();
             mapView.getMapAsync(this);
         }
+
+        // make comment
+        etComment = view.findViewById(R.id.etComment);
+        buttonComment = view.findViewById(R.id.buttonComment);
+
+        buttonComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String comment = etComment.getText().toString();
+
+                if (TextUtils.isEmpty(comment)){
+                    Toast.makeText(activity, "Please write a comment", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(activity, "Waiting for real comment api endpoint", Toast.LENGTH_SHORT).show();
+                //makeComment(comment);
+            }
+        });
+    }
+
+    private void rateEvent(float rating) {
+        String url = Constants.RATE_URL + event.getId()+ "/" + (int) rating;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        rbEvent.setRating(Float.parseFloat(response));
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("type", "post");
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    private void makeComment(final String comment) {
+        StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
+                Constants.COMMENT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // TODO: 15.12.2018
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userid", MainActivity.pk);
+                params.put("eventid", event.getId());
+                params.put("comment", comment);
+                params.put("Content-Type", "application/json; charset=utf-8");
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     private void getComments() {
         comments.clear();
-        User user = new User("test@test.com", "Tester", "password");
-        user.setName("Nazan Karaman");
-        Comment comment = new Comment(user, getString(R.string.lorem_ipsum_base), "7 September 2018", 4);
+        User user = new User("0", "test@test.com", "Tester", "password");
+        user.setName("Tuğçe Karaman");
+        Comment comment = new Comment(user, getString(R.string.lorem_ipsum_base), "7 November 2018", 4);
         comments.add(comment);
-        User user2 = new User("test@test.com", "Tester", "pass");
-        user2.setName("Adnan Demir");
+        User user2 = new User("0", "test@test.com", "Tester", "pass");
+        user2.setName("Fatih Arslan");
         Comment comment2 = new Comment(user2, getString(R.string.lorem_ipsum_content), "5 April 2018", 3);
         comments.add(comment2);
         commentAdapter.notifyDataSetChanged();

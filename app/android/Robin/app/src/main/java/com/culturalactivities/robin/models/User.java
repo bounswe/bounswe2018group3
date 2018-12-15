@@ -3,19 +3,21 @@ package com.culturalactivities.robin.models;
 import java.util.ArrayList;
 
 public class User {
-    private String email, username, password, name, surname, bio, profileImage, colorSchemeInf;
+    private String id, email, username, password, name, surname, bio, profileImage, colorSchemeInf;
     private double rating;
     private ArrayList<String> watchingTags, commentList, blockedTags;
     private ArrayList<Event> eventList;
     private ArrayList<User> followedUsers, followingUsers, blockedUsers;
 
-    public User(String email, String username, String password) {
+    public User(String id, String email, String username, String password) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
     }
 
-    public User(String email, String username,  String name, String surname, String bio, String profileImage, String colorSchemeInf, double rating) {
+    public User(String id, String email, String username,  String name, String surname, String bio, String profileImage, String colorSchemeInf, double rating) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.name = name;
@@ -24,6 +26,14 @@ public class User {
         this.profileImage = profileImage;
         this.colorSchemeInf = colorSchemeInf;
         this.rating = rating;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFullName(){

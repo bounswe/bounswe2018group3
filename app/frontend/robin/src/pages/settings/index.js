@@ -3,14 +3,13 @@ import React from 'react';
 import "./index.css";
 import Cookies from 'js-cookie';
 
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
-import { EVENT_URL } from "../constants/backend-urls";
 
-export default class CreateEvent extends React.Component {
+export default class Settings extends React.Component {
     constructor(props) {
       super(props);
       this.state = {

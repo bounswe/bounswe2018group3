@@ -25,6 +25,7 @@ export default class NavBar extends React.Component {
     this.handleNavbarChange = this.handleNavbarChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleButtons = this.handleButtons.bind(this);
+    this.handleSettings = this.handleSettings.bind(this);
   }
   toggle() {
     this.setState({
@@ -33,11 +34,17 @@ export default class NavBar extends React.Component {
   }
 
   handleButtons(){
-    console.log(Cookies.get("token"));
     if(Cookies.get("token") === undefined || Cookies.get("userid") === undefined){
       return(
         <div className="navbar-collapse collapse w-25 order-3 dual-collapse2 col-md-3 ">
-            
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item mr-1">
+                <button className="btn btn-primary" onClick={e => this.handleLogin(e)}>Login</button>
+              </li>
+              <li className="nav-item mr-1">
+                <button className="btn btn-success" onClick={e => this.handleRegister(e)}>Register</button>
+              </li>
+            </ul>
           </div>
       )
     }
@@ -62,7 +69,7 @@ export default class NavBar extends React.Component {
                   <i className="fa fa-bars"/>
                 </button>
                 <div className="dropdown-menu">
-                  <button className="btn"><i className="fa fa-cogs mr-1"/>Settings</button>
+                  <button className="btn" onClick={e => this.handleSettings(e)}><i className="fa fa-cogs mr-1" />Settings</button>
                   <button className="btn" onClick={e => this.handleLogout(e)}><i className="fa fa-sign-out mr-1"/>Logout</button>
                 </div>
               </li>
@@ -72,6 +79,16 @@ export default class NavBar extends React.Component {
     }
   }
 
+  handleLogin(e){
+    e.preventDefault();
+    this.setState({redirect: "/login"});
+  }
+
+  handleRegister(e){
+    e.preventDefault();
+    this.setState({redirect: "/register"});
+  }
+
   handleLogout(e){
     e.preventDefault();
     Cookies.remove("token");
@@ -79,13 +96,14 @@ export default class NavBar extends React.Component {
     this.setState({redirect: "/login"});
   }
 
-  handleProfile(e){
+  async handleProfile(e){
     e.preventDefault();
-    if(this.props.currentPath.substring(0,8) === "/profile"){
+    if(this.props.currentPath.substring(0,9) === "/profile/"  && this.props.currentPath.substring(9) === Cookies.get("userid")){
       return;
     }
     else
-      this.setState({redirect: "/profile/" + Cookies.get("userid")});
+      await this.setState({redirect: "/profile/" + Cookies.get("userid")});
+    console.log(this.state);
   }
 
   handleCreateEvent(e){
@@ -97,6 +115,15 @@ export default class NavBar extends React.Component {
       this.setState({redirect: "/create-event"});
   }
 
+  handleSettings(e){
+    e.preventDefault();
+    if(this.props.currentPath.substring(0,9) === "/settings"){
+      return;
+    }
+    else
+      this.setState({redirect: "/settings"});
+  }
+
   handleNavbarChange(e) {
     this.setState({...this.state, searchQuery: e.target.value});
   }
@@ -105,7 +132,6 @@ export default class NavBar extends React.Component {
     e.preventDefault();
     if(this.props.currentPath === "/searchresults"){
       Cookies.set("searchQ", this.state.searchQuery);
-      console.log(Cookies.get("searchQ"));
       window.location.reload();
       return;
     }

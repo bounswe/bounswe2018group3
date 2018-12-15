@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect} from "react-router-dom";
+import {Redirect, Link} from "react-router-dom";
 
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import axios from 'axios';
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 
-import { USERS_URL, EDIT_USER_URL } from "../constants/backend-urls"
+import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -19,64 +19,45 @@ import "./index.css"
 var examplePeople = [
   {
     id: 3,
-    firstName: "Debbie",
-    lastName: "Smith",
+    first_name: "Debbie",
+    last_name: "Smith",
     city: "New York",
     country: "NY",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg",
+    private: true,
   },
   {
     id: 4,
-    firstName: "Michael",
-    lastName: "Anderson",
+    first_name: "Michael",
+    last_name: "Anderson",
     city: "Boston",
     country: "MA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
+    private: false,
+
   },
   {
     id: 5,
-    firstName: "Jordan",
-    lastName: "Schlansky",
+    first_name: "Jordan",
+    last_name: "Schlansky",
     city: "Los Angeles",
     country: "CA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg"
+    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
+    private: false,
+
   },
 ]
-
-var exampleProfile = {
-  email: "",
-      firstName: "Furkan Enes",
-      lastName: "Yalçın",
-      password: "",
-      city: "Istanbul",
-      country: "Turkey",
-      birthday: "01.01.1996",
-      //gender: "",
-      //relationshipStatus: "",
-      //occupation: "",
-      //education: "",
-      //languages: "",
-      //about: "",
-      bio: "I am a professional Europa Universalis player. I also love to write codes and eat meat. I like girls",
-      interests: "games, girls",
-      //likes: "",
-      //hates: "",
-      //favourites: "",
-      attendedEvents: "Istanbul Coffee Fest",
-      willAttendEvents: "Cmpe451 Milestone",
-      createdEvents: "Europa Universalis IV Night",
-      profilePic: "",
-}
 
 export default class ProfileCard extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+      redirect: "",
       propsToken: this.props.location.token,
-      id: Cookies.get("userid"),
+      id: this.props.location.pathname.substring(9),
       email: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       password: "",
       //cardSummary: "",
       city: "",
@@ -96,7 +77,7 @@ export default class ProfileCard extends React.Component{
       attendedEvents: "",
       willAttendEvents: "",
       createdEvents: "",
-      profilePic: "",
+      profile_pic: "",
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -107,31 +88,55 @@ export default class ProfileCard extends React.Component{
   }
 
   async componentDidMount(){
+    if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === "")
+      return;
+
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
       method: "GET",
-      url: USERS_URL + Cookies.get("userid"),
+      url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
-    await axios(options).then(response => {
+    await axios(options).then(async response => {
+      console.log(response);
       if(response.status === 200){
-        console.log(response)
         this.setState({
           ...this.state,
+          id: response.data.id,
           bio: response.data.bio,
           birthday: response.data.birthday,
           city: response.data.city,
           country: response.data.country,
           email: response.data.email,
-          firstName: response.data.first_name,
-          lastName: response.data.last_name,
-          profilePic: response.data.profile_pic,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
+          profile_pic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
+          private: response.data.private,
         });
+        //if(response.data.private || this.state.private){
+        if(this.state.id === 3){
+          await this.setState({redirect: "/privateprofile/" + this.state.id});
+          console.log("true");
+        }
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+    options = {
+      method: "GET",
+      url: GET_USER_PIC_URL + this.props.location.pathname.substring(9),
+      headers: headers,
+    }
+    await axios(options).then(response => {
+      console.log("*************" + response);
+      if(response.status === 200){
+        this.setState({profile_pic: response.data.profile_pic})
       }
     }).catch(error => {
       console.error(error);
@@ -162,9 +167,9 @@ export default class ProfileCard extends React.Component{
       city: this.state.city,
       country: this.state.country,
       email: this.state.email,
-      firstName: this.state.first_name,
-      lastName: this.state.last_name,
-      profilePic: this.state.profile_pic,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      profile_pic: this.state.profile_pic,
       followedUsers: this.state.followedUsers,
       followers: this.state.followers,
     };
@@ -174,9 +179,10 @@ export default class ProfileCard extends React.Component{
       headers: headers,
       body: body,
     };
+    console.log(options);
     await axios(options).then(response => {
+      console.log(response);
       if(response.status === 200){
-        console.log(response);
       }
       }).catch(error => {
       console.error(error);
@@ -187,14 +193,25 @@ export default class ProfileCard extends React.Component{
   listFriends(people){
     var ret = [];
     for(let i = 0; i < people.length; i++){
+      var profileLink;
+      if(people[i].private){
+        profileLink = "/privateprofile/" + people[i].id;
+      }
+      else{
+        profileLink = "/profile/" + people[i].id;
+      }
       if(i % 2 === 1){
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-              <label className="name lead mb-0">{people[i].firstName + " " + people[i].lastName}</label>
+              <Link to={profileLink}>
+                <label className="name lead mb-0">
+                  {people[i].first_name + " " + people[i].last_name}
+                </label>
+              </Link>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
@@ -206,10 +223,14 @@ export default class ProfileCard extends React.Component{
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-left my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].firstName + " " + people[i].lastName} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
-              <label className="name lead mb-0">{people[i].firstName + " " + people[i].lastName}</label>
+              <Link to={profileLink}>
+                <label className="name lead mb-0">
+                  {people[i].first_name + " " + people[i].last_name}
+                </label>
+              </Link>
               <br/>
               <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
               <br/>
@@ -219,11 +240,24 @@ export default class ProfileCard extends React.Component{
       }
     }
     return ret;
-    
   }
 
   render(){
-    if(this.state.id === Cookies.get("userid")){
+    if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === ""){
+      return(
+        <div>
+          <h2>
+            User not found!
+          </h2>
+        </div>
+      )
+    }
+    if(this.state.redirect !== ""){
+      return(
+        <Redirect to={this.state.redirect}/>
+      )
+    }
+    if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
     return (
       <div>
         <div className="mb-70">
@@ -235,9 +269,9 @@ export default class ProfileCard extends React.Component{
               <div className="row">
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="card w-100" >
-                    <img className="card-img-top w-100" src={this.state.profilePic} alt="Card image"  />
+                    <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
-                      <h4 className="card-title">{this.state.firstName + " " + this.state.lastName}</h4>
+                      <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
                       <div className="address">								
                         <ul>
@@ -466,13 +500,13 @@ export default class ProfileCard extends React.Component{
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">First Name</label>
                           <div className="col-lg-9">
-                            <input className="form-control" type="text" name="firstName" value={this.state.firstName} onChange={e => this.handleChange(e)}/>
+                            <input className="form-control" type="text" name="first_name" value={this.state.first_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Last Name</label>
                           <div className="col-lg-9">
-                            <input className="form-control" type="text" name="lastName" value={this.state.lastName} onChange={e => this.handleChange(e)}/>
+                            <input className="form-control" type="text" name="last_name" value={this.state.last_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
                         <div className="form-group row">
@@ -607,7 +641,7 @@ export default class ProfileCard extends React.Component{
               <div className="row">
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="card w-100" >
-                    <img className="card-img-top w-100" src={this.state.profilePic} alt="Card image"  />
+                    <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
                       <h4 className="card-title">{this.state.name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
@@ -715,6 +749,8 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
+                                {this.listFriends(examplePeople)}
+                                {/*
                                   <li className="list-item col-xs-12 col-lg-6 float-left my-3">
                                     <div className="col-sm-4 col-md-2 px-0 float-left">
                                       <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
@@ -759,6 +795,7 @@ export default class ProfileCard extends React.Component{
                                       <br/>
                                     </div>
                                   </li>
+                                */}
                                 </ul>
                               </div>
                             </div>
@@ -774,6 +811,8 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
+                                {this.listFriends(examplePeople)}
+                                {/*
                                   <li className="list-item col-xs-12 col-lg-6 float-left my-3">
                                     <div className="col-sm-4 col-md-2 px-0 float-left">
                                       <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
@@ -818,6 +857,7 @@ export default class ProfileCard extends React.Component{
                                       <br/>
                                     </div>
                                   </li>
+                                */}
                                 </ul>
                               </div>
                             </div>

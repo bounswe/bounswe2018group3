@@ -28,6 +28,8 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       this.handleInterested = this.handleInterested.bind(this);
       this.handleJoinClick = this.handleJoinClick.bind(this);
       this.handleInterestedClick = this.handleInterestedClick.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
+      this.handleEdit = this.handleEdit.bind(this);
     }
     onStarClick(nextValue, prevValue, name) {     
       var data = {
@@ -48,7 +50,6 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       axios(options).then(response => {
         if(response.status === 200){
           var resp = response.data;
-          console.log(resp);
           this.setState({rating: resp});
         }
       }).catch(error => {
@@ -74,10 +75,11 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
         data: data,
         headers: headers,
       };
+      console.log(options);
       axios(options).then(response => {
+        console.log(response);
         if(response.status === 200){
           var eventList = response.data;
-          console.log(eventList);
           this.setState({event: eventList});
         }
       }).catch(error => {
@@ -106,7 +108,6 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       axios(options).then(response => {
         if(response.status === 200){
           var resp = response.data;
-          console.log(resp);
           return resp.username;
         }
       }).catch(error => {
@@ -135,7 +136,6 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       axios(options).then(response => {
         if(response.status === 200){
           var resp = response.data;
-          console.log(resp);
           this.setState({redirect: "/home"});
           
         }
@@ -178,6 +178,26 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
 
         )
       }
+    }
+
+    handleDelete(){
+      if(Cookies.get("userid") === this.state.event.creator){
+        return(
+          <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
+        )
+      }
+      else 
+        return;
+    }
+
+    handleEdit(){
+      if(Cookies.get("userid") === this.state.event.creator){
+        return(
+          <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
+        )
+      }
+      else 
+        return;
     }
 
   
@@ -223,11 +243,11 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
                 <p class="card-text shadow-sm bg-white rounded" style={{marginLeft:'30px', marginRight:'30px', marginTop:'20px'}}>{this.state.event.info}</p>
                 </div>
                 </div>
-              {this.handleJoin()}
-              {this.handleInterested()}
-                <a href="#" class="btn btn-primary"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete Event</a>
-            </div>
-                
+                {this.handleJoin()}
+                {this.handleInterested()}
+                {this.handleEdit()}
+                {this.handleDelete()}
+                </div>
               </div>
             </div>
           </div>

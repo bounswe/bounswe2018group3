@@ -22,6 +22,8 @@ export default class SearchResults extends React.Component{
       token: Cookies.get("token"),
       events : []
     };
+
+    this.showResults = this.showResults.bind(this);
   }
 
   componentDidMount(e){
@@ -42,7 +44,6 @@ export default class SearchResults extends React.Component{
     axios(options).then(response => {
       if(response.status === 200){
         var eventList = response.data;
-        console.log(eventList);
         this.setState({events: eventList});
       }
     }).catch(error => {
@@ -51,23 +52,34 @@ export default class SearchResults extends React.Component{
     })
   } 
 
+  showResults(){
+    if(this.state.events.length === 0){
+      return <h3 className="text-center">No event or user found!</h3>
+    }
+    else{
+      var ret = [];
+      for(let i = 0; i < this.state.events.length; i++){
+        ret.push(<EventComp title={this.state.events[i].name} subtitle={this.state.events[i].locatio}
+          eventPhoto={this.state.events[i].country} eventDetails={this.state.events[i].info} id={this.state.events[i].id}/>)
+      }
+      return ret;
+      
+  }
+  }
+
   render(){
     if(this.state.token === undefined){
       return(
         <Redirect to="/login"/>
       )
     }
-    console.log(Cookies.get("searchQ"))
     return (
       <div>
         <div className="mb-70">
           <NavBar currentPath={this.props.location.pathname}/>
         </div>
         <div className="eventContainer col-md-6">
-        {this.state.events.map(comp => {
-              return <EventComp title={comp.name} subtitle={comp.locatio}
-              eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
-            })}
+          {this.showResults()}
         </div>
       </div>
     );

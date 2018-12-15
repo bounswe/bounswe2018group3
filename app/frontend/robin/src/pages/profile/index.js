@@ -87,6 +87,8 @@ export default class ProfileCard extends React.Component{
     this.handleSave = this.handleSave.bind(this);
     this.listFriends = this.listFriends.bind(this);
     this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
+    this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
+    this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
   }
 
   async componentDidMount(){
@@ -198,9 +200,19 @@ export default class ProfileCard extends React.Component{
     console.log(this.state);
   }
 
+  uploadProfilePhotoHandler(e){
+    e.preventDefault();
+    console.log(this.state);
+  }
+
   fileChangedHandler(event){
     const file = event.target.files[0];
     this.setState({photo: file})
+  }
+
+  profilePhotoHandler(event){
+    const file = event.target.files[0];
+    this.setState({profile_pic: file})
   }
 
   listFriends(people){
@@ -551,6 +563,14 @@ export default class ProfileCard extends React.Component{
                           </div>
                         </div>
                         */}
+                        <div className="form-group row">
+                          <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
+                            <div className="col-lg-9">
+                              <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
+                              <label value="choose a photo" for="photo">{this.state.profile_pic==="" ? "Choose a file": this.state.profile_pic}</label>
+                              <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
+                            </div>
+                          </div>
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">City and Country</label>
                           <div className="col-lg-6">

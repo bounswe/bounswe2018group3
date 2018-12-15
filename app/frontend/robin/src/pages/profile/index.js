@@ -78,6 +78,7 @@ export default class ProfileCard extends React.Component{
       willAttendEvents: "",
       createdEvents: "",
       profile_pic: "",
+      photo: "",
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -506,7 +507,7 @@ export default class ProfileCard extends React.Component{
                             <div className="form-group row">
                               <div className="col-lg-9">
                                 <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)}/>
-                                <label for="photo">Choose a file</label>
+                                <label value="choose a photo" for="photo">{this.state.photo==="" ? "Choose a file": this.state.photo.name}</label>
                                 <button className="btn btn-primary" onClick={e => this.uploadPhotoHandler(e)}>Upload</button>
                               </div>
                             </div>

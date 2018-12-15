@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
@@ -64,6 +65,9 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     private SearchView searchView;
     private Switch switchSearch;
     private boolean isUserSearch = false;
+    private boolean isSearchOpen = false;
+
+    private ConstraintLayout clSearch;
 
     RequestQueue queue;
     private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
@@ -115,6 +119,8 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         searchView = view.findViewById(R.id.searchView);
         switchSearch= view.findViewById(R.id.switchSearch);
 
+        clSearch = view.findViewById(R.id.cLSearch);
+
         switchSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,6 +136,9 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                isSearchOpen = false;
+                clSearch.animate().translationY(0);
+                searchView.setQuery("", false);
                 if (isUserSearch){
                     getSearchUser(query);
                 }else {
@@ -306,6 +315,15 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             transaction.commit();
         }
 
+        if (id == R.id.action_search){
+            if (isSearchOpen){
+                isSearchOpen = false;
+                clSearch.animate().translationY(0);
+            }else {
+                isSearchOpen = true;
+                clSearch.animate().translationY(clSearch.getHeight()*3/2);
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 

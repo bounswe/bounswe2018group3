@@ -2,9 +2,6 @@ package com.culturalactivities.robin.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -13,8 +10,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -26,15 +21,13 @@ import com.culturalactivities.robin.fragments.MainPageFragment;
 import com.culturalactivities.robin.fragments.ProfileFragment;
 import com.culturalactivities.robin.fragments.SettingsFragment;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class MainActivity extends AppCompatActivity {
 
     private AHBottomNavigation bottomNavigation;
     private FragmentTransaction fragmentTransaction;
     public static String email, username, pk, token;
     public static Typeface ubuntuRegular, ubuntuBold, ubuntuItalic;
+    @SuppressLint("StaticFieldLeak")
     public static ProgressBar progressBar;
     public static boolean isGuest;
 
@@ -86,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setCurrentItem(1);
 
         // Add items
-
-
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {

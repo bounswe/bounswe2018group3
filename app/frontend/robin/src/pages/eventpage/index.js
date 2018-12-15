@@ -4,6 +4,10 @@ import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 import React from 'react';
 import Location from "../components/map/LocationPicker"
+
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
 import "./eventpage.css"
 
 export default class EventPage extends React.Component{
@@ -13,6 +17,7 @@ export default class EventPage extends React.Component{
     this.state = {
       comments: []
     }
+    this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
   }
 
   componentDidMount() {
@@ -31,8 +36,9 @@ export default class EventPage extends React.Component{
     })
   }
 
-  handleAddCommentClick = () => {
+  handleAddCommentClick(e){
     // commenti backende atcan
+    e.preventDefault();
     this.setState({
       comments: [{
         userName: "Benım bu",
@@ -40,6 +46,24 @@ export default class EventPage extends React.Component{
       }, ...this.state.comments]
     });
     console.log(this.state.commentValue);
+  }
+
+  handleAddcommentBox(){
+    if(Cookies.get("token") === undefined || Cookies.get("token") === ""){
+      return(
+        <form className="addCommentContainer" action="" onSubmit={e => e.preventDefault()}>
+          <h4 className="text-center">You must be logged in to comment</h4>
+        </form>
+      );
+    }
+    else{
+      return(
+        <form className="addCommentContainer" action="" onSubmit={e => e.preventDefault()}>
+          <input className="addComment" type="text" value={this.state.commentValue} onChange={e => this.setState({ commentValue: e.target.value })} placeholder="Type..."/>
+          <button onClick={e => this.handleAddCommentClick(e)}>Comment</button>
+        </form>
+      )
+    }
   }
 
   render(){
@@ -57,10 +81,9 @@ export default class EventPage extends React.Component{
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>
-        <form className="addCommentContainer" action="" onSubmit={e => e.preventDefault()}>
-          <input className="addComment" type="text" value={this.state.commentValue} onChange={e => this.setState({ commentValue: e.target.value })} placeholder="Type..."/>
-          <button onClick={this.handleAddCommentClick}>Add comment</button>
-        </form>
+        
+        
+        {this.handleAddcommentBox()}
         {this.state.comments.map(comment => {
           return <Comment userName={comment.userName} text={comment.text} date={Date.now()}/>
         })}

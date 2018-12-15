@@ -181,7 +181,7 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
     }
 
     handleDelete(){
-      if(Cookies.get("userid") === this.state.event.creator){
+      if(Cookies.get("userid") === this.state.event.creator && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
         return(
           <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
         )
@@ -191,7 +191,7 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
     }
 
     handleEdit(){
-      if(Cookies.get("userid") === this.state.event.creator){
+      if(Cookies.get("userid") === this.state.event.creator && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
         return(
           <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
         )

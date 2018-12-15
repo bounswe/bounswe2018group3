@@ -3,12 +3,8 @@ import { Link, Redirect } from "react-router-dom";
 
 import NavBar from "../components/navbar/index"
 import EventComp from "./components/event/index"
-import borisPhoto from "./boris.png"
-import skyGif from "./T9L0.gif"
-import gazaSurf from "./gazaSurf.jpg"
 import "./index.css"
 import Cookies from 'js-cookie';
-import { compose } from 'redux';
 import axios from 'axios';
 
 import { HOMEPAGE_URL } from "../constants/backend-urls";
@@ -42,6 +38,7 @@ export default class Home extends React.Component{
       headers: headers,
     };
     axios(options).then(response => {
+      //console.log(response);
       if(response.status === 200){
         var eventList = response.data;
         console.log(eventList);

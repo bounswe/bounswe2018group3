@@ -14,12 +14,13 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
     constructor(props){
       super(props);
       this.state = {
+        id: this.props.id,
         redirect : "",
-          event: 1,
-          creator : "",
-          rating : "",
-          joined: false,
-          interested: false,
+        event: 1,
+        creator : "",
+        rating : "",
+        joined: false,
+        interested: false,
       }
       this.onStarClick = this.onStarClick.bind(this);
       this.getUser = this.getUser.bind(this);
@@ -62,7 +63,7 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
     componentDidMount(e){
       var data = {
         // TODO: Change here according to API
-        id: Cookies.get("clickedEvent")
+        id: this.state.id
       };
       var headers= {
         "Content-Type": "application/json",
@@ -71,7 +72,7 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       var options = {
         method: "GET",
         // TODO: Update search url page.
-        url: EVENT_URL + Cookies.get("clickedEvent"),
+        url: EVENT_URL + this.state.id,
         data: data,
         headers: headers,
       };
@@ -205,6 +206,15 @@ import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backe
       const { rating } = this.state;
         if(this.state.redirect === "/home"){
           return (<Redirect to={this.state.redirect}/>)
+        }
+        else if(this.state.id === "" || this.state.id === undefined){
+          return (
+            <div>
+          <h2>
+            Event not found!
+          </h2>
+        </div>
+          )
         }
         return (
 

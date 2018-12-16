@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3D0625</color>
     <color name="colorPrimaryDark">#3D0625</color>
-    <color name="colorPrimaryLigth">#a75282</color>
+    <color name="colorPrimaryLigth">#eabfd8</color>
     <color name="colorPrimaryWhite">#edaed1</color>
     <color name="colorFacebook">#49639f</color>
     <color name="colorAccent">#a75282</color>

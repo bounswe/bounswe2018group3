@@ -1,11 +1,22 @@
 package com.culturalactivities.robin.fragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,14 +24,30 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CreateEventFragment extends Fragment {
 
@@ -28,6 +55,11 @@ public class CreateEventFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private boolean isDateSelected=false, isHourSelected=false;
     private String eventdate="00.00.0000", hour="00:00";
+    private static final int GALLERY_INTENT = 21;
+
+    private Spinner spinnerCurrencies;
+    private EditText etTitle, etArtist, etDescription, etPrice, etLatitude, etLongitude, etTags;
+    private ImageView ivEvent;
 
     private AppCompatActivity activity;
     @Override
@@ -122,7 +154,6 @@ public class CreateEventFragment extends Fragment {
                         isHourSelected = true;
                         hour = hod + ":" + m;
                         buttonSelectHour.setText(hour);
-                        buttonSelectHour.setTextColor(Color.BLACK);
                         buttonSelectHour.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                     }
 
@@ -133,12 +164,12 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
-
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int y, int m, int d) {
                 m++;
                 String month, day;
+
                 if (m < 10){
                     month = "0" + m;
                 }else {
@@ -150,12 +181,76 @@ public class CreateEventFragment extends Fragment {
                 }else {
                     day = "" + d;
                 }
+
                 eventdate = day + "." + month + "." + y;
                 buttonSelectDate.setText(eventdate);
-                buttonSelectDate.setTextColor(Color.BLACK);
                 buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                 isDateSelected = true;
             }
         };
+
+        etTitle = view.findViewById(R.id.etTitle);
+        etArtist = view.findViewById(R.id.etArtist);
+        etDescription = view.findViewById(R.id.etDescription);
+        etPrice = view.findViewById(R.id.etPrice);
+        etLatitude = view.findViewById(R.id.etLatitude);
+        etLongitude = view.findViewById(R.id.etLongitude);
+        etTags = view.findViewById(R.id.etTags);
+        spinnerCurrencies = view.findViewById(R.id.spinnerCurrencies);
+        ivEvent = view.findViewById(R.id.ivEvent);
+        ivEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isStoragePermissionGranted()){
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/");
+                    startActivityForResult(intent, GALLERY_INTENT);
+                }
+            }
+        });
+
+        List<String> currencies = Arrays.asList(activity.getResources().getStringArray(R.array.currencies));
+
+        spinnerCurrencies.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, currencies));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == GALLERY_INTENT && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/");
+            startActivityForResult(intent, GALLERY_INTENT);
+        }else {
+            Toast.makeText(activity, "Please select an image!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode== Activity.RESULT_OK && requestCode==GALLERY_INTENT){
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+                ivEvent.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
     }
 }

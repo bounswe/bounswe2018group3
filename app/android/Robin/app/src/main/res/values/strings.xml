@@ -57,4 +57,10 @@
     <string name="artist_info">Artist Info</string>
     <string name="settings">Settings</string>
     <string name="please_try_again">Please try again!</string>
+
+    <string-array name="currencies">
+        <item>₺</item>
+        <item>$</item>
+        <item>€</item>
+    </string-array>
 </resources>

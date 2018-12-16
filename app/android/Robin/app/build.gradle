@@ -39,7 +39,9 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
 
     // facebook library
+    //noinspection GradleDependency
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
 }

@@ -36,6 +36,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,11 +56,11 @@ import java.util.Map;
 
 public class CreateEventFragment extends Fragment {
 
-    private Button buttonSelectDate, buttonSelectHour;
+    private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private boolean isDateSelected=false, isHourSelected=false;
     private String eventdate="00.00.0000", hour="00:00";
-    private static final int GALLERY_INTENT = 21;
+    private static final int GALLERY_INTENT = 21, PLACE_PICKER_INTENT=22;
 
     private Spinner spinnerCurrencies;
     private EditText etTitle, etArtist, etDescription, etPrice, etLatitude, etLongitude, etTags;
@@ -105,6 +110,16 @@ public class CreateEventFragment extends Fragment {
 
         buttonSelectDate.setTypeface(MainActivity.ubuntuRegular);
         buttonSelectHour.setTypeface(MainActivity.ubuntuRegular);
+        /*buttonSelectLocation.setTypeface(MainActivity.ubuntuRegular);
+
+        buttonSelectLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLocationPermissionGranted()){
+                    selectLocation();
+                }
+            }
+        });*/
 
         buttonSelectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +169,7 @@ public class CreateEventFragment extends Fragment {
                         isHourSelected = true;
                         hour = hod + ":" + m;
                         buttonSelectHour.setText(hour);
-                        buttonSelectHour.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
+                        //buttonSelectHour.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                     }
 
                 }, h, minute, true);//true 24 saatli sistem için
@@ -184,7 +199,7 @@ public class CreateEventFragment extends Fragment {
 
                 eventdate = day + "." + month + "." + y;
                 buttonSelectDate.setText(eventdate);
-                buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
+                //buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                 isDateSelected = true;
             }
         };
@@ -236,6 +251,10 @@ public class CreateEventFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (resultCode== Activity.RESULT_OK && requestCode==PLACE_PICKER_INTENT){
+            Place place = PlacePicker.getPlace(data, activity);
+            LatLng latLng = place.getLatLng();
+            Toast.makeText(activity, latLng.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -253,4 +272,33 @@ public class CreateEventFragment extends Fragment {
             return true;
         }
     }
+    public boolean isLocationPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
+    }
+
+    private void selectLocation(){
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+
+        Intent intent;
+        try {
+            intent = intentBuilder.build(activity);
+            startActivityForResult(intent, PLACE_PICKER_INTENT);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5"/>
+                app:layout_constraintGuide_percent="0.5" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayout7"
@@ -139,8 +139,9 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bDatePicker">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/etTags"
@@ -166,8 +167,8 @@
                     android:id="@+id/etLatitude"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="Latitude" />
+                    android:hint="Latitude"
+                    android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -186,8 +187,8 @@
                     android:id="@+id/etLongitude"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="Longitude" />
+                    android:hint="Longitude"
+                    android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -199,13 +200,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:background="@drawable/button_background"
                 android:text="Date"
-                android:background="@color/colorPrimary"
-                android:textColor="@android:color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimaryLigth"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
 
             <Button
                 android:id="@+id/bTimePicker"
@@ -216,13 +217,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:background="@drawable/button_background"
                 android:text="Time"
-                android:background="@color/colorPrimary"
-                android:textColor="@android:color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimaryLigth"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
 
 
             <Button
@@ -234,14 +235,28 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
+                android:background="@drawable/button_background"
                 android:text="Create Event"
-                android:background="@color/colorPrimaryLigth"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorPrimaryLigth"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bDatePicker" />
+
+            <Button
+                android:id="@+id/buttonSelectLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Select Location"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonCreate" />
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
-    tools:context=".activities.RegisterActivity">
+    tools:context=".activities.RegisterActivity"
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -23,51 +24,60 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent">
             <EditText
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username"
+                android:textColor="@color/colorAccent"
                 android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent">
             <EditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
+                android:textColor="@color/colorAccent"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            android:textColorHint="@color/colorAccent">
             <EditText
                 android:id="@+id/etPassword1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
+                android:textColor="@color/colorAccent"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            android:textColorHint="@color/colorAccent">
             <EditText
                 android:id="@+id/etPassword2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/repassword"
+                android:textColor="@color/colorAccent"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:textColor="@android:color/white"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:id="@+id/buttonRegister"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/register" />
@@ -84,7 +94,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/login"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

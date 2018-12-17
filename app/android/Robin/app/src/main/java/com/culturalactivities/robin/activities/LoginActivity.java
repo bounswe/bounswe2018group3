@@ -1,16 +1,11 @@
 package com.culturalactivities.robin.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,15 +30,12 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +43,8 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CallbackManager callbackManager;
-    public static  AccessTokenTracker accessTokenTracker;
-    public static  ProfileTracker profileTracker;
+    public static AccessTokenTracker accessTokenTracker;
+    public static ProfileTracker profileTracker;
 
     private EditText etEmail, etPassword;
     private Button buttonLogin;
@@ -170,7 +162,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.buttonLogin:
-                login();
+                String email = etEmail.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+                login(email, password);
                 break;
             case R.id.buttonFacebook:
                 break;
@@ -186,9 +180,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void login() {
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
+    private void login(String email, String password) {
 
         if (!isValidEmail(email)){
             Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();

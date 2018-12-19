@@ -45,6 +45,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +55,8 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+
 public class MainPageFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView recyclerView;
@@ -167,11 +172,11 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = jsonObject.getString("id");
-                                String username = jsonObject.getString("username");
-                                String fname = jsonObject.getString("first_name");
-                                String lname = jsonObject.getString("last_name");
-                                String bio = jsonObject.getString("bio");
+                                String id = toUTF(jsonObject.getString("id"));
+                                String username = toUTF(jsonObject.getString("username"));
+                                String fname = toUTF(jsonObject.getString("first_name"));
+                                String lname = toUTF(jsonObject.getString("last_name"));
+                                String bio = toUTF(jsonObject.getString("bio"));
                                 //String colorScheme = jsonObject.getString("colorScheme");
                                 //String userimage = jsonObject.getString("profile_pic");
                                 double rating = Double.parseDouble(jsonObject.getString("rating"));
@@ -234,13 +239,14 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = jsonObject.getString("id");
-                                String name = jsonObject.getString("name");
-                                String info = jsonObject.getString("info");
-                                String artist = jsonObject.getString("artist");
-                                String date = jsonObject.getString("date");
-                                String time = jsonObject.getString("time");
-                                String image = jsonObject.getString("country"); // TODO: 04.12.2018 Here will change
+                                String id = toUTF(jsonObject.getString("id"));
+                                String name = toUTF(jsonObject.getString("name"));
+
+                                String info = toUTF(jsonObject.getString("info"));
+                                String artist = toUTF(jsonObject.getString("artist"));
+                                String date = toUTF(jsonObject.getString("date"));
+                                String time = toUTF(jsonObject.getString("time"));
+                                String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
@@ -341,5 +347,14 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             inflater.inflate(R.menu.menu_homepage_guest, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ex){
+
+        }
+        return str;
     }
 }

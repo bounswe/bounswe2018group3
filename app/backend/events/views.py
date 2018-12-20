@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 
 import django_filters
-
+import json
 from . import models
 from . import serializers
 from api.models import EventRating
@@ -105,3 +106,24 @@ class EventRateView(viewsets.ModelViewSet):
             totalPoint += rating.givenPoint
         
         return totalPoint/len(event.ratings.all())
+
+class EventCreateView(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventRWSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        event_response =  self.create(request, *args, **kwargs)
+        tag_ids = request.data["tag_ids"]
+        tag_ids = '{"tag_ids":'+tag_ids+'}'
+        event = models.Event.objects.get(id=event_response.data["id"])
+        for tag_id in json.loads(tag_ids)["tag_ids"]:
+            tag = Tag.objects.get(id=tag_id)
+            event.tags.add(tag)
+        event.save()
+        return event_response

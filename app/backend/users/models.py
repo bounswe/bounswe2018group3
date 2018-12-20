@@ -10,6 +10,7 @@ class CustomUser(AbstractUser):
     bio = models.TextField(blank=True)
     city = models.CharField(blank=True, max_length=255)
     country = models.CharField(blank=True, max_length=255)
+    is_private = models.BooleanField(default=False)
     email = models.EmailField()
     username = models.CharField(max_length=255, unique=True)
     profile_pic = models.ImageField(upload_to='pic_folder/profile_pics/', default='/default_profile.png')

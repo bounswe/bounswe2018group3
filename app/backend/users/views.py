@@ -5,10 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 import django_filters
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from . import models
 from . import serializers
-from api.models import UserRating
+from api.models import UserRating, Tag
 from events.models import Event
 from datetime import datetime
 
@@ -75,6 +76,7 @@ class UserRetrieveView(viewsets.ModelViewSet):
         user = models.CustomUser.objects.get(pk=pk)
         serializer = serializers.UserReadOnlySerializer(user)
         data = serializer.data
+        
         futureEvents = []
         pastEvents = []
         for event in user.event_set.all():
@@ -82,12 +84,10 @@ class UserRetrieveView(viewsets.ModelViewSet):
                 futureEvents.append(event.id)
             else:
                 pastEvents.append(event.id)
-
         data['futureEvents'] = futureEvents
         data['pastEvents'] = pastEvents
 
         events = Event.objects.all()
-
         created_events = []
         for event in events:
             if event.creator.id == user.id:
@@ -158,3 +158,91 @@ class UserPicView(viewsets.ModelViewSet):
         size = image.size
 
         return HttpResponse(image, content_type='image/png')
+
+class UserFollowsUserView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+
+    def follow(self, request, followed_user_id): #may need to check if already exists
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        followed_user = models.CustomUser.objects.get(id=followed_user_id)
+        user.followedUsers.add(followed_user)
+        user.save()
+
+        return Response("User is followed.")
+
+    def unfollow(self, request, followed_user_id): # need to check if attending
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        unfollowed_user = models.CustomUser.objects.get(id=followed_user_id)
+        user.followedUsers.remove(unfollowed_user)
+        user.save()
+        
+        return Response("User is unfollowed.")
+
+class UserBlocksUserView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+
+    def block(self, request, blocked_user_id): #may need to check if already exists
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        blocked_user = models.CustomUser.objects.get(id=blocked_user_id)
+        user.blockedUsers.add(blocked_user)
+        user.save()
+
+        return Response("User is blocked.")
+
+    def unblock(self, request, blocked_user_id): # need to check if attending
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        unblocked_user = models.CustomUser.objects.get(id=blocked_user_id)
+        user.blockedUsers.remove(unblocked_user)
+        user.save()
+        
+        return Response("User is unblocked.")
+
+class UserWatchesTagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+
+    def watch(self, request, tag_id): #may need to check if already exists
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        tag = Tag.objects.get(id=tag_id)
+        tag.watchers.add(user)
+        tag.save()
+
+        return Response("Tag is watched.")
+
+    def unwatch(self, request, tag_id): # need to check if attending
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        tag = Tag.objects.get(id=tag_id)
+        tag.watchers.remove(user)
+        tag.save()
+        
+        return Response("Tag is unwatched.")
+
+class UserBlocksTagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+
+    def block(self, request, tag_id): #may need to check if already exists
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        tag = Tag.objects.get(id=tag_id)
+        tag.blockers.add(user)
+        tag.save()
+
+        return Response("Tag is blocked.")
+
+    def unblock(self, request, tag_id): # need to check if attending
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        tag = Tag.objects.get(id=tag_id)
+        tag.blockers.remove(user)
+        tag.save()
+        
+        return Response("Tag is unblocked.")

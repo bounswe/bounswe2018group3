@@ -9,7 +9,8 @@ class UserRWSerializer(serializers.ModelSerializer):
             'email', 
             'username',
             'first_name',
-            'last_name', 
+            'last_name',
+            'is_private',
             'password',
             'is_superuser',
             'bio', 
@@ -22,7 +23,9 @@ class UserRWSerializer(serializers.ModelSerializer):
             'followedUsers',
             'followers',
             'blockedUsers',
-            'blockers')
+            'blockers',
+            'watchingTags',
+            'blockedTags',)
 
     def create(self, validated_data):
         return Users.objects.create(**validated_data)
@@ -65,7 +68,10 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followedUsers',
             'blockedUsers',
             'blockers',
-            'followers',)
+            'followers',
+            'watchingTags',
+            'blockedTags',
+            'is_private',)
         read_only_fields = fields = (
             'id',
             'email', 
@@ -82,7 +88,10 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followedUsers',
             'blockedUsers',
             'blockers',
-            'followers',)
+            'followers',
+            'watchingTags',
+            'blockedTags',
+            'is_private',)
 
 class UserAttendSerializer(serializers.ModelSerializer):
     class Meta:

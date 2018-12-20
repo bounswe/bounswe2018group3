@@ -17,7 +17,7 @@ class EventCommentRWSerializer(serializers.ModelSerializer):
             'date',
             'event',
             'event_id',
-            'rating'
+            'ratings'
         )
 
     def create(self, validated_data):
@@ -55,7 +55,7 @@ class UserCommentRWSerializer(serializers.ModelSerializer):
             'date',
             'user',
             'user_id',
-            'rating',
+            'ratings',
         )
 
     def create(self, validated_data):
@@ -95,21 +95,13 @@ class EventCommentReadOnlySerializer(serializers.ModelSerializer):
 class UserCommentRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserComment
-        fields = ('id', 'rating', 'ratingNum',)
+        fields = ('id', 'ratings', )
 
 class EventCommentRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.EventComment
-        fields = ('id', 'rating', 'ratingNum')
-
-    """
-    def update(self, instance, validated_data):
-        totalRating = instance.rating * instance.ratingNum
-        instance.ratingNum = instance.ratingNum + 1
-        instance.rating = (totalRating + validated_data.get('new_rating')) / instance.ratingNum
-        instance.save()
-        return instance"""
+        fields = ('id', 'ratings', )
 
 class UserCommentSearchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -120,7 +112,7 @@ class UserCommentSearchSerializer(serializers.ModelSerializer):
             'content',
             'author', 
             'date', 
-            'rating',)
+            'ratings',)
 
 class EventCommentSearchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -131,7 +123,7 @@ class EventCommentSearchSerializer(serializers.ModelSerializer):
             'content',
             'author',
             'date',
-            'rating')
+            'ratings')
 
 # Tag related serializers
 

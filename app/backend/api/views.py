@@ -70,20 +70,6 @@ class UserCommentEditView(generics.UpdateAPIView):
     queryset = models.UserComment.objects.all()
     serializer_class = serializers.UserCommentRWSerializer
 
-class UserCommentRateView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    queryset = models.UserComment.objects.all()
-    serializer_class = serializers.UserCommentRatingSerializer
-
-    def rate(self, request, pk, new_rating):
-        comment = models.UserComment.objects.get(pk=pk)
-        totalRating = comment.rating * comment.ratingNum
-        comment.ratingNum = comment.ratingNum + 1
-        comment.rating = (totalRating + new_rating) / comment.ratingNum
-        comment.save()
-
-        return HttpResponse(comment.rating)
-
 class UserCommentRetrieveView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.UserComment.objects.all()
@@ -109,8 +95,6 @@ class UserCommentFilter(django_filters.FilterSet):
             'content',
             'author', 
             'date', 
-            'rating', 
-            'ratingNum',
             )
 
 class UserCommentSearchView(generics.ListAPIView):
@@ -143,21 +127,6 @@ class EventCommentDeleteView(viewsets.ModelViewSet):
             return HttpResponse("Item deleted")
         return HttpResponse("Only the author can delete their comments")
 
-
-class EventCommentRateView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    queryset = models.EventComment.objects.all()
-    serializer_class = serializers.EventCommentRatingSerializer
-
-    def rate(self, request, pk, new_rating):
-        comment = models.EventComment.objects.get(pk=pk)
-        totalRating = comment.rating * comment.ratingNum
-        comment.ratingNum = comment.ratingNum + 1
-        comment.rating = (totalRating + new_rating) / comment.ratingNum
-        comment.save()
-
-        return HttpResponse(comment.rating)
-
 class EventCommentRetrieveView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.EventComment.objects.all()
@@ -170,9 +139,7 @@ class EventCommentFilter(django_filters.FilterSet):
             'title',
             'content',
             'author', 
-            'date', 
-            'rating', 
-            'ratingNum',
+            'date',
             )
 
 class EventCommentSearchView(generics.ListAPIView):

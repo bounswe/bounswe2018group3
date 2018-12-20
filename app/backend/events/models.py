@@ -18,8 +18,8 @@ class Event(models.Model):
     #tags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     #tags = models.ManyToManyField(Tag, related_name='event_set')
     #comments = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
-    rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    ratingNum = models.IntegerField(default=0)
+    #rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
+    #ratingNum = models.IntegerField(default=0)
     #attendants = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     attendants = models.ManyToManyField(CustomUser, related_name='event_set', blank=True)
 

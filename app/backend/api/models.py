@@ -8,8 +8,6 @@ import datetime
 class Comment(models.Model):
     #id = models.IntegerField(unique=True,db_index=True)
     #author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="writtenComments") #may also use EmbeddedModelField
-    rating = models.DecimalField(max_digits=3,decimal_places=2,default=0)
-    ratingNum = models.IntegerField(default=0)
     date = models.DateTimeField(db_index=True,default=timezone.now)
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -46,3 +44,13 @@ class EventImage(Image) :
 
 class UserImage(Image) :
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="images")
+
+class Rating(models.Model):
+    givenPoint = models.SmallIntegerField()
+    rater = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="given_ratings") #the user that gave the rating
+
+class EventRating(Rating):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ratings")
+
+class UserRating(Rating) :
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="ratings")

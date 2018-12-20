@@ -8,6 +8,7 @@ from rest_framework import viewsets
 
 from . import models
 from . import serializers
+from api.models import UserRating
 from events.models import Event
 from datetime import datetime
 
@@ -40,14 +41,30 @@ class UserRateView(viewsets.ModelViewSet):
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRatingSerializer
 
-    def rate(self, *args, **kwargs):
+    def rate(self, request, **kwargs):
         user = models.CustomUser.objects.get(pk=self.kwargs['user_id'])
-        totalRating = user.rating * user.ratingNum
-        user.ratingNum = user.ratingNum + 1
-        user.rating = (totalRating + self.kwargs['new_rating']) / user.ratingNum
-        user.save()
+        for rating in user.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.givenPoint = self.kwargs['new_rating']
+                rating.save()
+                return HttpResponse(self.calcRating(user.id))
+        rating = UserRating()
+        rating.rater = request.user
+        rating.givenPoint = self.kwargs['new_rating']
+        rating.user = user
+        rating.save()
 
-        return HttpResponse(user.rating)
+        return HttpResponse(self.calcRating(user.id))
+
+    def calcRating(self, pk):
+        user = models.CustomUser.objects.get(pk=self.kwargs['user_id'])
+        if(len(user.ratings.all()) == 0):
+            return 0
+        totalPoint = 0
+        for rating in user.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return totalPoint/len(user.ratings.all())
 
 class UserRetrieveView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -116,7 +133,7 @@ class UserFilter(django_filters.FilterSet):
             'city', 
             'country',
             'birthday', 
-            'rating',)
+            'ratings',)
 
 #Read only event models,
 class UserSearchView(generics.ListAPIView):

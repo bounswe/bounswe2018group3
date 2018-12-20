@@ -12,6 +12,7 @@ import django_filters
 
 from . import models
 from . import serializers
+from api.models import EventRating
 
 # Create your views here..
 
@@ -80,11 +81,27 @@ class EventRateView(viewsets.ModelViewSet):
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRatingSerializer
 
-    def rate(self, *args, **kwargs):
+    def rate(self, request, **kwargs):
         event = models.Event.objects.get(pk=self.kwargs['event_id'])
-        totalRating = event.rating * event.ratingNum
-        event.ratingNum = event.ratingNum + 1
-        event.rating = (totalRating + self.kwargs['new_rating']) / event.ratingNum
-        event.save()
+        for rating in event.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.givenPoint = self.kwargs['new_rating']
+                rating.save()
+                return HttpResponse(self.calcRating(event.id)) 
+        rating = EventRating()
+        rating.rater = request.user
+        rating.givenPoint = self.kwargs['new_rating']
+        rating.event = event
+        rating.save()
 
-        return HttpResponse(event.rating)
+        return HttpResponse(self.calcRating(event.id))
+
+    def calcRating(self,pk):
+        event = models.Event.objects.get(pk=self.kwargs['event_id'])
+        if(len(event.ratings.all()) == 0):
+            return 0
+        totalPoint = 0
+        for rating in event.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return totalPoint/len(event.ratings.all())

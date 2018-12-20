@@ -27,7 +27,7 @@ class EventEditSerializer(serializers.ModelSerializer):
                 instance.price = validated_data.get('price', instance.price)
                 #instance.tags = validated_data.get('tags', instance.tags)
                 #instance.comments = validated_data.get('comments', instance.comments)
-                instance.rating = validated_data.get('rating', instance.rating)
+                instance.ratings = validated_data.get('ratings', instance.ratings)
                 #instance.images = validated_data.get('images', instance.images)
                 #instance.attendants = validated_data.get('attendants', instance.attendants)
                 instance.save()
@@ -52,4 +52,4 @@ class EventRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Event
-        fields = ('id', 'rating', 'ratingNum',)
+        fields = ('id', 'ratings', )

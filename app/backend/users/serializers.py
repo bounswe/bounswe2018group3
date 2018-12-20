@@ -18,8 +18,7 @@ class UserRWSerializer(serializers.ModelSerializer):
             'profile_pic',
             'birthday', 
             'colorScheme',
-            'rating',
-            'ratingNum',
+            'ratings',
             'followedUsers',
             'followers',
             'blockedUsers',
@@ -62,8 +61,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'profile_pic',
             'birthday', 
             'colorScheme',
-            'rating',
-            'ratingNum',
+            'ratings',
             'followedUsers',
             'blockedUsers',
             'blockers',
@@ -80,8 +78,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'profile_pic',
             'birthday', 
             'colorScheme',
-            'rating',
-            'ratingNum',
+            'ratings',
             'followedUsers',
             'blockedUsers',
             'blockers',
@@ -108,18 +105,18 @@ class UserSearchSerializer(serializers.ModelSerializer):
             'city', 
             'country',
             'birthday', 
-            'rating',)
+            'ratings',)
 
 class ProfilePicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CustomUser
-        fields = ('profile_pic',)
+        fields = ('profile_pic', )
 
 class UserRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CustomUser
-        fields = ('id', 'rating', 'ratingNum',)
+        fields = ('id', 'ratings', )
         
     

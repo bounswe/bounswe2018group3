@@ -30,8 +30,6 @@ urlpatterns = [
     path('eventcomments/delete/<int:pk>', views.EventCommentDeleteView.as_view({'delete': 'delete'})),
     path('usercomments/search/', views.UserCommentSearchView.as_view()),
     path('eventcomments/search/', views.EventCommentSearchView.as_view()),
-    path('usercomments/rate/<int:pk>/<int:new_rating>', views.UserCommentRateView.as_view({'post': 'rate'})),
-    path('eventcomments/rate/<int:pk>/<int:new_rating>', views.EventCommentRateView.as_view({'post': 'rate'})),
 
     # Tag-related views
     path('tags/', views.TagCreateView.as_view()), 

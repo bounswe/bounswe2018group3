@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -36,12 +36,12 @@ class EventDeleteView(viewsets.ModelViewSet):
 
 
 class EventCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer
 
 class EventRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer
 
@@ -53,7 +53,7 @@ class EventFilter(django_filters.FilterSet):
 
 #Read only event models,
 class EventSearchView(generics.ListAPIView):
-    permission_classes = ()#(IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)#(IsAuthenticated,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer
     filter_backends = (filters.SearchFilter,)

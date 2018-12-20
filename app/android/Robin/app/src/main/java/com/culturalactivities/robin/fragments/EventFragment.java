@@ -165,7 +165,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
         tvArtistInfo.setText(event.getArtistInfo());
         tvPrice.setText(event.getPrice()+ " ₺");
-        tvDate.setText(event.getTime() +"-" + event.getDate());
+        tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
         
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);

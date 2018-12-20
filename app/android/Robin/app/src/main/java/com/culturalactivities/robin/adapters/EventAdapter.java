@@ -85,7 +85,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         Event event = events.get(position);
         holder.tvName.setText(event.getEventName());
         holder.tvName.setTypeface(MainActivity.ubuntuBold);
-        holder.tvDate.setText(event.getTime() +" " + event.getDate());
+        holder.tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
         holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
         Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
         holder.tvArtist.setText(event.getArtistInfo());

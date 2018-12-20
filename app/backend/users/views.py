@@ -61,13 +61,22 @@ class UserRetrieveView(viewsets.ModelViewSet):
         futureEvents = []
         pastEvents = []
         for event in user.event_set.all():
-            if(event.date > datetime.now()):
-                futureEvents.append(event)
+            if(event.date > datetime.date(datetime.now())):
+                futureEvents.append(event.id)
             else:
-                pastEvents.append(event)
+                pastEvents.append(event.id)
 
         data['futureEvents'] = futureEvents
         data['pastEvents'] = pastEvents
+
+        events = Event.objects.all()
+
+        created_events = []
+        for event in events:
+            if event.creator.id == user.id:
+                created_events.append(event.id)
+
+        data['createdEvents'] = created_events
 
         return JsonResponse(data)
 

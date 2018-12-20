@@ -14,7 +14,7 @@ import json
 from . import models
 from . import serializers
 from api.models import EventRating
-
+from api.models import Tag
 # Create your views here..
 
 #Read and write event models

@@ -9,7 +9,6 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from rest_framework.decorators import api_view
 
 import requests
@@ -21,6 +20,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import viewsets
+from rest_framework import mixins
 import django_filters
 from . import models
 from . import serializers
@@ -58,22 +58,76 @@ class VerificationSentView(APIView):
         }
         return Response(content)
 
-# Comment views
+# Comment views #####################################################
 
-class UserCommentCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+# Function for calculating user comment rating
+def calcRatingU(comment_id):  # Upvotes or downvotes (+1 or -1)
+    comment = models.UserComment.objects.get(pk=comment_id)
+    ratingNum = len(comment.ratings.all())
+    if(ratingNum == 0):
+        return (0,0)
+    totalPoint = 0
+    for rating in comment.ratings.all():
+        totalPoint += rating.givenPoint
+    
+    return (totalPoint, ratingNum)
+
+
+# Function for calculating event comment rating
+def calcRatingE(comment_id): # upvote or downvote
+    comment = models.EventComment.objects.get(pk=comment_id)
+    ratingNum = len(comment.ratings.all())
+    if(ratingNum == 0):
+        return (0,0)
+    totalPoint = 0
+    for rating in comment.ratings.all():
+        totalPoint += rating.givenPoint
+    
+    return (totalPoint, ratingNum)    
+
+class UserCommentCreateView(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.UserComment.objects.all()
     serializer_class = serializers.UserCommentRWSerializer
+
+    def get(self, request, *args, **kwargs):
+        commentList = []
+        for comment in models.UserComment.objects.all():
+            serializer =  serializers.UserCommentRWSerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+            del data['ratings']
+            commentList.append(data)
+        return Response(commentList)
+    
+    def post(self, request, *args, **kwargs):
+        comment_response =  self.create(request, *args, **kwargs)
+        comment = models.UserComment.objects.get(id=comment_response.data["id"])
+        serializer =  serializers.UserCommentRWSerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
 class UserCommentEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.UserComment.objects.all()
     serializer_class = serializers.UserCommentRWSerializer
 
-class UserCommentRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+class UserCommentRetrieveView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.UserComment.objects.all()
     serializer_class = serializers.UserCommentReadOnlySerializer
+
+    def get(self, *args, **kwargs):
+        comment = models.UserComment.objects.get(pk=self.kwargs['comment_id'])
+        serializer =  serializers.UserCommentReadOnlySerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
 class UserCommentDeleteView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -93,16 +147,15 @@ class UserCommentFilter(django_filters.FilterSet):
         fields = (
             'title',
             'content',
-            'author', 
             'date', 
             )
 
-class UserCommentSearchView(generics.ListAPIView):
-    permission_classes = ()#(IsAuthenticated,)
+class UserCommentSearchView(generics.ListAPIView): # TODO does not show ratings
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.UserComment.objects.all()
     serializer_class = serializers.UserCommentSearchSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ("title", "content", "author", )
+    search_fields = ("title", "content", "date", ) # cannot search in many-to many
     #filter_class = EventFilter
 
 class UserCommentRateView(viewsets.ModelViewSet):
@@ -116,34 +169,24 @@ class UserCommentRateView(viewsets.ModelViewSet):
             if rating.rater.id == request.user.id:
                 rating.givenPoint = self.kwargs['new_rating']
                 rating.save()
-                return Response(self.calcRating(comment.id))
+                return Response(calcRatingU(comment.id))
         rating = models.UserCommentRating()
         rating.rater = request.user
         rating.givenPoint = self.kwargs['new_rating']
         rating.comment = comment
         rating.save()
 
-        return Response(self.calcRating(comment.id))
+        return Response(calcRatingU(comment.id))
 
     def unrate(self, request, **kwargs):
         comment = models.UserComment.objects.get(pk=self.kwargs['comment_id'])
         for rating in comment.ratings.all():
             if rating.rater.id == request.user.id:
                 rating.delete()
-                return Response(self.calcRating(comment.id, 'u'))
+                return Response(calcRatingU(comment.id))
 
-        return Response(self.calcRating(comment.id))
+        return Response(calcRatingU(comment.id))
 
-    def calcRating(self, comment_id):
-        comment = models.UserComment.objects.get(pk=comment_id)
-        ratingNum = len(comment.ratings.all())
-        if(ratingNum == 0):
-            return (0,0)
-        totalPoint = 0
-        for rating in comment.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return (totalPoint/ratingNum, ratingNum)
 
 class UserCommentFlagView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -153,8 +196,12 @@ class UserCommentFlagView(viewsets.ModelViewSet):
     def get(self, request, comment_id):
         user = models.CustomUser.objects.get(id=request.user.id)
         if user.is_superuser:
-            serializer = serializers.UserCommentRatingSerializer(models.UserComment.objects.get(id=comment_id))
-            return JsonResponse(serializer.data)
+            comment = models.UserComment.objects.get(id=comment_id)
+            serializer = serializers.UserCommentRatingSerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+            del data['ratings']
+            return JsonResponse(data)
         return HttpResponse("Only superusers can see the flagged number.")
 
     def flag(self, request, comment_id):
@@ -164,8 +211,10 @@ class UserCommentFlagView(viewsets.ModelViewSet):
         comment.flaggers.add(flagger)
         comment.save()
         serializer = serializers.UserCommentRatingSerializer(comment)
-
-        return JsonResponse(serializer.data)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
     def unflag(self, request, comment_id): 
         flagger_id = request.user.id
@@ -174,14 +223,37 @@ class UserCommentFlagView(viewsets.ModelViewSet):
         comment.flaggers.remove(flagger)
         comment.save()
         serializer = serializers.UserCommentRatingSerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
-        return JsonResponse(serializer.data)
 
-
-class EventCommentCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class EventCommentCreateView(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.EventComment.objects.all()
     serializer_class = serializers.EventCommentRWSerializer
+
+    def get(self, request, *args, **kwargs):
+        commentList = []
+        for comment in models.EventComment.objects.all():
+            serializer =  serializers.EventCommentRWSerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+            del data['ratings']
+            commentList.append(data)
+        return Response(commentList)
+
+    def post(self, request, *args, **kwargs):
+        comment_response =  self.create(request, *args, **kwargs)
+        comment = models.EventComment.objects.get(id=comment_response.data["id"])
+        serializer =  serializers.EventCommentRWSerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
 class EventCommentEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -200,10 +272,18 @@ class EventCommentDeleteView(viewsets.ModelViewSet):
             return HttpResponse("Item deleted")
         return HttpResponse("Only the author can delete their comments")
 
-class EventCommentRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+class EventCommentRetrieveView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.EventComment.objects.all()
     serializer_class = serializers.EventCommentReadOnlySerializer
+
+    def get(self, *args, **kwargs):
+        comment = models.EventComment.objects.get(pk=self.kwargs['comment_id'])
+        serializer =  serializers.EventCommentReadOnlySerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
 class EventCommentFilter(django_filters.FilterSet):
     class Meta:
@@ -215,12 +295,12 @@ class EventCommentFilter(django_filters.FilterSet):
             'date',
             )
 
-class EventCommentSearchView(generics.ListAPIView):
-    permission_classes = ()#(IsAuthenticated,)
+class EventCommentSearchView(generics.ListAPIView): # TODO does not show ratings
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.EventComment.objects.all()
     serializer_class = serializers.EventCommentSearchSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ("title", "content",)
+    search_fields = ("title", "content","date")
     #filter_class = EventFilter
 
 class EventCommentRateView(viewsets.ModelViewSet):
@@ -234,34 +314,23 @@ class EventCommentRateView(viewsets.ModelViewSet):
             if rating.rater.id == request.user.id:
                 rating.givenPoint = self.kwargs['new_rating']
                 rating.save()
-                return HttpResponse(self.calcRating(comment.id))
+                return Response(calcRatingE(comment.id))
         rating = models.EventCommentRating()
         rating.rater = request.user
         rating.givenPoint = self.kwargs['new_rating']
         rating.comment = comment
         rating.save()
 
-        return HttpResponse(self.calcRating(comment.id))
+        return Response(calcRatingE(comment.id))
 
     def unrate(self, request, **kwargs):
         comment = models.EventComment.objects.get(pk=self.kwargs['comment_id'])
         for rating in comment.ratings.all():
             if rating.rater.id == request.user.id:
                 rating.delete()
-                return HttpResponse(self.calcRating(comment.id))
+                return Response(calcRatingE(comment.id))
 
-        return HttpResponse(self.calcRating(comment.id))
-
-    def calcRating(self, comment_id):
-        comment = models.EventComment.objects.get(pk=comment_id)
-        ratingNum = len(comment.ratings.all())
-        if(ratingNum == 0):
-            return (0,0)
-        totalPoint = 0
-        for rating in comment.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return (totalPoint/ratingNum, ratingNum)    
+        return Response(calcRatingE(comment.id))
 
 class EventCommentFlagView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -271,8 +340,12 @@ class EventCommentFlagView(viewsets.ModelViewSet):
     def get(self, request, comment_id):
         user = models.CustomUser.objects.get(id=request.user.id)
         if user.is_superuser:
-            serializer = serializers.EventCommentRatingSerializer(models.EventComment.objects.get(id=comment_id))
-            return JsonResponse(serializer.data)
+            comment = models.EventComment.objects.get(id=comment_id)
+            serializer = serializers.EventCommentRatingSerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+            del data['ratings']
+            return JsonResponse(data)
         return HttpResponse("Only superusers can see the flagged number.")
 
     def flag(self, request, comment_id):
@@ -282,8 +355,10 @@ class EventCommentFlagView(viewsets.ModelViewSet):
         comment.flaggers.add(flagger)
         comment.save()
         serializer = serializers.EventCommentRatingSerializer(comment)
-
-        return JsonResponse(serializer.data)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
     def unflag(self, request, comment_id): 
         flagger_id = request.user.id
@@ -292,17 +367,19 @@ class EventCommentFlagView(viewsets.ModelViewSet):
         comment.flaggers.remove(flagger)
         comment.save()
         serializer = serializers.EventCommentRatingSerializer(comment)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+        del data['ratings']
+        return JsonResponse(data)
 
-        return JsonResponse(serializer.data)
+# Tag related views ###################################################
 
-# Tag related views
-
-class TagCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class TagCreateView(generics.ListCreateAPIView): # TODO currently every user can do this, not cool
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagRWSerializer
 
-class TagEditView(generics.UpdateAPIView):
+class TagEditView(generics.UpdateAPIView):  # TODO currently every user can do this, not cool
     permission_classes = (IsAuthenticated,)
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagRWSerializer
@@ -320,16 +397,18 @@ class TagDeleteView(viewsets.ModelViewSet):
         return HttpResponse("Only a superuser can delete tags")
 
 class TagRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagReadOnlySerializer
 
 class TagSearchView(generics.ListAPIView):
-    permission_classes = ()#(IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSearchSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name", )
+
+# Image related views #######################################
 
 class UserImagesView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)

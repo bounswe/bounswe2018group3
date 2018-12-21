@@ -1,6 +1,7 @@
 from django.core import validators
 from django.db import models
 from users.models import CustomUser
+from django.utils import timezone
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
@@ -12,8 +13,8 @@ class Event(models.Model):
     country = models.CharField(max_length=255, blank=True)
     creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='created_events')
     artist = models.CharField(max_length=255)
-    date = models.DateField(db_index=True, blank=True, null=True)
-    time = models.TimeField(db_index=True, blank=True, null=True)
+    date = models.DateField(db_index=True, default=timezone.localdate())
+    time = models.TimeField(db_index=True, default=timezone.localtime().time())
     price = models.DecimalField(max_digits=6, decimal_places=2)
     #tags = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     #tags = models.ManyToManyField(Tag, related_name='event_set')

@@ -2,7 +2,9 @@ from rest_framework import serializers
 from . import models
 from events.models import Event
 from users.models import CustomUser
-import datetime
+
+from django.utils import timezone
+from datetime import datetime
 
 class EventCommentRWSerializer(serializers.ModelSerializer):
 
@@ -15,19 +17,16 @@ class EventCommentRWSerializer(serializers.ModelSerializer):
             'author',
             'date',
             'event',
+            'ratings'
         )
 
     def create(self, validated_data):
         request = self.context.get("request")
         if request and hasattr(request, "user"):
-            instance = models.EventComment.objects.create()
-            instance.title = validated_data.get('title', instance.title)
-            instance.content = validated_data.get('content', instance.content)
-            instance.author = request.user
-            instance.date = datetime.datetime.now()
-            instance.event = Event.objects.get(pk=validated_data.get('event_id'))
-            instance.save()
-            return instance
+            if "ratings" in validated_data:
+                del validated_data["ratings"]
+
+            return models.EventComment.objects.create(author=request.user, date=datetime.now(), **validated_data)
 
     def update(self, instance, validated_data):
         request = self.context.get("request")
@@ -35,7 +34,7 @@ class EventCommentRWSerializer(serializers.ModelSerializer):
             if instance.author.id == request.user.id:
                 instance.title = validated_data.get('title', instance.title)
                 instance.content = validated_data.get('content', instance.content)
-                instance.date = datetime.datetime.now()
+                instance.date = timezone.localtime()
                 instance.save()
                 return instance
 
@@ -50,19 +49,16 @@ class UserCommentRWSerializer(serializers.ModelSerializer):
             'author',
             'date',
             'user',
+            'ratings',
         )
 
     def create(self, validated_data):
         request = self.context.get("request")
         if request and hasattr(request, "user"):
-            instance = models.UserComment.objects.create()
-            instance.title = validated_data.get('title', instance.title)
-            instance.content = validated_data.get('content', instance.content)
-            instance.author = request.user
-            instance.date = datetime.datetime.now()
-            instance.user = CustomUser.objects.get(pk=validated_data.get('user_id'))
-            instance.save()
-            return instance
+            if "ratings" in validated_data:
+                del validated_data["ratings"]
+
+            return models.UserComment.objects.create(author=request.user, date=datetime.now(), **validated_data)
 
     def update(self, instance, validated_data):
         request = self.context.get("request")
@@ -70,33 +66,35 @@ class UserCommentRWSerializer(serializers.ModelSerializer):
             if instance.author.id == request.user.id:
                 instance.title = validated_data.get('title', instance.title)
                 instance.content = validated_data.get('content', instance.content)
-                instance.date = datetime.datetime.now()
+                instance.date = timezone.localtime()
                 instance.save()
                 return instance
 
 class UserCommentReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserComment
-        fields = '__all__'
-        #read_only_fields = ('__all__')
+        fields = (
+            'id',
+            'title',
+            'content',
+            'author', 
+            'date',
+            'user',
+            'ratings',
+            )
 
 class EventCommentReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventComment
-        fields = '__all__'
-        #read_only_fields = ('__all__')
-"""
-class UserCommentRatingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.UserComment
-        fields = ('id', 'ratings', )
-
-class EventCommentRatingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.EventComment
-        fields = ('id', 'ratings', )
-"""
+        fields = (
+            'id',
+            'title',
+            'content',
+            'author', 
+            'date', 
+            'event',
+            'ratings',
+            )
 
 class UserCommentSearchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,8 +103,9 @@ class UserCommentSearchSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'content',
-            'author', 
-            'date', 
+            'author',
+            'date',
+            'user',
             )
 
 class EventCommentSearchSerializer(serializers.ModelSerializer):
@@ -118,6 +117,7 @@ class EventCommentSearchSerializer(serializers.ModelSerializer):
             'content',
             'author',
             'date',
+            'event',
             )
 
 class UserCommentRatingSerializer(serializers.ModelSerializer):
@@ -132,7 +132,7 @@ class EventCommentRatingSerializer(serializers.ModelSerializer):
         model = models.EventComment
         fields = ('id', 'ratings', 'flaggers',)
 
-# Tag related serializers
+# Tag related serializers ####################################################
 
 class TagRWSerializer(serializers.ModelSerializer):
     class Meta:
@@ -174,6 +174,8 @@ class TagSearchSerializer(serializers.ModelSerializer):
             'watcherNumber',
             'blockers',
             'watchers')
+
+# Image related serializers ###############################################
 
 class UserImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

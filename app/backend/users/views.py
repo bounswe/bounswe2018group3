@@ -14,6 +14,21 @@ from api.models import UserRating, Tag
 from events.models import Event
 from datetime import datetime
 
+import json
+
+
+# Function for calculating rating of a user
+def calcRating(user_id):
+    user = models.CustomUser.objects.get(pk=user_id)
+    ratingNum = len(user.ratings.all())
+    if(ratingNum == 0):
+        return (0,0)
+    totalPoint = 0
+    for rating in user.ratings.all():
+        totalPoint += rating.givenPoint
+    
+    return (totalPoint/ratingNum, ratingNum)
+
 class UserCreateView(mixins.ListModelMixin,
                      mixins.CreateModelMixin,
                      generics.GenericAPIView):
@@ -55,7 +70,7 @@ class UserDeleteView(viewsets.ModelViewSet):
 
     def delete(self, request, pk):
         user = models.CustomUser.objects.get(pk=pk)
-        if(request.user.is_superuser == 'true'):
+        if(request.user.is_superuser == 'true'): # should we allow users to delete themselves?
             user.delete()
             return HttpResponse("User deleted")
         return HttpResponse("Only a superuser can delete users")
@@ -71,38 +86,26 @@ class UserRateView(viewsets.ModelViewSet):
             if rating.rater.id == request.user.id:
                 rating.givenPoint = self.kwargs['new_rating']
                 rating.save()
-                return HttpResponse(self.calcRating(user.id))
+                return Response(calcRating(user.id))
         rating = UserRating()
         rating.rater = request.user
         rating.givenPoint = self.kwargs['new_rating']
         rating.user = user
         rating.save()
 
-        return HttpResponse(self.calcRating(user.id))
+        return Response(calcRating(user.id))
 
     def unrate(self, request, **kwargs):
         user = models.CustomUser.objects.get(pk=self.kwargs['user_id'])
         for rating in user.ratings.all():
             if rating.rater.id == request.user.id:
                 rating.delete()
-                return HttpResponse(self.calcRating(user.id))
+                return Response(calcRating(user.id))
 
-        return HttpResponse(self.calcRating(user.id))
-
-    # Function for calculating rating of an event
-    def calcRating(self, user_id):
-        user = models.CustomUser.objects.get(pk=user_id)
-        ratingNum = len(user.ratings.all())
-        if(ratingNum == 0):
-            return (0,0)
-        totalPoint = 0
-        for rating in user.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return (totalPoint/ratingNum, ratingNum)
+        return Response(calcRating(user.id))
 
 class UserRetrieveView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserReadOnlySerializer
 
@@ -111,7 +114,7 @@ class UserRetrieveView(viewsets.ModelViewSet):
 
         serializer = serializers.UserReadOnlySerializer(user, context = {'request': request})
         data = serializer.data
-        futureEvents = []
+        futureEvents = []  # TODO also add this thing to UserCreateView
         pastEvents = []
         for event in user.event_set.all():
             if(event.date > datetime.date(datetime.now())):
@@ -191,7 +194,10 @@ class UserFlagView(viewsets.ModelViewSet):
         user = models.CustomUser.objects.get(id=request.user.id)
         if user.is_superuser:
             serializer = serializers.UserRatingSerializer(models.CustomUser.objects.get(id=user_id))
-            return JsonResponse(serializer.data)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRating(user.id)
+            del data['ratings']
+            return JsonResponse(data)
         return HttpResponse("Only superusers can see the flagged number.")
 
     def flag(self, request, user_id):
@@ -201,8 +207,10 @@ class UserFlagView(viewsets.ModelViewSet):
         user.flaggers.add(flagger)
         user.save()
         serializer = serializers.UserRatingSerializer(user)
-
-        return JsonResponse(serializer.data)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRating(user.id)
+        del data['ratings']
+        return JsonResponse(data)
 
     def unflag(self, request, user_id): 
         flagger_id = request.user.id
@@ -211,8 +219,10 @@ class UserFlagView(viewsets.ModelViewSet):
         user.flaggers.remove(flagger)
         user.save()
         serializer = serializers.UserRatingSerializer(user)
-
-        return JsonResponse(serializer.data)
+        data = serializer.data
+        (data['rating'], data['ratingNum']) = calcRating(user.id)
+        del data['ratings']
+        return JsonResponse(data)
 
 class UserFilter(django_filters.FilterSet):
     class Meta:
@@ -228,8 +238,8 @@ class UserFilter(django_filters.FilterSet):
             'ratings',)
 
 #Read only event models,
-class UserSearchView(generics.ListAPIView):
-    permission_classes = ()#(IsAuthenticated,)
+class UserSearchView(generics.ListAPIView):  # TODO does not display ratings nicely
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserSearchSerializer
     filter_backends = (filters.SearchFilter,)
@@ -238,7 +248,7 @@ class UserSearchView(generics.ListAPIView):
 
 class UserPicView(viewsets.ModelViewSet):
     http_method_names = ['get', 'put']
-    permission_classes = ()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.ProfilePicSerializer
     pagination_class = None

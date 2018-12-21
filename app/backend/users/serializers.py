@@ -47,7 +47,9 @@ class UserRWSerializer(serializers.ModelSerializer):
             del validated_data["comments"]
         if "ratings" in validated_data:
             del validated_data["ratings"]
-        return Users.objects.create(**validated_data)
+        if "images" in validated_data:
+            del validated_data["images"]
+        return models.CustomUser.objects.create(**validated_data)
 
     
     def update(self, instance, validated_data):

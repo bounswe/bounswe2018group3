@@ -21,9 +21,9 @@ urlpatterns = [
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/ExampleView/', ExampleView.as_view()),
     
+    # Image-related views
     path('userImage/', views.UserImagesView.as_view(), name='user-image'),
     path('userImage/<int:pk>', views.UserImageDetail.as_view(), name='userimage-detail'),
-
     path('eventImage/', views.EventImagesView.as_view(), name='event-image'),
     path('eventImage/<int:pk>', views.EventImageDetail.as_view(), name='eventimage-detail'),
 
@@ -32,8 +32,8 @@ urlpatterns = [
     path('eventcomments/', views.EventCommentCreateView.as_view()),
     path('usercomments/edit/<int:pk>', views.UserCommentEditView.as_view()),
     path('eventcomments/edit/<int:pk>', views.EventCommentEditView.as_view()),
-    path('usercomments/<int:pk>', views.UserCommentRetrieveView.as_view()),
-    path('eventcomments/<int:pk>', views.EventCommentRetrieveView.as_view()),
+    path('usercomments/<int:comment_id>', views.UserCommentRetrieveView.as_view({'get': 'get'})),
+    path('eventcomments/<int:comment_id>', views.EventCommentRetrieveView.as_view({'get': 'get'})),
     path('usercomments/delete/<int:pk>', views.UserCommentDeleteView.as_view({'delete': 'delete'})),
     path('eventcomments/delete/<int:pk>', views.EventCommentDeleteView.as_view({'delete': 'delete'})),
     path('usercomments/search/', views.UserCommentSearchView.as_view()),
@@ -41,7 +41,7 @@ urlpatterns = [
     path('usercomments/rate/<int:comment_id>/<int:new_rating>', views.UserCommentRateView.as_view({'get': 'rate', 'delete': 'unrate'})),
     path('eventcomments/rate/<int:comment_id>/<int:new_rating>', views.EventCommentRateView.as_view({'get': 'rate', 'delete': 'unrate'})),
     path('usercomments/flag/<int:comment_id>', views.UserCommentFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
-    path('eventcomments/flag/<int:event_id>', views.EventCommentFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
+    path('eventcomments/flag/<int:comment_id>', views.EventCommentFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
 
     # Tag-related views
     path('tags/', views.TagCreateView.as_view()), 

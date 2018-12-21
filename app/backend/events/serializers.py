@@ -53,6 +53,7 @@ class EventRWSerializer(serializers.ModelSerializer):
             'ratings',
             'attendants',
             'comments',
+            'images',
         )
 
     def create(self, validated_data):
@@ -68,6 +69,8 @@ class EventRWSerializer(serializers.ModelSerializer):
                 del validated_data["comments"]
             if "ratings" in validated_data:
                 del validated_data["ratings"]
+            if "images" in validated_data:
+                del validated_data["images"]
             return models.Event.objects.create(creator=request.user,**validated_data)
 
 class EventRatingSerializer(serializers.ModelSerializer):

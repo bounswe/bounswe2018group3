@@ -26,7 +26,8 @@ class UserRWSerializer(serializers.ModelSerializer):
             'blockers',
             'watchingTags',
             'blockedTags',
-            'comments',)
+            'comments',
+            'images',)
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -90,7 +91,8 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'watchingTags',
             'blockedTags',
             'comments',
-            'is_private',)
+            'is_private',
+            'images',)
         read_only_fields = fields = (
             'id',
             'email', 
@@ -111,7 +113,9 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'watchingTags',
             'blockedTags',
             'comments',
-            'is_private',)
+            'is_private',
+            'images',
+            )
 
 class UserAttendSerializer(serializers.ModelSerializer):
     class Meta:

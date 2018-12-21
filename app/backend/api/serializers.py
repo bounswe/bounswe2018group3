@@ -172,3 +172,21 @@ class UserImageSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, data):
         request = self.context.get("request")
         return models.UserImage.objects.create(user=request.user, **data)
+
+class EventImageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.EventImage
+        fields = ('url', 'id', 'content')
+        #user = serializers.Field(source='user.id')
+
+    def create(self, data):
+        request = self.context.get("request")
+        if "event_id" in request.data:
+            print("*"*70)
+            event = models.Event.objects.get(pk =int(request.data["event_id"]))
+            print(event)
+            print("*"*70)
+            if event.creator.id == request.user.id:
+                print("*"*70)
+                return models.EventImage.objects.create(event=event, **data)
+

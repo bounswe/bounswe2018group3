@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 import django_filters
 from django.http import HttpResponse, JsonResponse
@@ -13,12 +14,45 @@ from api.models import UserRating, Tag
 from events.models import Event
 from datetime import datetime
 
-# Create your views here.
+def calcRating(user_id):
+        user = models.CustomUser.objects.get(pk=user_id)
+        ratingNum = len(user.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
+        totalPoint = 0
+        for rating in user.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return (totalPoint/ratingNum, ratingNum)
 
-class UserCreateView(generics.ListCreateAPIView):
+class UserCreateView(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRWSerializer
+
+    def get(self, request, *args, **kwargs):
+        userList = []
+        for user in models.CustomUser.objects.all():
+            serializer =  serializers.UserRWSerializer(user)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRating(user.id)
+            del data['ratings']
+            userList.append(data)
+        return Response(userList)
+
+    def post(self, request, *args, **kwargs):
+        user_response =  self.create(request, *args, **kwargs)
+        if "tag_ids" in request.data: # watching tags can be given by creating user
+            tag_ids = request.data["tag_ids"]
+            tag_ids = '{"tag_ids":'+tag_ids+'}'
+            user = models.CustomUser.objects.get(id=user_response.data["id"])
+            for tag_id in json.loads(tag_ids)["tag_ids"]:
+                tag = Tag.objects.get(id=tag_id)
+                user.watchingTags.add(tag)
+            user.save()
+        return user_response
 
 class UserEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -72,11 +106,10 @@ class UserRetrieveView(viewsets.ModelViewSet):
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserReadOnlySerializer
 
-    def events(self, request, pk):
+    def get(self, request, pk):
         user = models.CustomUser.objects.get(pk=pk)
         serializer = serializers.UserReadOnlySerializer(user)
         data = serializer.data
-        
         futureEvents = []
         pastEvents = []
         for event in user.event_set.all():
@@ -94,7 +127,8 @@ class UserRetrieveView(viewsets.ModelViewSet):
                 created_events.append(event.id)
 
         data['createdEvents'] = created_events
-
+        (data['rating'], data['ratingNum']) = calcRating(user.id)
+        del data['ratings']
         return JsonResponse(data)
 
 class UserAttendView(viewsets.ModelViewSet):

@@ -34,7 +34,7 @@ class Tag(models.Model):
 
 class Image(models.Model):
     #id = models.IntegerField(unique=True,db_index=True)
-    content = models.ImageField(upload_to='pic_folder/');
+    content = models.ImageField(upload_to='pic_folder/')
 
     class Meta:
        abstract = True

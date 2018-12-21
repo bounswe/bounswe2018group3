@@ -28,6 +28,21 @@ class UserRWSerializer(serializers.ModelSerializer):
             'blockedTags',)
 
     def create(self, validated_data):
+        request = self.context.get("request")
+        if "blockedUsers" in validated_data:
+            del validated_data["blockedUsers"]
+        if "followedUsers" in validated_data:
+            del validated_data["followedUsers"]
+        if "blockers" in validated_data:
+            del validated_data["blockers"]
+        if "followers" in validated_data:
+            del validated_data["followers"]
+        if "blockedTags" in validated_data:
+            del validated_data["blockedTags"]
+        if "watchingTags" in validated_data:
+            del validated_data["watcchingTags"]
+        if "ratings" in validated_data:
+            del validated_data["ratings"]
         return Users.objects.create(**validated_data)
 
     

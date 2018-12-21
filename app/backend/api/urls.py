@@ -6,6 +6,8 @@ from rest_auth.registration.views import VerifyEmailView
 from .views import CompleteView, VerificationSentView
 from django.views.generic import TemplateView
 
+from django.conf.urls.static import static
+
 from . import views
 
 urlpatterns = [
@@ -19,6 +21,9 @@ urlpatterns = [
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/ExampleView/', ExampleView.as_view()),
     
+    path('userImage/', views.UserImagesView.as_view(), name='user-image'),
+    path('userImage/<int:pk>', views.UserImageDetail.as_view(), name='userimage-detail'),
+
     # Comment-related views
     path('usercomments/', views.UserCommentCreateView.as_view()),
     path('eventcomments/', views.EventCommentCreateView.as_view()),
@@ -30,7 +35,6 @@ urlpatterns = [
     path('eventcomments/delete/<int:pk>', views.EventCommentDeleteView.as_view({'delete': 'delete'})),
     path('usercomments/search/', views.UserCommentSearchView.as_view()),
     path('eventcomments/search/', views.EventCommentSearchView.as_view()),
-    
 
     # Tag-related views
     path('tags/', views.TagCreateView.as_view()), 
@@ -38,4 +42,4 @@ urlpatterns = [
     path('tags/delete/<int:pk>', views.TagDeleteView.as_view({'delete': 'delete'})),
     path('tags/search/', views.TagSearchView.as_view()),
     path('tags/<int:pk>', views.TagRetrieveView.as_view()),
-]
+] + static("userImage/pic_folder/", document_root="./pic_folder")

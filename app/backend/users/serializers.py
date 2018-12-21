@@ -102,6 +102,15 @@ class UserAttendSerializer(serializers.ModelSerializer):
             'event_set',
         )
 
+class UserInterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomUser
+        fields = (
+            'id',
+            'username',
+            'interested_event_set',
+        )
+
 class UserSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUser

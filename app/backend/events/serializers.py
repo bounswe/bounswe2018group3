@@ -46,6 +46,8 @@ class EventRWSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user"):
             if "attendants" in validated_data:
                 del validated_data["attendants"]
+            if "interestants" in validated_data:
+                del validated_data["interestants"]    
             return models.Event.objects.create(creator=request.user,**validated_data)
 
 class EventRatingSerializer(serializers.ModelSerializer):

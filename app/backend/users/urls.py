@@ -9,6 +9,7 @@ urlpatterns = [
     path('search/', views.UserSearchView.as_view()),
     path('<int:pk>', views.UserRetrieveView.as_view({'get': 'events'})),
     path('attend/<int:event_id>', views.UserAttendView.as_view({'get': 'attend', 'delete': 'unattend'})),
+    path('interest/<int:event_id>', views.UserInterestedView.as_view({'get': 'interest', 'delete': 'uninterest'})),
     path('follow/<int:followed_user_id>', views.UserFollowsUserView.as_view({'get': 'follow', 'delete': 'unfollow'})),
     path('block/<int:blocked_user_id>', views.UserBlocksUserView.as_view({'get': 'block', 'delete': 'unblock'})),
     path('watch/<int:tag_id>', views.UserWatchesTagView.as_view({'get': 'watch', 'delete': 'unwatch'})),

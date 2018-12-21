@@ -122,6 +122,31 @@ class UserAttendView(viewsets.ModelViewSet):
 
         return JsonResponse(serializer.data)
 
+class UserInterestedView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.UserInterestSerializer
+
+    def interest(self, request, event_id): #may need to check if already exists
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        event = Event.objects.get(id=event_id)
+        event.interestants.add(user)
+        event.save()
+        serializer = serializers.UserInterestSerializer(user)
+
+        return JsonResponse(serializer.data)
+
+    def uninterest(self, request, event_id): # need to check if attending
+        user_id = request.user.id
+        user = models.CustomUser.objects.get(id=user_id)
+        event = Event.objects.get(id=event_id)
+        event.interestants.remove(user)
+        event.save()
+        serializer = serializers.UserInterestSerializer(user)
+
+        return JsonResponse(serializer.data)
+
 class UserFilter(django_filters.FilterSet):
     class Meta:
         model = models.CustomUser

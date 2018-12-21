@@ -155,6 +155,6 @@ class UserRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CustomUser
-        fields = ('id', 'ratings', )
+        fields = ('id', 'ratings', 'flaggers',)
         
     

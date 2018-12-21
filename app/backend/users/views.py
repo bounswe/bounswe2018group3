@@ -171,13 +171,45 @@ class UserInterestedView(viewsets.ModelViewSet):
 
         return JsonResponse(serializer.data)
 
-    def uninterest(self, request, event_id): # need to check if attending
+    def uninterest(self, request, event_id): 
         user_id = request.user.id
         user = models.CustomUser.objects.get(id=user_id)
         event = Event.objects.get(id=event_id)
         event.interestants.remove(user)
         event.save()
         serializer = serializers.UserInterestSerializer(user)
+
+        return JsonResponse(serializer.data)
+
+class UserFlagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.CustomUser.objects.all()
+    serializer_class = serializers.UserRatingSerializer
+
+    def get(self, request, user_id):
+        user = models.CustomUser.objects.get(id=request.user.id)
+        if user.is_superuser:
+            serializer = serializers.UserRatingSerializer(models.CustomUser.objects.get(id=user_id))
+            return JsonResponse(serializer.data)
+        return HttpResponse("Only superusers can see the flagged number.")
+
+    def flag(self, request, user_id):
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        user = models.CustomUser.objects.get(id=user_id)
+        user.flaggers.add(flagger)
+        user.save()
+        serializer = serializers.UserRatingSerializer(user)
+
+        return JsonResponse(serializer.data)
+
+    def unflag(self, request, user_id): 
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        user = models.CustomUser.objects.get(id=user_id)
+        user.flaggers.remove(flagger)
+        user.save()
+        serializer = serializers.UserRatingSerializer(user)
 
         return JsonResponse(serializer.data)
 

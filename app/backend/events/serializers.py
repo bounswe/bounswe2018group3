@@ -74,4 +74,4 @@ class EventRatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Event
-        fields = ('id', 'ratings', )
+        fields = ('id', 'ratings', 'flaggers')

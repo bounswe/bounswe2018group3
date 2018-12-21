@@ -128,6 +128,37 @@ class EventRateView(viewsets.ModelViewSet):
 
         return HttpResponse(calcRating(event.id))
 
+class EventFlagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.EventRatingSerializer
+
+    def get(self, request, event_id):
+        user = models.CustomUser.objects.get(id=request.user.id)
+        if user.is_superuser:
+            serializer = serializers.EventRatingSerializer(models.Event.objects.get(id=event_id))
+            return JsonResponse(serializer.data)
+        return HttpResponse("Only superusers can see the flagged number.")
+
+    def flag(self, request, event_id):
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        event = models.Event.objects.get(id=event_id)
+        event.flaggers.add(flagger)
+        event.save()
+        serializer = serializers.EventRatingSerializer(event)
+
+        return JsonResponse(serializer.data)
+
+    def unflag(self, request, event_id): 
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        event = models.Event.objects.get(id=event_id)
+        event.flaggers.remove(flagger)
+        event.save()
+        serializer = serializers.EventRatingSerializer(event)
+
+        return JsonResponse(serializer.data)
 
 class EventCreateView(mixins.ListModelMixin,
                      mixins.CreateModelMixin,

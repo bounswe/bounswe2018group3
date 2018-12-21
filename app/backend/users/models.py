@@ -20,6 +20,7 @@ class CustomUser(AbstractUser):
     #ratingNum = models.IntegerField(default=0)
     followedUsers = models.ManyToManyField("self", symmetrical=False, related_name="followers")
     blockedUsers = models.ManyToManyField("self", symmetrical=False, related_name="blockers")
+    flaggedUsers = models.ManyToManyField("self", symmetrical=False, related_name="flaggers") # flagging other users as inappropriate
     #written_comments = models.EmbeddedModelField(model_container=Comment) can be accessed as comment_set
     #watchingTags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_field="watchers")
     #blockedTags = models.ForeignKey(Tag, on_delete=models.CASCADE, related_field="blockers")

@@ -23,6 +23,7 @@ class Event(models.Model):
     #attendants = models.CharField(validators=[validators.int_list_validator],max_length=255,blank=True)
     attendants = models.ManyToManyField(CustomUser, related_name='event_set', blank=True)
     interestants = models.ManyToManyField(CustomUser, related_name='interested_event_set', blank=True)
+    flaggers = models.ManyToManyField(CustomUser, related_name='flagged_events', blank=True) # for flagging events as inappropriate
 
     def __str__(self):
         return self.name + " : " + self.info

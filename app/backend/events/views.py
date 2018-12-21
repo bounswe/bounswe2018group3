@@ -6,7 +6,7 @@ from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 
 import django_filters
@@ -15,12 +15,23 @@ from . import models
 from . import serializers
 from api.models import EventRating
 from api.models import Tag
-# Create your views here..
+
+
+# Function for calculating rating of an event
+def calcRating(event_id):
+        event = models.Event.objects.get(pk=event_id)
+        ratingNum = len(event.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
+        totalPoint = 0
+        for rating in event.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return (totalPoint/ratingNum, ratingNum)
 
 #Read and write event models
 class EventEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
-
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventEditSerializer
 
@@ -37,15 +48,36 @@ class EventDeleteView(viewsets.ModelViewSet):
         return HttpResponse("Only the creator can delete their events")
 
 
-class EventCreateView(generics.ListCreateAPIView):
+class EventCreationView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer
 
-class EventRetrieveView(generics.RetrieveAPIView):
+class EventRetrieveView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Event.objects.all()
     serializer_class = serializers.EventRWSerializer
+
+    def get(self, *args, **kwargs):
+        event = models.Event.objects.get(pk=self.kwargs['event_id'])
+        serializer =  serializers.EventRWSerializer(event)
+        data = serializer.data
+        print(calcRating(event.id))
+        (data['rating'], data['ratingNum']) = calcRating(event.id)
+        del data['ratings']
+        return JsonResponse(data)
+
+"""
+    def get(self, *args, **kwargs):
+        eventsList = []
+        for event in models.Event.objects.all():
+            serializer =  serializers.EventRWSerializer(event)
+            data = serializer.data
+            data['rating'] = EventRateView.calcRating(event.id)
+            del data['ratings']
+            eventsList.append(data)
+        HttpResponse(eventsList)
+"""
 
 
 class EventFilter(django_filters.FilterSet):
@@ -88,24 +120,15 @@ class EventRateView(viewsets.ModelViewSet):
             if rating.rater.id == request.user.id:
                 rating.givenPoint = self.kwargs['new_rating']
                 rating.save()
-                return HttpResponse(self.calcRating(event.id)) 
+                return HttpResponse(calcRating(event.id)) 
         rating = EventRating()
         rating.rater = request.user
         rating.givenPoint = self.kwargs['new_rating']
         rating.event = event
         rating.save()
 
-        return HttpResponse(self.calcRating(event.id))
+        return HttpResponse(calcRating(event.id))
 
-    def calcRating(self,pk):
-        event = models.Event.objects.get(pk=self.kwargs['event_id'])
-        if(len(event.ratings.all()) == 0):
-            return 0
-        totalPoint = 0
-        for rating in event.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return totalPoint/len(event.ratings.all())
 
 class EventCreateView(mixins.ListModelMixin,
                      mixins.CreateModelMixin,
@@ -115,15 +138,23 @@ class EventCreateView(mixins.ListModelMixin,
     serializer_class = serializers.EventRWSerializer
 
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        eventList = []
+        for event in models.Event.objects.all():
+            serializer =  serializers.EventRWSerializer(event)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRating(event.id)
+            del data['ratings']
+            eventList.append(data)
+        return Response(eventList)
 
     def post(self, request, *args, **kwargs):
         event_response =  self.create(request, *args, **kwargs)
-        tag_ids = request.data["tag_ids"]
-        tag_ids = '{"tag_ids":'+tag_ids+'}'
-        event = models.Event.objects.get(id=event_response.data["id"])
-        for tag_id in json.loads(tag_ids)["tag_ids"]:
-            tag = Tag.objects.get(id=tag_id)
-            event.tags.add(tag)
-        event.save()
+        if "tag_ids" in request.data:
+            tag_ids = request.data["tag_ids"]
+            tag_ids = '{"tag_ids":'+tag_ids+'}'
+            event = models.Event.objects.get(id=event_response.data["id"])
+            for tag_id in json.loads(tag_ids)["tag_ids"]:
+                tag = Tag.objects.get(id=tag_id)
+                event.tags.add(tag)
+            event.save()
         return event_response

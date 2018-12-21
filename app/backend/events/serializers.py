@@ -37,17 +37,34 @@ class EventEditSerializer(serializers.ModelSerializer):
 class EventRWSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
-        fields = '__all__'
-        #read_only_fields = ('__all__', )
+        fields = (
+            'id',
+            'name',
+            'location',
+            'loc_lattitude',
+            'loc_longitude',
+            'city',
+            'country',
+            'artist',
+            'date',
+            'time',
+            'price',
+            'tags',
+            'ratings',
+            'attendants',
+        )
 
     def create(self, validated_data):
         request = self.context.get("request")
-        print(validated_data)
         if request and hasattr(request, "user"):
             if "attendants" in validated_data:
                 del validated_data["attendants"]
             if "interestants" in validated_data:
                 del validated_data["interestants"]    
+            if "tags" in validated_data:
+                del validated_data["tags"]
+            if "ratings" in validated_data:
+                del validated_data["ratings"]
             return models.Event.objects.create(creator=request.user,**validated_data)
 
 class EventRatingSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.EventCreateView.as_view()),
-    path('<int:pk>', views.EventRetrieveView.as_view()),
+    path('<int:event_id>', views.EventRetrieveView.as_view({'get': 'get'})),
     path('edit/<int:pk>', views.EventEditView.as_view()),
     path('delete/<int:pk>', views.EventDeleteView.as_view({'delete': 'delete'})),
     path('search/', views.EventSearchView.as_view()),

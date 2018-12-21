@@ -24,6 +24,9 @@ urlpatterns = [
     path('userImage/', views.UserImagesView.as_view(), name='user-image'),
     path('userImage/<int:pk>', views.UserImageDetail.as_view(), name='userimage-detail'),
 
+    path('eventImage/', views.EventImagesView.as_view(), name='event-image'),
+    path('eventImage/<int:pk>', views.EventImageDetail.as_view(), name='eventimage-detail'),
+
     # Comment-related views
     path('usercomments/', views.UserCommentCreateView.as_view()),
     path('eventcomments/', views.EventCommentCreateView.as_view()),
@@ -46,4 +49,4 @@ urlpatterns = [
     path('tags/delete/<int:pk>', views.TagDeleteView.as_view({'delete': 'delete'})),
     path('tags/search/', views.TagSearchView.as_view()),
     path('tags/<int:pk>', views.TagRetrieveView.as_view()),
-] + static("userImage/pic_folder/", document_root="./pic_folder")
+] + static("userImage/pic_folder/", document_root="./pic_folder") + static("eventImage/pic_folder/", document_root="./pic_folder")

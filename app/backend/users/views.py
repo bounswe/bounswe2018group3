@@ -24,7 +24,7 @@ class UserCreateView(mixins.ListModelMixin,
     def get(self, request, *args, **kwargs):
         userList = []
         for user in models.CustomUser.objects.all():
-            serializer =  serializers.UserRWSerializer(user)
+            serializer =  serializers.UserRWSerializer(user, context = {'request': request})
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(user.id)
             del data['ratings']
@@ -108,7 +108,8 @@ class UserRetrieveView(viewsets.ModelViewSet):
 
     def get(self, request, pk):
         user = models.CustomUser.objects.get(pk=pk)
-        serializer = serializers.UserReadOnlySerializer(user)
+
+        serializer = serializers.UserReadOnlySerializer(user, context = {'request': request})
         data = serializer.data
         futureEvents = []
         pastEvents = []

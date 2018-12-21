@@ -162,3 +162,13 @@ class TagSearchSerializer(serializers.ModelSerializer):
             'watcherNumber',
             'blockers',
             'watchers')
+
+class UserImageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.UserImage
+        fields = ('url', 'id', 'content')
+        #user = serializers.Field(source='user.id')
+
+    def create(self, data):
+        request = self.context.get("request")
+        return models.UserImage.objects.create(user=request.user, **data)

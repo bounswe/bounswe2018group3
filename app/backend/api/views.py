@@ -185,3 +185,43 @@ class TagSearchView(generics.ListAPIView):
     serializer_class = serializers.TagSearchSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name", )
+
+class UserImagesView(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def get(self, request, format=None):
+        photo = models.UserImage.objects.all()
+        serializer = serializers.UserImageSerializer(photo, context={'request': request}, many=True)
+        return Response(data=serializer.data)
+
+    def post(self, request, format=None):
+        serializer = serializers.UserImageSerializer(context={'request': request}, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+class UserImageDetail(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def get_object(self, pk):
+        return models.UserImage.objects.get(pk=pk)
+
+
+    def get(self, request, pk, format=None):
+        photo = self.get_object(pk)
+        serializer = serializers.UserImageSerializer(photo, context={'request': request})
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        photo = self.get_object(pk)
+        serializer = serializers.UserImageSerializer(photo, context={'request': request}, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    def delete(self, request, pk, format=None):
+        photo = self.get_object(pk)
+        photo.delete()
+        return Response("Deleted.")

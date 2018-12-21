@@ -22,10 +22,10 @@ urlpatterns = [
     path('rest-auth/ExampleView/', ExampleView.as_view()),
     
     # Image-related views
-    path('userImage/', views.UserImagesView.as_view(), name='user-image'),
-    path('userImage/<int:pk>', views.UserImageDetail.as_view(), name='userimage-detail'),
-    path('eventImage/', views.EventImagesView.as_view(), name='event-image'),
-    path('eventImage/<int:pk>', views.EventImageDetail.as_view(), name='eventimage-detail'),
+    path('userimages/', views.UserImagesView.as_view(), name='user-image'),
+    path('userimages/<int:pk>', views.UserImageDetail.as_view(), name='userimage-detail'),
+    path('eventimages/', views.EventImagesView.as_view(), name='event-image'),
+    path('eventimages/<int:pk>', views.EventImageDetail.as_view(), name='eventimage-detail'),
 
     # Comment-related views
     path('usercomments/', views.UserCommentCreateView.as_view()),

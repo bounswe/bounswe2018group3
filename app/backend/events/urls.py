@@ -10,4 +10,5 @@ urlpatterns = [
     path('search/', views.EventSearchView.as_view()),
     path('homepage/<int:page>', views.EventUserRelated.as_view()),
     path('rate/<int:event_id>/<int:new_rating>', views.EventRateView.as_view({'get': 'rate'})),
+    path('flag/<int:event_id>', views.EventFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
 ]

@@ -30,6 +30,7 @@ urlpatterns = [
     path('eventcomments/delete/<int:pk>', views.EventCommentDeleteView.as_view({'delete': 'delete'})),
     path('usercomments/search/', views.UserCommentSearchView.as_view()),
     path('eventcomments/search/', views.EventCommentSearchView.as_view()),
+    
 
     # Tag-related views
     path('tags/', views.TagCreateView.as_view()), 

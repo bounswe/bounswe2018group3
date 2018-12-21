@@ -62,7 +62,6 @@ class EventRetrieveView(viewsets.ModelViewSet):
         event = models.Event.objects.get(pk=self.kwargs['event_id'])
         serializer =  serializers.EventRWSerializer(event)
         data = serializer.data
-        print(calcRating(event.id))
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
         return JsonResponse(data)

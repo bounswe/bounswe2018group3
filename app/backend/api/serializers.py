@@ -5,7 +5,6 @@ from users.models import CustomUser
 import datetime
 
 class EventCommentRWSerializer(serializers.ModelSerializer):
-    event_id = serializers.IntegerField()
 
     class Meta:
         model = models.EventComment
@@ -16,8 +15,6 @@ class EventCommentRWSerializer(serializers.ModelSerializer):
             'author',
             'date',
             'event',
-            'event_id',
-            'ratings'
         )
 
     def create(self, validated_data):
@@ -43,7 +40,6 @@ class EventCommentRWSerializer(serializers.ModelSerializer):
                 return instance
 
 class UserCommentRWSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
 
     class Meta:
         model = models.UserComment
@@ -54,8 +50,6 @@ class UserCommentRWSerializer(serializers.ModelSerializer):
             'author',
             'date',
             'user',
-            'user_id',
-            'ratings',
         )
 
     def create(self, validated_data):
@@ -91,7 +85,7 @@ class EventCommentReadOnlySerializer(serializers.ModelSerializer):
         model = models.EventComment
         fields = '__all__'
         #read_only_fields = ('__all__')
-
+"""
 class UserCommentRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserComment
@@ -102,6 +96,7 @@ class EventCommentRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventComment
         fields = ('id', 'ratings', )
+"""
 
 class UserCommentSearchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -112,7 +107,7 @@ class UserCommentSearchSerializer(serializers.ModelSerializer):
             'content',
             'author', 
             'date', 
-            'ratings',)
+            )
 
 class EventCommentSearchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -123,7 +118,7 @@ class EventCommentSearchSerializer(serializers.ModelSerializer):
             'content',
             'author',
             'date',
-            'ratings')
+            )
 
 # Tag related serializers
 

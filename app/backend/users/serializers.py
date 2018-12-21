@@ -25,7 +25,8 @@ class UserRWSerializer(serializers.ModelSerializer):
             'blockedUsers',
             'blockers',
             'watchingTags',
-            'blockedTags',)
+            'blockedTags',
+            'comments',)
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -40,7 +41,9 @@ class UserRWSerializer(serializers.ModelSerializer):
         if "blockedTags" in validated_data:
             del validated_data["blockedTags"]
         if "watchingTags" in validated_data:
-            del validated_data["watcchingTags"]
+            del validated_data["watchingTags"]
+        if "comments" in validated_data:
+            del validated_data["comments"]
         if "ratings" in validated_data:
             del validated_data["ratings"]
         return Users.objects.create(**validated_data)
@@ -86,6 +89,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followers',
             'watchingTags',
             'blockedTags',
+            'comments',
             'is_private',)
         read_only_fields = fields = (
             'id',
@@ -106,6 +110,7 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             'followers',
             'watchingTags',
             'blockedTags',
+            'comments',
             'is_private',)
 
 class UserAttendSerializer(serializers.ModelSerializer):

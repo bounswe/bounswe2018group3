@@ -19,7 +19,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -71,7 +73,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     private Switch switchSearch;
     private boolean isUserSearch = false;
     private boolean isSearchOpen = false;
-
+    private ImageView createImage;
     private ConstraintLayout clSearch;
 
     RequestQueue queue;
@@ -125,7 +127,17 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         switchSearch= view.findViewById(R.id.switchSearch);
 
         clSearch = view.findViewById(R.id.cLSearch);
+        createImage = view.findViewById(R.id.ivCreate);
+        createImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.fragment, CreateEventFragment.newInstance());
+                    transaction.addToBackStack("addEPF");
+                    transaction.commit();
 
+            }
+        });
         switchSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -314,12 +326,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_create_event){
-            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.fragment, CreateEventFragment.newInstance());
-            transaction.addToBackStack("addCEF");
-            transaction.commit();
-        }
 
         if (id == R.id.action_search){
             if (isSearchOpen){

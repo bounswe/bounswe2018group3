@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.conf.urls.static import static
 
 from . import views
 
@@ -17,4 +18,4 @@ urlpatterns = [
     path('getpic/<int:user_id>', views.UserPicView.as_view({'get': 'getpic'})),
     path('rate/<int:user_id>/<int:new_rating>', views.UserRateView.as_view({'get': 'rate'})),
     path('flag/<int:user_id>', views.UserFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
-]
+] + static("/search/pic_folder/profile_pics/", document_root="./pic_folder/profile_pics") + static("/pic_folder/profile_pics/", document_root="./pic_folder/profile_pics")

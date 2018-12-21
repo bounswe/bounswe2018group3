@@ -14,17 +14,6 @@ from api.models import UserRating, Tag
 from events.models import Event
 from datetime import datetime
 
-def calcRating(user_id):
-        user = models.CustomUser.objects.get(pk=user_id)
-        ratingNum = len(user.ratings.all())
-        if(ratingNum == 0):
-            return (0,0)
-        totalPoint = 0
-        for rating in user.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return (totalPoint/ratingNum, ratingNum)
-
 class UserCreateView(mixins.ListModelMixin,
                      mixins.CreateModelMixin,
                      generics.GenericAPIView):
@@ -91,15 +80,26 @@ class UserRateView(viewsets.ModelViewSet):
 
         return HttpResponse(self.calcRating(user.id))
 
-    def calcRating(self, pk):
+    def unrate(self, request, **kwargs):
         user = models.CustomUser.objects.get(pk=self.kwargs['user_id'])
-        if(len(user.ratings.all()) == 0):
-            return 0
+        for rating in user.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.delete()
+                return HttpResponse(self.calcRating(user.id))
+
+        return HttpResponse(self.calcRating(user.id))
+
+    # Function for calculating rating of an event
+    def calcRating(self, user_id):
+        user = models.CustomUser.objects.get(pk=user_id)
+        ratingNum = len(user.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
         totalPoint = 0
         for rating in user.ratings.all():
             totalPoint += rating.givenPoint
         
-        return totalPoint/len(user.ratings.all())
+        return (totalPoint/ratingNum, ratingNum)
 
 class UserRetrieveView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

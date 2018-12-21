@@ -15,6 +15,6 @@ urlpatterns = [
     path('watch/<int:tag_id>', views.UserWatchesTagView.as_view({'get': 'watch', 'delete': 'unwatch'})),
     path('blockTag/<int:tag_id>', views.UserBlocksTagView.as_view({'get': 'block', 'delete': 'unblock'})),
     path('getpic/<int:user_id>', views.UserPicView.as_view({'get': 'getpic'})),
-    path('rate/<int:user_id>/<int:new_rating>', views.UserRateView.as_view({'get': 'rate'})),
+    path('rate/<int:user_id>/<int:new_rating>', views.UserRateView.as_view({'get': 'rate', 'delete': 'unrate'})),
     path('flag/<int:user_id>', views.UserFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
 ]

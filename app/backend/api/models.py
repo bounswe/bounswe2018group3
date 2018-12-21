@@ -11,6 +11,7 @@ class Comment(models.Model):
     date = models.DateTimeField(db_index=True,default=timezone.now)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    flaggers = models.ManyToManyField(CustomUser, blank=True)
 
     class Meta:
        abstract = True
@@ -52,5 +53,11 @@ class Rating(models.Model):
 class EventRating(Rating):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ratings")
 
+class EventCommentRating(Rating):
+    comment = models.ForeignKey(EventComment, on_delete=models.CASCADE, related_name="ratings")
+
 class UserRating(Rating) :
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="ratings")
+
+class UserCommentRating(Rating) :
+    comment = models.ForeignKey(UserComment, on_delete=models.CASCADE, related_name="ratings")

@@ -17,18 +17,6 @@ from api.models import EventRating
 from api.models import Tag
 
 
-# Function for calculating rating of an event
-def calcRating(event_id):
-        event = models.Event.objects.get(pk=event_id)
-        ratingNum = len(event.ratings.all())
-        if(ratingNum == 0):
-            return (0,0)
-        totalPoint = 0
-        for rating in event.ratings.all():
-            totalPoint += rating.givenPoint
-        
-        return (totalPoint/ratingNum, ratingNum)
-
 #Read and write event models
 class EventEditView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -119,14 +107,34 @@ class EventRateView(viewsets.ModelViewSet):
             if rating.rater.id == request.user.id:
                 rating.givenPoint = self.kwargs['new_rating']
                 rating.save()
-                return HttpResponse(calcRating(event.id)) 
+                return Response(self.calcRating(event.id)) 
         rating = EventRating()
         rating.rater = request.user
         rating.givenPoint = self.kwargs['new_rating']
         rating.event = event
         rating.save()
 
-        return HttpResponse(calcRating(event.id))
+        return Response(self.calcRating(event.id))
+
+    def unrate(self, request, **kwargs):
+        event = models.Event.objects.get(pk=self.kwargs['event_id'])
+        for rating in event.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.delete()
+                return Response(self.calcRating(event.id))
+
+        return Response(self.calcRating(event.id))
+
+    # Function for calculating rating of an event
+    def calcRating(self, event_id):
+        event = models.Event.objects.get(pk=event_id)
+        ratingNum = len(event.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
+        totalPoint = 0
+        for rating in event.ratings.all():
+            totalPoint += rating.givenPoint
+        return (totalPoint/ratingNum, ratingNum)
 
 class EventFlagView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

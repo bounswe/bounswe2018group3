@@ -105,6 +105,79 @@ class UserCommentSearchView(generics.ListAPIView):
     search_fields = ("title", "content", "author", )
     #filter_class = EventFilter
 
+class UserCommentRateView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = models.UserComment.objects.all()
+    serializer_class = serializers.UserCommentRatingSerializer
+
+    def rate(self, request, **kwargs):
+        comment = models.UserComment.objects.get(pk=self.kwargs['comment_id'])
+        for rating in comment.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.givenPoint = self.kwargs['new_rating']
+                rating.save()
+                return Response(self.calcRating(comment.id))
+        rating = models.UserCommentRating()
+        rating.rater = request.user
+        rating.givenPoint = self.kwargs['new_rating']
+        rating.comment = comment
+        rating.save()
+
+        return Response(self.calcRating(comment.id))
+
+    def unrate(self, request, **kwargs):
+        comment = models.UserComment.objects.get(pk=self.kwargs['comment_id'])
+        for rating in comment.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.delete()
+                return Response(self.calcRating(comment.id, 'u'))
+
+        return Response(self.calcRating(comment.id))
+
+    def calcRating(self, comment_id):
+        comment = models.UserComment.objects.get(pk=comment_id)
+        ratingNum = len(comment.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
+        totalPoint = 0
+        for rating in comment.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return (totalPoint/ratingNum, ratingNum)
+
+class UserCommentFlagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.UserComment.objects.all()
+    serializer_class = serializers.UserCommentRatingSerializer
+
+    def get(self, request, comment_id):
+        user = models.CustomUser.objects.get(id=request.user.id)
+        if user.is_superuser:
+            serializer = serializers.UserCommentRatingSerializer(models.UserComment.objects.get(id=comment_id))
+            return JsonResponse(serializer.data)
+        return HttpResponse("Only superusers can see the flagged number.")
+
+    def flag(self, request, comment_id):
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        comment = models.UserComment.objects.get(id=comment_id)
+        comment.flaggers.add(flagger)
+        comment.save()
+        serializer = serializers.UserCommentRatingSerializer(comment)
+
+        return JsonResponse(serializer.data)
+
+    def unflag(self, request, comment_id): 
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        comment = models.UserComment.objects.get(id=comment_id)
+        comment.flaggers.remove(flagger)
+        comment.save()
+        serializer = serializers.UserCommentRatingSerializer(comment)
+
+        return JsonResponse(serializer.data)
+
+
 class EventCommentCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.EventComment.objects.all()
@@ -149,6 +222,78 @@ class EventCommentSearchView(generics.ListAPIView):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("title", "content",)
     #filter_class = EventFilter
+
+class EventCommentRateView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = models.EventComment.objects.all()
+    serializer_class = serializers.EventCommentRatingSerializer
+
+    def rate(self, request, **kwargs):
+        comment = models.EventComment.objects.get(pk=self.kwargs['comment_id'])
+        for rating in comment.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.givenPoint = self.kwargs['new_rating']
+                rating.save()
+                return HttpResponse(self.calcRating(comment.id))
+        rating = models.EventCommentRating()
+        rating.rater = request.user
+        rating.givenPoint = self.kwargs['new_rating']
+        rating.comment = comment
+        rating.save()
+
+        return HttpResponse(self.calcRating(comment.id))
+
+    def unrate(self, request, **kwargs):
+        comment = models.EventComment.objects.get(pk=self.kwargs['comment_id'])
+        for rating in comment.ratings.all():
+            if rating.rater.id == request.user.id:
+                rating.delete()
+                return HttpResponse(self.calcRating(comment.id))
+
+        return HttpResponse(self.calcRating(comment.id))
+
+    def calcRating(self, comment_id):
+        comment = models.EventComment.objects.get(pk=comment_id)
+        ratingNum = len(comment.ratings.all())
+        if(ratingNum == 0):
+            return (0,0)
+        totalPoint = 0
+        for rating in comment.ratings.all():
+            totalPoint += rating.givenPoint
+        
+        return (totalPoint/ratingNum, ratingNum)    
+
+class EventCommentFlagView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = models.EventComment.objects.all()
+    serializer_class = serializers.EventCommentRatingSerializer
+
+    def get(self, request, comment_id):
+        user = models.CustomUser.objects.get(id=request.user.id)
+        if user.is_superuser:
+            serializer = serializers.EventCommentRatingSerializer(models.EventComment.objects.get(id=comment_id))
+            return JsonResponse(serializer.data)
+        return HttpResponse("Only superusers can see the flagged number.")
+
+    def flag(self, request, comment_id):
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        comment = models.EventComment.objects.get(id=comment_id)
+        comment.flaggers.add(flagger)
+        comment.save()
+        serializer = serializers.EventCommentRatingSerializer(comment)
+
+        return JsonResponse(serializer.data)
+
+    def unflag(self, request, comment_id): 
+        flagger_id = request.user.id
+        flagger = models.CustomUser.objects.get(id=flagger_id)
+        comment = models.EventComment.objects.get(id=comment_id)
+        comment.flaggers.remove(flagger)
+        comment.save()
+        serializer = serializers.EventCommentRatingSerializer(comment)
+
+        return JsonResponse(serializer.data)
 
 # Tag related views
 

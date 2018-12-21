@@ -120,6 +120,18 @@ class EventCommentSearchSerializer(serializers.ModelSerializer):
             'date',
             )
 
+class UserCommentRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.UserComment
+        fields = ('id', 'ratings', 'flaggers',)
+
+class EventCommentRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.EventComment
+        fields = ('id', 'ratings', 'flaggers',)
+
 # Tag related serializers
 
 class TagRWSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import mixins
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 import django_filters
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
@@ -28,7 +28,7 @@ def calcRating(user_id):
 class UserCreateView(mixins.ListModelMixin,
                      mixins.CreateModelMixin,
                      generics.GenericAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRWSerializer
 
@@ -72,7 +72,7 @@ class UserDeleteView(viewsets.ModelViewSet):
         return HttpResponse("Only a superuser can delete users")
 
 class UserRateView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.CustomUser.objects.all()
     serializer_class = serializers.UserRatingSerializer
 

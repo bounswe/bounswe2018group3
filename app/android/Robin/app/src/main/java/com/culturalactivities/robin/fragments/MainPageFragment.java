@@ -13,6 +13,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +74,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
     private Switch switchSearch;
     private boolean isUserSearch = false;
     private boolean isSearchOpen = false;
-    private ImageView createImage;
+    private ImageView createButton;
     private ConstraintLayout clSearch;
 
     RequestQueue queue;
@@ -110,6 +111,8 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
 
     private void setView(View view) {
+        //Toast.makeText(this.activity, "type is "+MainActivity.token, Toast.LENGTH_LONG).show();
+        //Log.d("access only Token is", String.valueOf(MainActivity.token));
         queue = Volley.newRequestQueue(activity);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setSubtitle(activity.getString(R.string.home_page));
@@ -127,14 +130,14 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         switchSearch= view.findViewById(R.id.switchSearch);
 
         clSearch = view.findViewById(R.id.cLSearch);
-        createImage = view.findViewById(R.id.ivCreate);
-        createImage.setOnClickListener(new View.OnClickListener() {
+        createButton = view.findViewById(R.id.ivCreate);
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                    transaction.add(R.id.fragment, CreateEventFragment.newInstance());
-                    transaction.addToBackStack("addEPF");
-                    transaction.commit();
+                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment, CreateEventFragment.newInstance());
+                transaction.addToBackStack("addEPF");
+                transaction.commit();
 
             }
         });
@@ -215,7 +218,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("type", "post");
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "JWT " + MainActivity.token);
+                //params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
 
@@ -253,17 +256,16 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String id = toUTF(jsonObject.getString("id"));
                                 String name = toUTF(jsonObject.getString("name"));
-
                                 String info = toUTF(jsonObject.getString("info"));
                                 String artist = toUTF(jsonObject.getString("artist"));
                                 String date = toUTF(jsonObject.getString("date"));
                                 String time = toUTF(jsonObject.getString("time"));
-                                String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
+                                //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
-                                images.add(new Image(image, null));
-                                events.add(new Event(id, name, info, artist, date, time, price, rating, null, null, null, tags, images));
+                                //images.add(new Image(image, null));
+                                events.add(new Event(id, name,info, artist, date, time, price, rating, null, null, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();
@@ -285,7 +287,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "JWT " + MainActivity.token);
+                //params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
 

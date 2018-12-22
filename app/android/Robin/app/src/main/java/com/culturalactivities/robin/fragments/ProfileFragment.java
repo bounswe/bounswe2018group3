@@ -188,11 +188,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 String artist = toUTF(jsonObject.getString("artist"));
                                 String date = toUTF(jsonObject.getString("date"));
                                 String time = toUTF(jsonObject.getString("time"));
-                                String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
+                                //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
-                                images.add(new Image(image, null));
+                                //images.add(new Image(image, null));
                                 events.add(new Event(id, name, info, artist, date, time, price, rating, null, null, null, null, images));
                             }
                             recyclerView.setAdapter(eventAdapter);

@@ -41,6 +41,7 @@ class EventRWSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'location',
+            'info',
             'loc_lattitude',
             'loc_longitude',
             'city',

@@ -266,7 +266,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("type", "post");
+                //params.put("type", "post");
                 params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
@@ -302,7 +302,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 //String colorScheme = jsonObject.getString("colorScheme");
                                 //String userimage = jsonObject.getString("profile_pic");
                                 double rating = Double.parseDouble(jsonObject.getString("rating"));
-                                users.add(new User(id, "", username, fname, lname, bio, null, "", rating));
+                                users.add(new User(id, "", username, fname, lname, bio, null, ""));
                             }
                             recyclerView.setAdapter(userAdapter);
                             userAdapter.notifyDataSetChanged();

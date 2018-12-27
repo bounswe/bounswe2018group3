@@ -16,7 +16,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String id, String email, String username,  String name, String surname, String bio, String profileImage, String colorSchemeInf, double rating) {
+    public User(String id, String email, String username,  String name, String surname, String bio, String profileImage, String colorSchemeInf) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -25,7 +25,7 @@ public class User {
         this.bio = bio;
         this.profileImage = profileImage;
         this.colorSchemeInf = colorSchemeInf;
-        this.rating = rating;
+       // this.rating = rating;
     }
 
     public String getId() {

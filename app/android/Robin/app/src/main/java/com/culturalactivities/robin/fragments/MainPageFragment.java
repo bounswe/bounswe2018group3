@@ -131,16 +131,20 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
         clSearch = view.findViewById(R.id.cLSearch);
         createButton = view.findViewById(R.id.ivCreate);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment, CreateEventFragment.newInstance());
-                transaction.addToBackStack("addEPF");
-                transaction.commit();
+        if(MainActivity.token!=null) {
+            createButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.fragment, CreateEventFragment.newInstance());
+                    transaction.addToBackStack("addEPF");
+                    transaction.commit();
 
-            }
-        });
+                }
+            });
+        }else{
+            createButton.setVisibility(createButton.INVISIBLE);
+        }
         switchSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -194,8 +198,8 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 String bio = toUTF(jsonObject.getString("bio"));
                                 //String colorScheme = jsonObject.getString("colorScheme");
                                 //String userimage = jsonObject.getString("profile_pic");
-                                double rating = Double.parseDouble(jsonObject.getString("rating"));
-                                users.add(new User(id, "", username, fname, lname, bio, null, "", rating));
+                                //double rating = Double.parseDouble(jsonObject.getString("rating"));
+                                users.add(new User(id, "", username, fname, lname, bio, null, ""));
                             }
                             recyclerView.setAdapter(userAdapter);
                             userAdapter.notifyDataSetChanged();
@@ -216,7 +220,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("type", "post");
+                //params.put("type", "post");
                 params.put("Content-Type", "application/json");
                 //params.put("Authorization", "JWT " + MainActivity.token);
                 return params;

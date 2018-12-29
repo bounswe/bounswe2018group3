@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,13 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
@@ -54,9 +62,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreateEventFragment extends Fragment {
+import android.view.View;
 
-    private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class CreateEventFragment extends Fragment {
+    RequestQueue queue;
+    private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation,buttonCreate;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private boolean isDateSelected=false, isHourSelected=false;
     private String eventdate="00.00.0000", hour="00:00";
@@ -65,7 +79,7 @@ public class CreateEventFragment extends Fragment {
     private Spinner spinnerCurrencies;
     private EditText etTitle, etArtist, etDescription, etPrice, etLatitude, etLongitude, etTags;
     private ImageView ivEvent;
-
+    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
     private AppCompatActivity activity;
     @Override
     public void onAttach(Context context) {
@@ -105,6 +119,7 @@ public class CreateEventFragment extends Fragment {
         activity.getSupportActionBar().setSubtitle("Create Event");
         MainActivity.progressBar.setVisibility(View.INVISIBLE);
         //reference = new Reference();
+        queue = Volley.newRequestQueue(activity);
         buttonSelectDate= (Button) view.findViewById(R.id.bDatePicker);
         buttonSelectHour= (Button) view.findViewById(R.id.bTimePicker);
 
@@ -140,7 +155,13 @@ public class CreateEventFragment extends Fragment {
                 dialog.show();
             }
         });
-
+        buttonCreate = view.findViewById(R.id.buttonCreate);
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               createEvent();
+            }
+        });
         buttonSelectHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,8 +229,8 @@ public class CreateEventFragment extends Fragment {
         etArtist = view.findViewById(R.id.etArtist);
         etDescription = view.findViewById(R.id.etDescription);
         etPrice = view.findViewById(R.id.etPrice);
-        etLatitude = view.findViewById(R.id.etLatitude);
-        etLongitude = view.findViewById(R.id.etLongitude);
+        //etLatitude = view.findViewById(R.id.etLatitude);
+        //etLongitude = view.findViewById(R.id.etLongitude);
         etTags = view.findViewById(R.id.etTags);
         spinnerCurrencies = view.findViewById(R.id.spinnerCurrencies);
         ivEvent = view.findViewById(R.id.ivEvent);
@@ -300,5 +321,54 @@ public class CreateEventFragment extends Fragment {
             e.printStackTrace();
         }
     }
+    public void createEvent(){
+        final StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
+                EVENTS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
 
+                            JSONObject jsonObject = new JSONObject(response);
+                            jsonObject.put("name", etTitle.getText().toString().trim());
+                            jsonObject.put("info", etDescription.getText().toString().trim());
+                            jsonObject.put("artist", etArtist.getText().toString().trim());
+                            jsonObject.put("price", etPrice.getText().toString().trim());
+                            jsonObject.put("tags", new JSONArray("[]"));
+                            jsonObject.put("ratings", new JSONArray("[]"));
+                            jsonObject.put("comments", new JSONArray("[]"));
+                            jsonObject.put("images", new JSONArray("[]"));
+
+                            Toast.makeText(activity, jsonObject.getString("detail"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+
+            /*@Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", etTitle.getText().toString().trim());
+                params.put("info", etDescription.getText().toString().trim());
+                params.put("artist", etArtist.getText().toString().trim());
+                params.put("price", etPrice.getText().toString().trim());
+                return params;
+            }*/
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
 }

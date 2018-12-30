@@ -21,7 +21,7 @@ export default class EventPage extends React.Component{
     this.state = {
       id: this.props.location.pathname.substring(7),
       redirect : "",
-      event: 1,
+      event: {},
       creator : {},
       rating : "",
       joined: false,
@@ -50,7 +50,7 @@ export default class EventPage extends React.Component{
     };
     var headers= {
       "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
+      //"Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
       method: "GET",
@@ -70,7 +70,7 @@ export default class EventPage extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    this.getUser(this.state.event.creator)
+    //this.getUser(this.state.event.creator)
   } 
 
   getUser(e){
@@ -80,7 +80,7 @@ export default class EventPage extends React.Component{
   };
   var headers= {
     "Content-Type": "application/json",
-    "Authorization" : "JWT " + Cookies.get("token")
+    //"Authorization" : "JWT " + Cookies.get("token")
   };
   var options = {
     method: "GET",
@@ -263,7 +263,7 @@ handleEdit(){
         </div>
       )
     }
-    else if(this.state.error){
+    /*else if(this.state.error){
       return(
         <div>
           <h2>
@@ -271,7 +271,7 @@ handleEdit(){
           </h2>
         </div>
       )
-    }
+    }*/
     return (
       <React.Fragment>
       <div className="mb-70">
@@ -309,7 +309,9 @@ handleEdit(){
                   Date-Time : {this.state.event.date} {this.state.event.time}
                   </div>
                   <div class="col-sm-3">
-                  {this.getUser(this.state.event.creator)}
+                  {
+                    //this.getUser(this.state.event.creator)
+                  }
                   </div>
                 </div>
 

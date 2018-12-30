@@ -96,7 +96,7 @@ export default class CreateEvent extends React.Component {
     
 
     }
-    // TODO : I'm getting bad request 400 over here.
+
     handleCreate(e){
       this.setState({submitClicked: true});
       if(this.checkError()){
@@ -129,8 +129,9 @@ export default class CreateEvent extends React.Component {
         data: data,
         headers: headers,
       };
-      console.log(options);
+      //console.log(options);
       axios(options).then(response => {
+        console.log(response);
         if(response.status === 201){
           console.log(response);
           this.setState({redirect: "/createEventSuccess"});

@@ -158,6 +158,20 @@ class UserCommentSearchView(generics.ListAPIView): # TODO does not show ratings
     search_fields = ("title", "content", "date", ) # cannot search in many-to many
     #filter_class = EventFilter
 
+    def get(self, request, *args, **kwargs):
+        usercomment_set =  models.UserComment.objects.all()
+        usercomment_set = self.filter_queryset(usercomment_set)
+        
+        returned_usercomments = []
+        for comment in usercomment_set:
+            serializer =  serializers.EventCommentReadOnlySerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
+            del data['ratings']
+            returned_usercomments.append(data)
+        
+        return JsonResponse(returned_usercomments, safe=False)
+
 class UserCommentRateView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.UserComment.objects.all()
@@ -302,6 +316,20 @@ class EventCommentSearchView(generics.ListAPIView): # TODO does not show ratings
     filter_backends = (filters.SearchFilter,)
     search_fields = ("title", "content","date")
     #filter_class = EventFilter
+
+    def get(self, request, *args, **kwargs):
+        eventcomment_set =  models.EventComment.objects.all()
+        eventcomment_set = self.filter_queryset(eventcomment_set)
+        
+        returned_eventcomments = []
+        for comment in eventcomment_set:
+            serializer =  serializers.EventCommentReadOnlySerializer(comment)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
+            del data['ratings']
+            returned_eventcomments.append(data)
+        
+        return JsonResponse(returned_eventcomments, safe=False)
 
 class EventCommentRateView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)

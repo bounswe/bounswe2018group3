@@ -104,8 +104,9 @@ export default class ProfileCard extends React.Component{
       url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
+    //console.log(options)
     await axios(options).then(async response => {
-      //console.log(response);
+      console.log(response);
       if(response.status === 200){
         this.setState({
           ...this.state,
@@ -139,9 +140,9 @@ export default class ProfileCard extends React.Component{
       headers: headers,
     }
     await axios(options).then(response => {
-      console.log("*************" + response);
+      console.log(response);
       if(response.status === 200){
-        this.setState({profile_pic: response.data.profile_pic})
+        this.setState({profile_pic: response.data.profile_pic.data})
       }
     }).catch(error => {
       console.error(error);
@@ -567,7 +568,7 @@ export default class ProfileCard extends React.Component{
                           <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
                             <div className="col-lg-9">
                               <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
-                              <label value="choose a photo" for="photo">{this.state.profile_pic==="" ? "Choose a file": this.state.profile_pic}</label>
+                              <label value="choose a photo" for="photo">Choose a file{/*this.state.profile_pic==="" ? "Choose a file": this.state.profile_pic*/}</label>
                               <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
                             </div>
                           </div>

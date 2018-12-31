@@ -116,12 +116,21 @@ export default class CreateEvent extends React.Component {
         date : this.state.date,
         time : this.state.time,
         price : this.state.price,
-        country : this.state.imageLink,
+        comments: [],
+        ratings: [],
+        images: [],
+        tags: [],
+        //country : this.state.imageLink,
         //creator: this.state.creator,
       };
       var headers= {
-        //"Content-Type": "application/json",
-        "Authorization" : "JWT " + Cookies.get("token")
+        //"Content-Type": "multipart/form-data;boundary",
+        "Authorization" : "JWT " + Cookies.get("token"),
+        "cache-control": "no-cache",
+        "Content-Type": "application/json",
+        //"Content-Type": "application/x-www-form-urlencoded",
+        //'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+
       };
       var options = {
         method: "POST",
@@ -132,7 +141,7 @@ export default class CreateEvent extends React.Component {
       console.log(options);
       axios(options).then(response => {
         console.log(response);
-        if(response.status === 201){
+        if(response.status === 200){
           console.log(response);
           this.setState({redirect: "/createEventSuccess"});
           //window.location.reload();

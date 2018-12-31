@@ -228,19 +228,21 @@ handleEdit(){
       "Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
-      method: "GET",
+      method: "POST",
       // TODO: Update search url page.
       url: EVENT_COMMENTS_URL + this.state.id,
-      data: data,
+      body: data,
       headers: headers,
     };
+    console.log(options)
     axios(options).then(response => {
       if(response.status === 200){
-        console.log(response);
+        console.log("comment add" + response);
         window.location.reload();
       }
     }).catch(error => {
       console.error(error);
+      console.log("error in the comment")
       this.setState({error: true});
     })
     this.setState({commentValue: ""});

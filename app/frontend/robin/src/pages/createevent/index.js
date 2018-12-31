@@ -241,12 +241,7 @@ export default class CreateEvent extends React.Component {
                 </div>
                 <label>
                   <div className="col-lg-6 event-in">
-                    <input
-                      name="eventDate"
-                      type="text"
-                      value={this.state.eventDate}
-                      placeholder="Date"
-                      onChange={this.handleNameChange}/>
+                    <input type="date" placeholder="Date"  name="eventDate" value={this.state.eventDate} onChange={this.handleNameChange}/>
                   </div>
                 </label>
               </div>
@@ -258,7 +253,7 @@ export default class CreateEvent extends React.Component {
                   <div className="col-lg-6 event-in">
                     <input
                       name="eventTime"
-                      type="text"
+                      type="time"
                       value={this.state.eventTime}
                       placeholder="Time"
                       onChange={this.handleNameChange}/>

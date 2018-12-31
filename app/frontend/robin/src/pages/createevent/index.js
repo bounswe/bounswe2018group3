@@ -8,7 +8,8 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
-import { EVENT_URL } from "../constants/backend-urls";
+import { EVENT_URL, USERS_URL } from "../constants/backend-urls";
+
 export default class CreateEvent extends React.Component {
     constructor(props) {
       super(props);
@@ -21,6 +22,7 @@ export default class CreateEvent extends React.Component {
         eventTime: "",
         eventPrice: "",
         imageLink: "",
+        creator: {},
         isGoing: true,
         numberOfGuests: 2,
         submitClicked: false,
@@ -33,6 +35,12 @@ export default class CreateEvent extends React.Component {
       this.handleErrorMessage = this.handleErrorMessage.bind(this);
       //this.handleSubmit = this.handleSubmit.bind(this);
       this.checkError = this.checkError.bind(this);
+      this.getUser = this.getUser.bind(this);
+    }
+
+    componentDidMount(){
+      this.setState({creator: this.getUser(Cookies.get("userid"))})
+      
     }
   
     handleInputChange(event) {
@@ -58,7 +66,37 @@ export default class CreateEvent extends React.Component {
           [name]: value
         });
     }
-    // TODO : I'm getting bad request 400 over here.
+
+    getUser(e){
+      var data = {
+        // TODO: Change here according to API
+        //id: Cookies.get("clickedEvent")
+      };
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        // TODO: Update search url page.
+        url: USERS_URL + e,
+        //data: data,
+        headers: headers,
+      };
+      axios(options).then(response => {
+        if(response.status === 200){
+          var resp = response.data;
+          this.setState({creator: resp});
+          return resp.username;
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    
+
+    }
+
     handleCreate(e){
       this.setState({submitClicked: true});
       if(this.checkError()){
@@ -72,13 +110,14 @@ export default class CreateEvent extends React.Component {
       else
         return;
       var data = {
-       name : this.state.eventName,
-       info : this.state.eventInfo,
-       artist : this.state.artistName,
-       date : this.state.eventDate,
-       time : this.state.eventTime,
-       price : this.state.eventPrice,
-       country : this.state.imageLink
+        name : this.state.eventName,
+        info : this.state.eventInfo,
+        artist : this.state.artistName,
+        date : this.state.eventDate,
+        time : this.state.eventTime,
+        price : this.state.eventPrice,
+        country : this.state.imageLink,
+        creator: this.state.creator,
       };
       var headers= {
         "Content-Type": "application/json",
@@ -90,8 +129,9 @@ export default class CreateEvent extends React.Component {
         data: data,
         headers: headers,
       };
-      console.log(options);
+      //console.log(options);
       axios(options).then(response => {
+        console.log(response);
         if(response.status === 201){
           console.log(response);
           this.setState({redirect: "/createEventSuccess"});
@@ -138,6 +178,7 @@ export default class CreateEvent extends React.Component {
     }
   
     render() {
+      console.log(this.state);
       if(this.state.redirect === "/createEventSuccess"){
         return (<Redirect to={this.state.redirect}/>)
       }

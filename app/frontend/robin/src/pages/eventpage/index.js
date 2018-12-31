@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL } from "../constants/backend-urls";
+import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
 
 import "./eventpage.css"
 
@@ -21,7 +21,7 @@ export default class EventPage extends React.Component{
     this.state = {
       id: this.props.location.pathname.substring(7),
       redirect : "",
-      event: 1,
+      event: {},
       creator : {},
       rating : "",
       joined: false,
@@ -43,14 +43,14 @@ export default class EventPage extends React.Component{
   }
 
   async componentDidMount(e){
-    console.log(this.state);
+    //console.log(this.state);
     var data = {
       // TODO: Change here according to API
       id: this.state.id
     };
     var headers= {
       "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
+      //"Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
       method: "GET",
@@ -59,9 +59,9 @@ export default class EventPage extends React.Component{
       data: data,
       headers: headers,
     };
-    console.log(options);
+    //console.log(options);
     await axios(options).then(response => {
-      console.log(response);
+      //console.log(response);
       if(response.status === 200){
         var eventList = response.data;
         this.setState({event: eventList, error: false});
@@ -70,7 +70,7 @@ export default class EventPage extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    this.getUser(this.state.event.creator)
+    //this.getUser(this.state.event.creator)
   } 
 
   getUser(e){
@@ -80,7 +80,7 @@ export default class EventPage extends React.Component{
   };
   var headers= {
     "Content-Type": "application/json",
-    "Authorization" : "JWT " + Cookies.get("token")
+    //"Authorization" : "JWT " + Cookies.get("token")
   };
   var options = {
     method: "GET",
@@ -166,7 +166,7 @@ handleInterested(){
 }
 
 handleDelete(){
-  console.log(Cookies.get("userid") == this.state.creator.id)
+  //console.log(Cookies.get("userid") == this.state.creator.id)
   if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
     return(
       <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
@@ -215,15 +215,40 @@ handleEdit(){
   }
 
   handleAddCommentClick(e){
-    // commenti backende atcan
     e.preventDefault();
-    this.setState({
-      comments: [{
-        userName: "Benım bu",
-        text: this.state.commentValue
-      }, ...this.state.comments]
-    });
-    console.log(this.state.commentValue);
+    var data = {
+      // TODO: Change here according to API
+      //id: Cookies.get("clickedEvent")
+      title: this.state.event.name,
+      content: this.state.commentValue,
+      id: this.state.id,
+    };
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "POST",
+      // TODO: Update search url page.
+      url: EVENT_COMMENTS_URL + this.state.id,
+      body: data,
+      headers: headers,
+    };
+    console.log(options)
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log("comment add" + response);
+        window.location.reload();
+      }
+    }).catch(error => {
+      console.error(error);
+      console.log("error in the comment")
+      this.setState({error: true});
+    })
+    this.setState({commentValue: ""});
+
+    
+    //console.log(this.state.commentValue);
   }
 
   handleAddcommentBox(){
@@ -250,6 +275,7 @@ handleEdit(){
   }
 
   render(){
+    console.log(this.state);
     const { rating } = this.state;
     if(this.state.redirect !== ""){
       return (<Redirect to={this.state.redirect}/>)
@@ -263,7 +289,7 @@ handleEdit(){
         </div>
       )
     }
-    else if(this.state.error){
+    /*else if(this.state.error){
       return(
         <div>
           <h2>
@@ -271,7 +297,7 @@ handleEdit(){
           </h2>
         </div>
       )
-    }
+    }*/
     return (
       <React.Fragment>
       <div className="mb-70">
@@ -309,7 +335,9 @@ handleEdit(){
                   Date-Time : {this.state.event.date} {this.state.event.time}
                   </div>
                   <div class="col-sm-3">
-                  {this.getUser(this.state.event.creator)}
+                  {
+                    //this.getUser(this.state.event.creator)
+                  }
                   </div>
                 </div>
 

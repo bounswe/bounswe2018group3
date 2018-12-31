@@ -13,6 +13,7 @@ export const EDIT_USER_URL = "http://139.59.128.92:8080/api/v1/users/edit/";
 export const GET_USER_PIC_URL = "http://139.59.128.92:8080/api/v1/users/getpic/";
 
 export const EVENT_URL = "http://139.59.128.92:8080/api/v1/events/";
+export const EVENT_COMMENTS_URL = "http://139.59.128.92:8080/api/v1/eventcomments/"
 
 export const HOMEPAGE_URL = "http://139.59.128.92:8080/api/v1/events/homepage/";
 

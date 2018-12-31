@@ -245,6 +245,38 @@ class UserSearchView(generics.ListAPIView):  # TODO does not display ratings nic
     filter_backends = (filters.SearchFilter,)
     search_fields = ("first_name", "last_name", "country", "city", "username", )
     #filter_class = EventFilter
+    def get(self, request, *args, **kwargs):
+        user_set = models.CustomUser.objects.all()
+        user_set = self.filter_queryset(user_set)
+
+        returned_users = []
+        for user in user_set:
+            serializer =  serializers.UserSearchSerializer(user)
+            data = serializer.data
+            futureEvents = []  # TODO also add this thing to UserCreateView
+            pastEvents = []
+            for event in user.event_set.all():
+                if(event.date > datetime.date(datetime.now())):
+                    futureEvents.append(event.id)
+                else:
+                    pastEvents.append(event.id)
+            data['futureEvents'] = futureEvents
+            data['pastEvents'] = pastEvents
+
+            events = Event.objects.all()
+            created_events = []
+            for event in events:
+                if event.creator.id == user.id:
+                    created_events.append(event.id)
+
+            data['createdEvents'] = created_events
+            (data['rating'], data['ratingNum']) = calcRating(user.id)
+            del data['ratings']
+
+            returned_users.append(data)
+        
+        return JsonResponse(returned_users, safe=False)
+
 
 class UserPicView(viewsets.ModelViewSet):
     http_method_names = ['get', 'put']

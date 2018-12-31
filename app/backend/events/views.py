@@ -83,21 +83,39 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
     filter_backends = (filters.SearchFilter,)
     search_fields = ("info", "name", "country", "city", "artist", )
     #filter_class = EventFilter
+    def get(self, request, *args, **kwargs):
+        event_set = models.Event.objects.all()
+        event_set = self.filter_queryset(event_set)
+        
+        returned_events = []
+        for event in event_set:
+            serializer =  serializers.EventRWSerializer(event)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRating(event.id)
+            del data['ratings']
+            returned_events.append(data)
+        
+        return JsonResponse(returned_events, safe=False)
 
 class EventUserRelated(APIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.Event.objects.all()
 
     def get(self, request, page, format=None):
-        
         event_set = models.Event.objects.all()
         events = []
         for event in event_set:
             events.append(event)
         events.sort(key=lambda x: x.date, reverse=True)
         
-        events_serialized = [(serializers.EventRWSerializer(event).data) for event in events]
-        return Response(events_serialized[page*10:(page+1)*10])
+        returned_events = []
+        for event in events:
+            serializer =  serializers.EventRWSerializer(event)
+            data = serializer.data
+            (data['rating'], data['ratingNum']) = calcRating(event.id)
+            del data['ratings']
+            returned_events.append(data)
+        return JsonResponse(returned_events[page*10:(page+1)*10], safe=False)
 
 class EventRateView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

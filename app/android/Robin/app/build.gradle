@@ -20,12 +20,17 @@ android {
 
 repositories {
     mavenCentral()
+    maven{
+        url 'https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
+
     implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.mashape.unirest:unirest-android:1.0+'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -203,7 +207,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     Toast.makeText(activity, "Please write a comment", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(activity, "Waiting for real comment api endpoint", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity, "Waiting for real comment api endpoint", Toast.LENGTH_SHORT).show();
                 makeComment(comment,commentTitle);
             }
         });
@@ -246,8 +250,21 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void makeComment(final String comment, final String commentTitle) {
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        /*try {
+            HttpResponse<String> response = Unirest.post("http://139.59.128.92:8080/api/v1/eventcomments/")
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6ImNhZ2Rhc3RvbWJ1bCIsImV4cCI6MTU0Njk0MzIwOSwiZW1haWwiOiJjYWdkYXN0b21idWxAaG90bWFpbC5jb20ifQ.tiPyqrvGpHR8_hZ4bNVs0BtWA12JIjN-V1pFqbjbBgk")
+                    .header("cache-control", "no-cache")
+                    .header("Postman-Token", "c01801b1-0fdd-4558-9b2d-e0729c7594b4")
+                    .body("{\"title\":\"deneme\",\"content\":\"super event\",\"event\":\"2\",\"ratings\":[]}")
+                    .asString();
+            Log.e("comment created","super");
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }*/
 
-        StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
+        /*StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 Constants.COMMENT_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -283,6 +300,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         };
         // Add the request to the RequestQueue.
         queue.add(jsonObjReq);
+        */
     }
 
     private void getComments() {

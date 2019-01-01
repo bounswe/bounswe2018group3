@@ -84,6 +84,8 @@ export default class ProfileCard extends React.Component{
        /*photo: {},
       uploadPhoto: {},*/
       private: false,
+      followedUsers: [],
+      followers: [],
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -126,8 +128,8 @@ export default class ProfileCard extends React.Component{
           email: response.data.email,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          followedUsers: response.data.followedUsers,
-          followers: response.data.followers,
+          followedUsers: response.data.followedUsers.map((person, key) => {return {id: person[0], firstName: person[1], lastName: person[2]}}),
+          followers: response.data.followers.map((person, key) => {return {id: person[0], firstName: person[1], lastName: person[2]}}),
           private: response.data.private,
           profile_pic: response.data.profile_pic,
           profile_photo: {},
@@ -260,12 +262,12 @@ export default class ProfileCard extends React.Component{
     //console.log(this.state);
   }
 
-  follow(){
+  async follow(){
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
     };
-    options = {
+    var options = {
       method: "GET",
       url: FOLLOW_URL + this.props.location.pathname.substring(9),
       headers: headers,
@@ -480,7 +482,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                  {this.listFriends(examplePeople)}                                
+                                  {this.listFriends(this.state.followers)}                                
                                 </ul>
                               </div>
                             </div>
@@ -496,7 +498,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                  {this.listFriends(examplePeople)} 
+                                  {this.listFriends(this.state.followedUsers)} 
                                 </ul>
                               </div>
                             </div>
@@ -814,7 +816,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                  {this.listFriends(examplePeople)}
+                                  {this.listFriends(this.state.followers)}
                                 </ul>
                               </div>
                             </div>
@@ -830,7 +832,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                  {this.listFriends(examplePeople)}
+                                  {this.listFriends(this.state.followedUsers)}
                                 </ul>
                               </div>
                             </div>

@@ -2,6 +2,7 @@ package com.culturalactivities.robin.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ import com.culturalactivities.robin.adapters.CommentAdapter;
 import com.culturalactivities.robin.adapters.ImageAdapter;
 import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
+import com.culturalactivities.robin.models.Image;
 import com.culturalactivities.robin.models.User;
 import com.culturalactivities.robin.utilities.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,6 +49,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +66,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
 
     RequestQueue queue;
-    private Event event;
+    private Event event = new Event();
+    private String eventid;
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
     private RatingBar rbEvent, rbMakeRate;
@@ -104,14 +108,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         // Required empty public constructor
     }
 
-    public static EventFragment newInstance(Event event) {
+    public static EventFragment newInstance(String eventid) {
         EventFragment fragment = new EventFragment();
-        fragment.setEvent(event);
+        fragment.setEvent(eventid);
         return fragment;
     }
 
-    private void setEvent(Event event){
-        this.event = event;
+    private void setEvent(String eventid){
+        this.eventid = eventid;
     }
 
     @Override
@@ -156,11 +160,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         tvArtistInfo.setTypeface(MainActivity.ubuntuRegular);
         tvPrice.setTypeface(MainActivity.ubuntuRegular);
 
-        //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
-        tvTitle.setText(event.getEventName());
-        tvDescription.setText(event.getEventInfo());
-        rbEvent.setRating(event.getRating());
-
         rbMakeRate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -168,10 +167,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             }
         });
 
-        tvArtistInfo.setText(event.getArtistInfo());
-        tvPrice.setText(event.getPrice()+ " ₺");
-        tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
-        
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
         imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
@@ -235,6 +230,89 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 }
             }
         });
+
+        getEventDetails();
+    }
+
+    private void getEventDetails() {
+        String url = Constants.EVENTS + eventid;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            String id = toUTF(jsonObject.getString("id"));
+                            String name = toUTF(jsonObject.getString("name"));
+                            String info = toUTF(jsonObject.getString("info"));
+                            String artist = toUTF(jsonObject.getString("artist"));
+                            String date = toUTF(jsonObject.getString("date"));
+                            String time = toUTF(jsonObject.getString("time"));
+                            //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
+                            JSONArray commentArray= jsonObject.getJSONArray("comments");
+                            for(int j=0;j<commentArray.length();j++){
+                                comments.add(new Comment(commentArray.get(j).toString(),id));
+                            }
+                            Double price = Double.valueOf(jsonObject.getString("price"));
+                            Float rating = Float.valueOf(jsonObject.getString("rating"));
+                            ArrayList<Image> images = new ArrayList<>();
+                            //images.add(new Image(image, null));
+
+                            //JSONArray arrayCreator = jsonObject.getJSONArray("creator");
+                            JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
+
+                            for (int i = 0; i < arrayAttendants.length(); i++) {
+                                String attendantid = arrayAttendants.get(i).toString();
+                                if (attendantid.equals(MainActivity.pk)){
+                                    isAttended = true;
+                                    buttonAttend.setText("Attended");
+                                    buttonAttend.setBackgroundColor(Color.GREEN);
+                                }
+                            }
+
+                            event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
+
+
+                            //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
+                            tvTitle.setText(event.getEventName());
+                            tvDescription.setText(event.getEventInfo());
+                            rbEvent.setRating(event.getRating());
+
+                            tvArtistInfo.setText(event.getArtistInfo());
+                            tvPrice.setText(event.getPrice()+ " ₺");
+                            tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
+
+                            rvGallery.setAdapter(imageAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     private void setInterested(int requestCode) {

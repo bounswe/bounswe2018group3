@@ -255,6 +255,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("EVENTOO", response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -274,6 +275,10 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
                                 //images.add(new Image(image, null));
+
+                                JSONArray arrayCreator = jsonObject.getJSONArray("creator");
+                                JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
+
                                 events.add(new Event(id, name,info, artist, date, time, price, rating, null, comments, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
@@ -316,7 +321,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
             case R.id.simple_event:
                 int p1 = recyclerView.getChildLayoutPosition(view);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment, EventFragment.newInstance(events.get(p1)));
+                transaction.add(R.id.fragment, EventFragment.newInstance(events.get(p1).getId()));
                 transaction.addToBackStack("addEF");
                 transaction.commit();
                 break;

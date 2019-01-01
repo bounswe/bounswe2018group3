@@ -7,10 +7,10 @@ public class Event {
     private double price;
     private float rating;
     private Location location;
-    private ArrayList<Comment> comments;
-    private ArrayList<User> goingUser;
-    private ArrayList<Tag> tags;
-    private ArrayList<Image> images;
+    private ArrayList<Comment> comments = new ArrayList<>();
+    private ArrayList<User> goingUser = new ArrayList<>();
+    private ArrayList<Tag> tags= new ArrayList<>();
+    private ArrayList<Image> images = new ArrayList<>();
 
     public Event() {
         eventName = "Event Title";

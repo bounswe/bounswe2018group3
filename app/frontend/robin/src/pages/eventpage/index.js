@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
 
 import "./eventpage.css"
 
@@ -97,7 +97,7 @@ export default class EventPage extends React.Component{
         //console.log(response);
         if(response.status === 200){
           var annot = response.data;
-          ann = { imageLink: annot.content,
+          var ann = { imageLink: annot.content,
             annotations: []
             }
           annot.annotations.forEach(function(elem){

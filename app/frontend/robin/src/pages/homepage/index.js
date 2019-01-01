@@ -7,8 +7,6 @@ import "./index.css";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-import img from "./deneme.jpg";
-import Annotation from 'react-image-annotation';
 import { HOMEPAGE_URL } from "../constants/backend-urls";
 
 export default class Home extends React.Component{
@@ -19,15 +17,7 @@ export default class Home extends React.Component{
       query: this.props.location.query,
       token: Cookies.get("token"),
       events : [],
-      page : 0 ,
-      annotations: [{data:{id:0.123123, text:"asdasd"},
-      geometry:{ 
-       height:21.0, 
-       type: "RECTANGLE",
-       width:11.04, 
-       x:11.3,
-       y:8.51}}],
-      annotation: {}
+      page : 0 
     };
   }
 
@@ -74,22 +64,11 @@ export default class Home extends React.Component{
           <NavBar currentPath={this.props.location.pathname}/>
         </div>
         <div className="eventContainer col-md-6">
-        {//this.state.events.map(comp => {
-           //   return <EventComp title={comp.name} subtitle={comp.locatio}
-             // eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
+        {this.state.events.map(comp => {
+              return <EventComp title={comp.name} subtitle={comp.locatio}
+              eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
             })}
         </div>
-        <Annotation
-          src={img}
-          alt='Two pebbles anthropomorphized holding hands'
- 
-          annotations={this.state.annotations}
- 
-          type={this.state.type}
-          value={this.state.annotation}
-          onChange={this.onChange}
-          onSubmit={this.onSubmit}
-        />
       </div>
       
     );

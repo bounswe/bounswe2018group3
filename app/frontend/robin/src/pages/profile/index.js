@@ -70,6 +70,7 @@ export default class ProfileCard extends React.Component{
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
     this.follow = this.follow.bind(this);
     this.handleFollowButton = this.handleFollowButton.bind(this);
+    this.redirectProfile = this.redirectProfile.bind(this);
   }
 
   async componentDidMount(){
@@ -114,6 +115,7 @@ export default class ProfileCard extends React.Component{
         //if(response.data.private || this.state.private){
         if(this.state.private && this.state.id !== Cookies.get("userid")){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
+
         }
       }
     }).catch(error => {
@@ -318,10 +320,16 @@ export default class ProfileCard extends React.Component{
           console.error(error);
           this.setState({error: true});
         })
-      
       }
+      window.location.reload();
     }
   } 
+
+  redirectProfile(link){
+    this.setState({redirect: link});
+    window.location.reload();
+
+  }
 
   listFriends(people){
     var ret = [];
@@ -335,11 +343,11 @@ export default class ProfileCard extends React.Component{
       }
       if(i % 2 === 1){
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-right my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-right my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
-            <div className="col-12 col-sm-8 col-md-10 float-right">
+            <div className="col-12 col-sm-8 col-md-10 float-right" >
               <Link to={profileLink}>
                 <label className="name lead mb-0">
                   {people[i].first_name + " " + people[i].last_name}
@@ -354,7 +362,7 @@ export default class ProfileCard extends React.Component{
       }
       else{
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-left my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-left my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>

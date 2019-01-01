@@ -23,6 +23,7 @@ export default class PrivateProfile extends React.Component{
     }
 
     this.follow = this.follow.bind(this);
+    this.handleFollowButton = this.handleFollowButton.bind(this);
   }
 
   async componentDidMount(){
@@ -71,6 +72,30 @@ export default class PrivateProfile extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+    if(this.state.token !== undefined){
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log("did mount");
+        //console.log(response);
+        if(response.status === 200){
+          //console.log(response)
+          this.setState({
+            userFollowing: response.data.followedUsers.map((person, key) => {return person[0]}),
+          });
+        }
+      }).catch(error => {
+        console.error(error);
+      }) 
+    }
 
   }
 
@@ -116,6 +141,26 @@ export default class PrivateProfile extends React.Component{
       }
     }
   } 
+  handleFollowButton(){
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        return(
+          <button href="" className="btn btn-md btn-primary btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Follow
+          </button>
+        )
+      }
+      else{
+        return(
+          <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Following
+          </button>
+        )
+      }
+    }
+  }
 
   render(){
     if(this.props.location.pathname.substring(16) === undefined || this.props.location.pathname.substring(16) === ""){
@@ -144,10 +189,7 @@ export default class PrivateProfile extends React.Component{
             <div className="address">								
               <p className="text-center"><i className="fa fa-lock" aria-hidden="true"></i></p>
               <p className="text-center">This user's profile is private</p>
-              <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto" onClick={this.follow}>
-                <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                Follow
-              </button>
+              {this.handleFollowButton()}
               <button href="" className="btn btn-md btn-primary btn-block w-10 mx-auto">
                 <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
                 Message

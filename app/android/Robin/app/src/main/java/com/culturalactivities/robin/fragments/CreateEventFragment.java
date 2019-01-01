@@ -342,7 +342,8 @@ public class CreateEventFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         MainActivity.progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Your event is updated.", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
@@ -494,7 +495,8 @@ public class CreateEventFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         MainActivity.progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Your event is created.", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 

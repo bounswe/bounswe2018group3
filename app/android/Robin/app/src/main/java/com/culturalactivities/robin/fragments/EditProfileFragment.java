@@ -118,29 +118,20 @@ public class EditProfileFragment extends Fragment {
         String UURL = Constants.USERS_URL + "edit/" + MainActivity.pk;
 
         MainActivity.progressBar.setVisibility(View.VISIBLE);
-        StringRequest jsonObjReq = new StringRequest(Request.Method.PATCH,
+        final StringRequest jsonObjReq = new StringRequest(Request.Method.PATCH,
                 UURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        MainActivity.progressBar.setVisibility(View.VISIBLE);
+                        MainActivity.progressBar.setVisibility(View.INVISIBLE);
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                
+
             }
         }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
-                params.put("Authorization", "JWT " + MainActivity.token);
-                return params;
-            }
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
@@ -149,6 +140,14 @@ public class EditProfileFragment extends Fragment {
                 params.put("bio", etBio.getText().toString());
                 return params;
             }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+
         };
         queue.add(jsonObjReq);
     }

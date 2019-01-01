@@ -166,41 +166,28 @@ export default class ProfileCard extends React.Component{
   }
 
   async handleSave(){
+    var profile_pic_changed = false;
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
     };
-    if(this.state.profile_pic === this.oldState.profile_pic){ 
-      console.log("profilepic not changed");
-      var body = {
-        bio: this.state.bio,
-        birthday: this.state.birthday,
-        city: this.state.city,
-        country: this.state.country,
-        email: this.state.email,
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        //profile_pic: this.state.profile_pic,
-        //followedUsers: this.state.followedUsers,
-        followers: this.state.followers,
-      };
-    }
-    else{
-      console.log("profilepic changed");
+    var body = {
+      bio: this.state.bio,
+      birthday: this.state.birthday,
+      city: this.state.city,
+      country: this.state.country,
+      email: this.state.email,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      //profile_pic: this.state.profile_pic,
+      //followedUsers: this.state.followedUsers,
+      followers: this.state.followers,
+    };
+    if(this.state.profile_pic !== this.oldState.profile_pic){ 
+      profile_pic_changed = true;
 
-      var body = {
-        bio: this.state.bio,
-        birthday: this.state.birthday,
-        city: this.state.city,
-        country: this.state.country,
-        email: this.state.email,
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        profile_pic: this.state.profile_pic,
-        //followedUsers: this.state.followedUsers,
-        followers: this.state.followers,
-      };
     }
+      
     this.oldState = this.state;
 
     var options = {
@@ -209,15 +196,34 @@ export default class ProfileCard extends React.Component{
       headers: headers,
       data: body,
     };
-    console.log(options);
+    //console.log(options);
     await axios(options).then(response => {
-      console.log(response);
+      //console.log(response);
       if(response.status === 200){
       }
       }).catch(error => {
       console.error(error);
       this.setState({error: true});
     })
+    if(profile_pic_changed){
+      const formData = new FormData()
+      formData.append('profile_pic', this.state.profile_pic, this.state.profile_pic.name)
+      options = {
+        method: "PATCH",
+        url: EDIT_USER_URL + Cookies.get("userid"),
+        headers: headers,
+        data: formData,
+      }
+      await axios(options).then(response => {
+        //console.log(response);
+        if(response.status === 200){
+        }
+        }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    }
+
   }
 /*
   uploadPhotoHandler(e){
@@ -236,13 +242,13 @@ export default class ProfileCard extends React.Component{
   async uploadProfilePhotoHandler(e){
     e.preventDefault();
     await this.setState({profile_pic: this.state.profile_photo, profile_photo: {}});
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   async profilePhotoHandler(e){
     const file = e.target.files[0];
     await this.setState({profile_photo: file})
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   listFriends(people){

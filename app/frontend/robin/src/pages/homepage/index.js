@@ -102,7 +102,7 @@ export default class Home extends React.Component{
           src={img}
           alt='Two pebbles anthropomorphized holding hands'
  
-          annotations={this.state.annotations}
+          annotations={[{data:{id:0.123123, text:"asdasd"}, geometry:{height:21.0, type: "RECTANGLE", width:21.0}}]}
  
           type={this.state.type}
           value={this.state.annotation}
@@ -110,6 +110,7 @@ export default class Home extends React.Component{
           onSubmit={this.onSubmit}
         />
       </div>
+      
     );
   }
 };

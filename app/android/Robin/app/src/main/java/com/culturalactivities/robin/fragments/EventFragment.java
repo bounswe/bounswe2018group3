@@ -46,9 +46,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,6 +89,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     //Google Map
     GoogleMap map;
     MapView mapView;
+
+    private boolean isAttended = false, isInterested = false;
 
     private AppCompatActivity activity;
     @Override
@@ -207,7 +206,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     Toast.makeText(activity, "Please write a comment", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //Toast.makeText(activity, "Waiting for real comment api endpoint", Toast.LENGTH_SHORT).show();
                 makeComment(comment,commentTitle);
             }
         });
@@ -219,24 +217,93 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         buttonInterested.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setInterested();
+                if (isInterested){
+                    setInterested(Request.Method.DELETE);
+                }else {
+                    setInterested(Request.Method.GET);
+                }
             }
         });
 
         buttonAttend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAttend();
+                if (isAttended){
+                    setAttend(Request.Method.DELETE);
+                }else {
+                    setAttend(Request.Method.GET);
+                }
             }
         });
     }
 
-    private void setAttend() {
+    private void setInterested(int requestCode) {
+        String url = Constants.EVENT_INTEREST + event.getId();
+        StringRequest jsonObjReq = new StringRequest(requestCode,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("INTERESTEDDD", response);
+                    }
+                }, new Response.ErrorListener() {
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
+    private void setAttend(int requestType) {
+        String url = Constants.EVENT_ATTEND + event.getId();
+        Log.d("ATURRLLL", url);
+        StringRequest jsonObjReq = new StringRequest(requestType, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("ATTENDED", response);
+                    }
+                }, new Response.ErrorListener() {
 
-    private void setInterested() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     private void rateEvent(float rating) {

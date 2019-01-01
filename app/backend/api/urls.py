@@ -46,7 +46,7 @@ urlpatterns = [
     path('eventcomments/flag/<int:comment_id>', views.EventCommentFlagView.as_view({'get': 'get', 'post': 'flag', 'delete': 'unflag'})),
 
     # Tag-related views
-    path('tags/', views.TagCreateView.as_view()), 
+    path('tags/', views.TagCreateView.as_view()),
     path('tags/edit/<int:pk>', views.TagEditView.as_view()),
     path('tags/delete/<int:pk>', views.TagDeleteView.as_view({'delete': 'delete'})),
     path('tags/search/', views.TagSearchView.as_view()),

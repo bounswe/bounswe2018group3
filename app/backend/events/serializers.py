@@ -54,7 +54,7 @@ class EventRWSerializer(serializers.ModelSerializer):
             'tags',
             'ratings',
             'attendants',
-            'interestants'
+            'interestants',
             'comments',
             'images',
         )

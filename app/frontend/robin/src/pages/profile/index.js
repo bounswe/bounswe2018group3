@@ -70,6 +70,7 @@ export default class ProfileCard extends React.Component{
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
     this.follow = this.follow.bind(this);
     this.handleFollowButton = this.handleFollowButton.bind(this);
+    this.redirectProfile = this.redirectProfile.bind(this);
   }
 
   async componentDidMount(){
@@ -114,6 +115,7 @@ export default class ProfileCard extends React.Component{
         //if(response.data.private || this.state.private){
         if(this.state.private && this.state.id !== Cookies.get("userid")){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
+
         }
       }
     }).catch(error => {
@@ -242,9 +244,11 @@ export default class ProfileCard extends React.Component{
         headers: headers,
         data: formData,
       }
+      console.log(options)
       await axios(options).then(response => {
         //console.log(response);
         if(response.status === 200){
+          //window.location.reload();
         }
         }).catch(error => {
         console.error(error);
@@ -318,10 +322,16 @@ export default class ProfileCard extends React.Component{
           console.error(error);
           this.setState({error: true});
         })
-      
       }
+      window.location.reload();
     }
   } 
+
+  redirectProfile(link){
+    this.setState({redirect: link});
+    window.location.reload();
+
+  }
 
   listFriends(people){
     var ret = [];
@@ -335,26 +345,25 @@ export default class ProfileCard extends React.Component{
       }
       if(i % 2 === 1){
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-right my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-right my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
-            <div className="col-12 col-sm-8 col-md-10 float-right">
+            <div className="col-12 col-sm-8 col-md-10 float-right" >
               <Link to={profileLink}>
                 <label className="name lead mb-0">
                   {people[i].first_name + " " + people[i].last_name}
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )
       }
       else{
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-left my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-left my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
               <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
@@ -365,8 +374,7 @@ export default class ProfileCard extends React.Component{
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )
@@ -467,14 +475,15 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interests}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                      <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>
@@ -615,7 +624,7 @@ export default class ProfileCard extends React.Component{
                           <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
                             <div className="col-lg-9">
                               <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
-                              <label value="choose a photo" for="photo">{this.state.profile_photo ? "Choose a file": this.state.profile_photo.name}</label>
+                              <label value="choose a photo" for="photo">{this.state.profile_photo.name ? this.state.profile_photo.name : "Choose a file" }</label>
                               <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
                             </div>
                           </div>
@@ -807,14 +816,15 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interests}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                        <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>

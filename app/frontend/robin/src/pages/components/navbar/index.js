@@ -101,8 +101,10 @@ export default class NavBar extends React.Component {
     if(this.props.currentPath.substring(0,9) === "/profile/"  && this.props.currentPath.substring(9) === Cookies.get("userid")){
       return;
     }
-    else
+    else{
       await this.setState({redirect: "/profile/" + Cookies.get("userid")});
+      window.location.reload();
+    }
     console.log(this.state);
   }
 

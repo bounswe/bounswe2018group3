@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_URL, EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { EVENT_URL, EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL, EVENT_IMAGES_URL } from "../constants/backend-urls";
 
 import "./eventpage.css"
 
@@ -27,6 +27,8 @@ export default class EventPage extends React.Component{
       joined: false,
       interested: false,
       comments: [],
+      images: [],
+      shownImage: "",
       error: false,
       token: Cookies.get("token"),
       user: {},
@@ -61,12 +63,45 @@ export default class EventPage extends React.Component{
       headers: headers,
     };
     //console.log(options);
-    await axios(options).then(response => {
+    await axios(options).then(async response => {
       //console.log(response);
       if(response.status === 200){
         var eventList = response.data;
         this.setState({event: eventList, error: false});
         this.setState({creator: {id: this.state.event.creator[0], firstName: this.state.event.creator[1], lastName: this.state.event.creator[2]}});
+        if(this.state.event.images.length > 0){
+          var data = {
+            // TODO: Change here according to API
+            id: this.state.id
+          };
+          var headers= {
+            "Content-Type": "application/json",
+            //"Authorization" : "JWT " + Cookies.get("token")
+          };
+          var options = {
+            method: "GET",
+            // TODO: Update search url page.
+            url: EVENT_IMAGES_URL + this.state.event.images[0],
+            data: data,
+            headers: headers,
+          };
+          await axios(options).then(async response => {
+            console.log(response);
+            var headers= {
+              "Content-Type": "application/json",
+              //"Authorization" : "JWT " + Cookies.get("token")
+            };
+            var options = {
+              method: "GET",
+              // TODO: Update search url page.
+              url: response.data.content,
+              //data: data,
+              headers: headers,
+            };
+            this.setState({shownImage: response.data.content})
+            
+        })
+        }
       }
     }).catch(error => {
       console.error(error);
@@ -409,7 +444,7 @@ handleEdit(){
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
             <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.event.country} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
             </div>
             <div class="col-sm-6">
             <div class="card-body">
@@ -418,7 +453,7 @@ handleEdit(){
                     Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.firstName + " " + this.state.creator.lastName}</a>
                   </div>
                   <div class="col-sm-9">
-                    Price: {this.state.event.price}
+                    Price: {this.state.event.price} $
                   </div>
                   <div class="col-sm-3">
                   <StarRatingComponent 
@@ -432,6 +467,14 @@ handleEdit(){
                 <div class="row" style={{marginLeft:'15px'}}>
                   <div class="col-sm-9">
                   Date-Time : {this.state.event.date} {this.state.event.time}
+                  </div>
+                  <div class="col-sm-3">
+                 
+                  </div>
+                </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Artist : {this.state.event.artist ? this.state.event.artist : "Anonymous" } 
                   </div>
                   <div class="col-sm-3">
                  

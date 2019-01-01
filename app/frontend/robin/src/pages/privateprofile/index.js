@@ -10,7 +10,7 @@ import axios from 'axios';
 
 import "./index.css";
 
-import { USERS_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
+import { USERS_URL, GET_USER_PIC_URL, FOLLOW_URL } from "../constants/backend-urls"
 
 export default class PrivateProfile extends React.Component{
   constructor(props){
@@ -22,7 +22,8 @@ export default class PrivateProfile extends React.Component{
       profile_pic: "",
     }
 
-    this.handleAddFriend = this.handleAddFriend.bind(this);
+    this.follow = this.follow.bind(this);
+    this.handleFollowButton = this.handleFollowButton.bind(this);
   }
 
   async componentDidMount(){
@@ -71,11 +72,94 @@ export default class PrivateProfile extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+    if(this.state.token !== undefined){
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log("did mount");
+        //console.log(response);
+        if(response.status === 200){
+          //console.log(response)
+          this.setState({
+            userFollowing: response.data.followedUsers.map((person, key) => {return person[0]}),
+          });
+        }
+      }).catch(error => {
+        console.error(error);
+      }) 
+    }
 
   }
 
-  handleAddFriend(){
-
+  async follow(){ 
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "GET",
+          url: FOLLOW_URL + this.props.location.pathname.substring(16),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+      else{
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "DELETE",
+          url: FOLLOW_URL + this.props.location.pathname.substring(16),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+    }
+  } 
+  handleFollowButton(){
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        return(
+          <button href="" className="btn btn-md btn-primary btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Follow
+          </button>
+        )
+      }
+      else{
+        return(
+          <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Following
+          </button>
+        )
+      }
+    }
   }
 
   render(){
@@ -105,10 +189,7 @@ export default class PrivateProfile extends React.Component{
             <div className="address">								
               <p className="text-center"><i className="fa fa-lock" aria-hidden="true"></i></p>
               <p className="text-center">This user's profile is private</p>
-              <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto">
-                <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                Follow
-              </button>
+              {this.handleFollowButton()}
               <button href="" className="btn btn-md btn-primary btn-block w-10 mx-auto">
                 <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
                 Message

@@ -46,12 +46,14 @@
 
             <TextView
                 android:id="@+id/tvBio"
-                android:layout_width="260dp"
-                android:layout_height="83dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="36dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/tabLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toEndOf="@+id/ivProfile"
@@ -104,21 +106,22 @@
             <Button
                 android:id="@+id/buttonProfile"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="98dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintEnd_toStartOf="@+id/tvBio"
+                app:layout_constraintEnd_toEndOf="@+id/ivProfile"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivProfile"
                 app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
             <TextView
                 android:id="@+id/tvName"
                 style="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_width="0dp"
-                android:layout_height="29dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"

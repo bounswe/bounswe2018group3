@@ -20,7 +20,7 @@
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/logo"
+                android:src="@drawable/eventimage"
                 android:transitionName="eventBanner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="Title"
@@ -41,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
 
             <RatingBar
                 android:id="@+id/rbEvent"
@@ -58,42 +57,73 @@
             <TextView
                 android:id="@+id/tvArtistInfo"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@android:color/white"
                 android:padding="8dp"
                 android:text="@string/artist_info"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                app:layout_constraintEnd_toStartOf="@+id/tvDate"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonInterested" />
 
             <TextView
                 android:id="@+id/tvDate"
-                android:layout_width="118dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@android:color/white"
                 android:padding="8dp"
                 android:text="Date"
                 android:textColor="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/tvArtistInfo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/tvArtistInfo"
-                app:layout_constraintTop_toBottomOf="@+id/ivProfile"
+                app:layout_constraintTop_toTopOf="@+id/tvArtistInfo"
                 tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="00:00:0000"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"
+                android:text="$0"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <Button
+                android:id="@+id/buttonInterested"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Interested"
+                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+
+            <Button
+                android:id="@+id/buttonAttend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Attend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonInterested"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
         </android.support.constraint.ConstraintLayout>
 
         <TextView

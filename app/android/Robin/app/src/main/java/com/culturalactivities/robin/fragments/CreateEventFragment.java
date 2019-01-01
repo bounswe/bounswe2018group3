@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,7 +61,7 @@ import java.util.Map;
 
 public class CreateEventFragment extends Fragment {
     RequestQueue queue;
-    private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation,buttonCreate;
+    private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation, buttonCreate;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private boolean isDateSelected=false, isHourSelected=false;
     private String eventdate="00.00.0000", hour="00:00";
@@ -218,8 +219,8 @@ public class CreateEventFragment extends Fragment {
         etArtist = view.findViewById(R.id.etArtist);
         etDescription = view.findViewById(R.id.etDescription);
         etPrice = view.findViewById(R.id.etPrice);
-        //etLatitude = view.findViewById(R.id.etLatitude);
-        //etLongitude = view.findViewById(R.id.etLongitude);
+        etLatitude = view.findViewById(R.id.etLatitude);
+        etLongitude = view.findViewById(R.id.etLongitude);
         etTags = view.findViewById(R.id.etTags);
         spinnerCurrencies = view.findViewById(R.id.spinnerCurrencies);
         ivEvent = view.findViewById(R.id.ivEvent);
@@ -325,6 +326,7 @@ public class CreateEventFragment extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("ERROOO", error.toString());
             }
         }) {
 
@@ -332,15 +334,22 @@ public class CreateEventFragment extends Fragment {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", etTitle.getText().toString().trim());
-                params.put("artist", etArtist.getText().toString().trim());
-                params.put("price", etPrice.getText().toString().trim());
-                /*params.put("info", etDescription.getText().toString().trim());
+                params.put("location", "location");
+                params.put("info", etDescription.getText().toString());
                 params.put("loc_lattitude", etLatitude.getText().toString());
                 params.put("loc_longitude", etLongitude.getText().toString());
-                params.put("tags", "");
-                params.put("ratings", "");
-                params.put("comments", "");
-                params.put("images", "");*/
+                params.put("city", "");
+                params.put("country", "");
+                params.put("artist", etArtist.getText().toString().trim());
+                params.put("date", buttonSelectDate.getText().toString().trim());
+                params.put("time", buttonSelectHour.getText().toString().trim());
+                params.put("price", etPrice.getText().toString().trim());
+
+                JSONArray array = new JSONArray();
+                params.put("tags", array.toString());
+                params.put("ratings", array.toString());
+                params.put("comments", array.toString());
+                params.put("images", array.toString());
                 return params;
             }
             @Override

@@ -80,7 +80,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
 
     // for comment
-    private Button buttonComment;
+    private Button buttonComment, buttonInterested, buttonAttend;
     private EditText etComment, etCommentTitle;
     private Date today = Calendar.getInstance().getTime();
     private SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -207,6 +207,32 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 makeComment(comment,commentTitle);
             }
         });
+
+
+        buttonInterested = view.findViewById(R.id.buttonInterested);
+        buttonAttend = view.findViewById(R.id.buttonAttend);
+
+        buttonInterested.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setInterested();
+            }
+        });
+
+        buttonAttend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAttend();
+            }
+        });
+    }
+
+    private void setAttend() {
+
+    }
+
+    private void setInterested() {
+
     }
 
     private void rateEvent(float rating) {

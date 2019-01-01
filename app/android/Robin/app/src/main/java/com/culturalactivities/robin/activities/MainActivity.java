@@ -60,6 +60,24 @@ public class MainActivity extends AppCompatActivity {
         ubuntuItalic = Typeface.createFromAsset(getAssets(), "fonts/Ubuntu-Italic.ttf");
 
         if (isGuest){
+            bottomNavigation = findViewById(R.id.xbottom_navigation);
+            bottomNavigation.setDefaultBackgroundColor(Color.WHITE);
+            bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
+            bottomNavigation.setInactiveColor(Color.GRAY);
+            AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home_page, R.drawable.home, R.color.colorPrimaryLigth);
+            bottomNavigation.addItem(item1);
+            bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+                @Override
+                public boolean onTabSelected(int position, boolean wasSelected) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    switch (position) {
+                        case 0:
+                            fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
+                            break;
+                    }
+                    return true;
+                }
+            });
             fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, MainPageFragment.newInstance()).commit();
         }else {

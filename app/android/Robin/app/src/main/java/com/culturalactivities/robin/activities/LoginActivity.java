@@ -70,11 +70,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         preferences = getSharedPreferences("login", MODE_PRIVATE);
         String token = preferences.getString("token", null);
 
-        if (token != null){
+        if (token != null) {
             String pk = preferences.getString("pk", null);
             String username = preferences.getString("username", null);
             String email = preferences.getString("email", null);
-            openMainActivity(token, pk, username, email,false);
+            openMainActivity(token, pk, username, email, false);
         }
 
         etEmail = findViewById(R.id.etEmail);
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Profile profile = Profile.getCurrentProfile();
-                if (profile != null){
+                if (profile != null) {
                     //loginWithFacebook(profile.getId(), profile.getFirstName(), profile.getLastName(), String.valueOf(profile.getProfilePictureUri(300, 300)));
                 }
             }
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile cp) {
-                if (cp != null){
+                if (cp != null) {
                     //loginWithFacebook(cp.getId(), cp.getFirstName(), cp.getLastName(), String.valueOf(cp.getProfilePictureUri(300, 300)));
                 }
             }
@@ -145,22 +145,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void openMainActivity(String token, String pk, String username, String email, boolean isGuest){
+    private void openMainActivity(String token, String pk, String username, String email, boolean isGuest) {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("pk", pk);
         intent.putExtra("username", username);
         intent.putExtra("email", email);
-        intent.putExtra("isGuest",isGuest);
+        intent.putExtra("isGuest", isGuest);
         startActivity(intent);
-        if(!isGuest){
+        if (!isGuest) {
             finish();
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.buttonLogin:
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
@@ -175,19 +175,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 break;
             case R.id.tvGuestUser:
-                openMainActivity(null,null,null,null,true);
+                openMainActivity(null, null, null, null, true);
                 break;
         }
     }
 
     private void login(String email, String password) {
 
-        if (!isValidEmail(email)){
+        if (!isValidEmail(email)) {
             Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Password can not be empty", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginRequest(email, password);
     }
 
-    public void loginRequest(final String email, final String password){
+    public void loginRequest(final String email, final String password) {
         StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 Constants.LOGIN_URL,
                 new Response.Listener<String>() {
@@ -215,7 +215,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             preferences.edit().putString("username", username).apply();
                             preferences.edit().putString("email", email).apply();
 
-                            openMainActivity(token, pk, username, email,false);
+                            openMainActivity(token, pk, username, email, false);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -242,7 +242,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Add the request to the RequestQueue.
         queue.add(jsonObjReq);
     }
+
     public final static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
 }

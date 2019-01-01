@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,8 +93,8 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String name = jsonObject.getString("name");
-                                String info = jsonObject.getString("info");
+                                String name = toUTF(jsonObject.getString("name"));
+                                String info = toUTF(jsonObject.getString("info"));
                                 events.add(new Event(name, info));
                             }
                             eventAdapter.notifyDataSetChanged();
@@ -124,5 +125,14 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+    }
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ex){
+
+        }
+        return str;
     }
 }

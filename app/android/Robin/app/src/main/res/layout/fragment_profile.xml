@@ -18,10 +18,12 @@
 
             <ImageView
                 android:id="@+id/ivBanner"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:src="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="371dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/white_rounded_corner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,8 +31,6 @@
                 android:id="@+id/ivProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
@@ -39,22 +39,23 @@
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivBanner"
-                app:layout_constraintVertical_bias="0.7" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1" />
 
             <TextView
                 android:id="@+id/tvBio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="260dp"
+                android:layout_height="83dp"
                 android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="36dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toEndOf="@+id/ivProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvEvents"
@@ -73,14 +74,14 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="148dp"
                 android:background="@drawable/white_rounded_corner"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvBio"
+                app:layout_constraintTop_toTopOf="@+id/ivBanner"
                 app:tabSelectedTextColor="@color/colorPrimary"
                 app:tabTextColor="@android:color/darker_gray">
 
@@ -103,24 +104,26 @@
             <Button
                 android:id="@+id/buttonProfile"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
+                android:layout_width="98dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
-                app:layout_constraintStart_toEndOf="@+id/ivProfile"
-                app:layout_constraintTop_toBottomOf="@+id/ivBanner" />
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/tvBio"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
             <TextView
                 android:id="@+id/tvName"
+                style="@style/Base.TextAppearance.AppCompat.Medium"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="29dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                style="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
                 app:layout_constraintEnd_toEndOf="parent"

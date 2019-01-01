@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,10 +114,10 @@ public class EditProfileFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            String username = jsonObject.getString("username");
-                            String fname = jsonObject.getString("first_name");
-                            String lname = jsonObject.getString("last_name");
-                            String bio = jsonObject.getString("bio");
+                            String username = toUTF(jsonObject.getString("username"));
+                            String fname = toUTF(jsonObject.getString("first_name"));
+                            String lname = toUTF(jsonObject.getString("last_name"));
+                            String bio = toUTF(jsonObject.getString("bio"));
                             String image = jsonObject.getString("profile_pic");
 
                             etName.setText(fname);
@@ -217,5 +218,14 @@ public class EditProfileFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ex){
+
+        }
+        return str;
     }
 }

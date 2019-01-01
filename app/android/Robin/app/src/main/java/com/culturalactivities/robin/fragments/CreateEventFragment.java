@@ -106,7 +106,6 @@ public class CreateEventFragment extends Fragment {
     }
 
     private void setView(View view) {
-        activity.getSupportActionBar().setSubtitle("Create Event");
         MainActivity.progressBar.setVisibility(View.INVISIBLE);
         //reference = new Reference();
         queue = Volley.newRequestQueue(activity);

@@ -50,7 +50,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,8 +81,10 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     // for comment
     private Button buttonComment;
-    private EditText etComment;
-
+    private EditText etComment, etCommentTitle;
+    private Date today = Calendar.getInstance().getTime();
+    private SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+    private String date = fmt.format(today);
     //Google Map
     GoogleMap map;
     MapView mapView;
@@ -133,7 +138,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     @SuppressLint("SetTextI18n")
     private void setView(View view) {
         queue = Volley.newRequestQueue(activity);
-        activity.getSupportActionBar().setSubtitle(event.getEventName());
         ivBanner = view.findViewById(R.id.ivProfile);
         tvTitle = view.findViewById(R.id.tvTitle);
         tvArtistInfo = view.findViewById(R.id.tvArtistInfo);
@@ -187,19 +191,20 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
         // make comment
         etComment = view.findViewById(R.id.etComment);
+        etCommentTitle = view.findViewById(R.id.etCommentTitle);
         buttonComment = view.findViewById(R.id.buttonComment);
 
         buttonComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String comment = etComment.getText().toString();
-
+                String commentTitle = etCommentTitle.getText().toString();
                 if (TextUtils.isEmpty(comment)){
                     Toast.makeText(activity, "Please write a comment", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Toast.makeText(activity, "Waiting for real comment api endpoint", Toast.LENGTH_SHORT).show();
-                //makeComment(comment);
+                makeComment(comment,commentTitle);
             }
         });
     }
@@ -240,7 +245,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         queue.add(jsonObjReq);
     }
 
-    private void makeComment(final String comment) {
+    private void makeComment(final String comment, final String commentTitle) {
+
         StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 Constants.COMMENT_URL,
                 new Response.Listener<String>() {
@@ -263,7 +269,15 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 params.put("author", MainActivity.pk);
                 params.put("event", event.getId());
                 params.put("content", comment);
-                params.put("Content-Type", "application/json; charset=utf-8");
+                params.put("date", date);
+                params.put("title", commentTitle);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
         };

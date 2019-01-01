@@ -34,25 +34,31 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
+import com.culturalactivities.robin.utilities.Constants;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -60,6 +66,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CreateEventFragment extends Fragment {
+
+    private String eventid;
+    private boolean isEditMod = false;
     RequestQueue queue;
     private Button buttonSelectDate, buttonSelectHour, buttonSelectLocation, buttonCreate;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -70,7 +79,6 @@ public class CreateEventFragment extends Fragment {
     private Spinner spinnerCurrencies;
     private EditText etTitle, etArtist, etDescription, etPrice, etLatitude, etLongitude, etTags;
     private ImageView ivEvent;
-    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
     private AppCompatActivity activity;
     @Override
     public void onAttach(Context context) {
@@ -81,8 +89,17 @@ public class CreateEventFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CreateEventFragment newInstance() {
-        return new CreateEventFragment();
+    public static CreateEventFragment newInstance(String eventid) {
+        CreateEventFragment fragment = new CreateEventFragment();
+        fragment.setEvent(eventid);
+        return fragment;
+    }
+
+    private void setEvent(String eventid){
+        this.eventid = eventid;
+        if (eventid != null){
+            isEditMod = true;
+        }
     }
 
     @Override
@@ -146,10 +163,19 @@ public class CreateEventFragment extends Fragment {
             }
         });
         buttonCreate = view.findViewById(R.id.buttonCreate);
+        if (isEditMod){
+            buttonCreate.setText("Save Changes");
+        }else {
+            buttonCreate.setText("Create Event");
+        }
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               createEvent();
+                if (isEditMod){
+                    editEvent();
+                }else {
+                    createEvent();
+                }
             }
         });
         buttonSelectHour.setOnClickListener(new View.OnClickListener() {
@@ -235,9 +261,147 @@ public class CreateEventFragment extends Fragment {
             }
         });
 
+
+        // fill event data if event mode
+        if (isEditMod){
+            getEventDetails();
+        }
+
         List<String> currencies = Arrays.asList(activity.getResources().getStringArray(R.array.currencies));
 
         spinnerCurrencies.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, currencies));
+    }
+
+    private void getEventDetails() {
+        String url = Constants.EVENTS_URL + eventid;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                            String id = toUTF(jsonObject.getString("id"));
+                            String name = toUTF(jsonObject.getString("name"));
+                            String info = toUTF(jsonObject.getString("info"));
+                            String artist = toUTF(jsonObject.getString("artist"));
+                            String date = toUTF(jsonObject.getString("date"));
+                            String time = toUTF(jsonObject.getString("time"));
+                            String price = toUTF(jsonObject.getString("price"));
+                            Float rating = Float.valueOf(jsonObject.getString("rating"));
+                            String lat = toUTF(jsonObject.getString("rating"));
+                            String lon = toUTF(jsonObject.getString("rating"));
+
+                            etTitle.setText(name);
+                            etArtist.setText(artist);
+                            etDescription.setText(info);
+                            etLatitude.setText(lat);
+                            etLongitude.setText(lon);
+                            etPrice.setText(price);
+                            buttonSelectDate.setText(date);
+                            buttonSelectHour.setText(hour);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    private void editEvent() {
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        final StringRequest jsonObjReq = new StringRequest(Request.Method.PATCH,
+                Constants.EDIT_EVENTS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MainActivity.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // As of f605da3 the following should work
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        Log.d("RESSOO", res);
+                        JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", etTitle.getText().toString().trim());
+                params.put("location", "location");
+                params.put("info", etDescription.getText().toString());
+                params.put("loc_lattitude", etLatitude.getText().toString());
+                params.put("loc_longitude", etLongitude.getText().toString());
+                params.put("city", "");
+                params.put("country", "");
+                params.put("artist", etArtist.getText().toString().trim());
+                params.put("date", buttonSelectDate.getText().toString().trim());
+                params.put("time", buttonSelectHour.getText().toString().trim());
+                params.put("price", etPrice.getText().toString().trim());
+
+                ArrayList<Integer> arrayList = new ArrayList<>();
+                Gson gson = new Gson();
+
+                String myarray = gson.toJson(arrayList);
+                params.put("tags", myarray);
+                params.put("ratings", myarray);
+                params.put("comments", myarray);
+                params.put("images", myarray);
+
+                Log.d("CREATE PARAMS", params.toString());
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     @Override
@@ -313,9 +477,17 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void createEvent(){
+        if (!isDateSelected){
+            Toast.makeText(activity, "Please select date!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!isHourSelected){
+            Toast.makeText(activity, "Please select hour!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         final StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
-                EVENTS_URL,
+                Constants.EVENTS_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -326,7 +498,23 @@ public class CreateEventFragment extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ERROOO", error.toString());
+                // As of f605da3 the following should work
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        Log.d("RESSOO", res);
+                        JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        e2.printStackTrace();
+                    }
+                }
             }
         }) {
 
@@ -345,22 +533,36 @@ public class CreateEventFragment extends Fragment {
                 params.put("time", buttonSelectHour.getText().toString().trim());
                 params.put("price", etPrice.getText().toString().trim());
 
-                JSONArray array = new JSONArray();
-                params.put("tags", array.toString());
-                params.put("ratings", array.toString());
-                params.put("comments", array.toString());
-                params.put("images", array.toString());
+                ArrayList<Integer> arrayList = new ArrayList<>();
+                Gson gson = new Gson();
+
+                String myarray = gson.toJson(arrayList);
+                params.put("tags", myarray);
+                params.put("ratings", myarray);
+                params.put("comments", myarray);
+                params.put("images", myarray);
+
+                Log.d("CREATE PARAMS", params.toString());
                 return params;
             }
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
         };
         // Add the request to the RequestQueue.
         queue.add(jsonObjReq);
+    }
+
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ignored){
+
+        }
+        return str;
     }
 }

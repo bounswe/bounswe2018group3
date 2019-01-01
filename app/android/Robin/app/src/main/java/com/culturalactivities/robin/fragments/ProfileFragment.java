@@ -10,16 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,11 +29,9 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
-import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
-import com.culturalactivities.robin.models.Image;
-import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
+import com.culturalactivities.robin.utilities.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,11 +56,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     RequestQueue queue;
     public static final String USER_ID = "user_id";
     private String USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
-    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
     private String userid;
 
-    private SearchUserAdapter userAdapter;
-    private ArrayList<User> users = new ArrayList<>();
+    private SearchUserAdapter followersAdapter, followingAdapters;
+    private ArrayList<User> followers = new ArrayList<>();
+    private ArrayList<User> followings = new ArrayList<>();
 
     private ImageView ivProfile;
     private TextView tvName, tvBio;
@@ -110,7 +105,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
 
-        userAdapter = new SearchUserAdapter(activity, users, ProfileFragment.this);
+        followersAdapter = new SearchUserAdapter(activity, followers, ProfileFragment.this);
+        followingAdapters = new SearchUserAdapter(activity, followings, ProfileFragment.this);
 
         buttonProfile = view.findViewById(R.id.buttonProfile);
         if (userid.equals(MainActivity.pk)){
@@ -118,6 +114,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             buttonProfile.setText("EDIT");
         } else {
             isMe = false;
+            if (isFriend){
+                buttonProfile.setText("Unfollow");
+            }else {
+                buttonProfile.setText("Follow");
+            }
         }
 
         buttonProfile.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +129,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     transaction.add(R.id.fragment, EditProfileFragment.newInstance());
                     transaction.addToBackStack("addEPF");
                     transaction.commit();
+                }else if (isFriend){
+                    follow(Request.Method.DELETE);
+                }else {
+                    follow(Request.Method.GET);
                 }
             }
         });
@@ -136,8 +141,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         ivProfile = view.findViewById(R.id.ivProfile);
         tvName = view.findViewById(R.id.tvName);
         tvBio = view.findViewById(R.id.tvBio);
-        getProfile(userid);
-        getEvents();
 
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -145,13 +148,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
-                        getEvents();
+                        recyclerView.setAdapter(eventAdapter);
+                        eventAdapter.notifyDataSetChanged();
                         break;
                     case 1:
-                        getFollowings();
+                        recyclerView.setAdapter(followingAdapters);
+                        followersAdapter.notifyDataSetChanged();
                         break;
                     case 2:
-                        getFollowings();
+                        recyclerView.setAdapter(followersAdapter);
+                        followersAdapter.notifyDataSetChanged();
                         break;
                 }
             }
@@ -166,102 +172,87 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-    }
 
-    private void getEvents() {
-        String USER_URL = USERS_URL+MainActivity.pk;
-        events.clear();
-        MainActivity.progressBar.setVisibility(View.VISIBLE);
-        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                USER_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            events.add(new Event(2,"0","Future Events"));
-                            JSONObject jsonObj = new JSONObject(response);;
-                            JSONArray futureEventArray= jsonObj.getJSONArray("futureEvents");
-                            Log.e("beforeFutureEvents",futureEventArray.toString());
-                            for(int j=0;j<futureEventArray.length();j++){
-                                events.add(new Event(1, String.valueOf(futureEventArray.getJSONArray(j).get(0)),futureEventArray.getJSONArray(j).get(1).toString()));
-                            }
-
-                            events.add(new Event(2,"0","Past Events"));
-                            jsonObj = new JSONObject(response);;
-                            JSONArray pastEventArray= jsonObj.getJSONArray("pastEvents");
-                            Log.e("beforePastEvents",pastEventArray.toString());
-                            for(int j=0;j<pastEventArray.length();j++){
-                                events.add(new Event(1, String.valueOf(pastEventArray.getJSONArray(j).get(0)),pastEventArray.getJSONArray(j).get(1).toString()));
-                            }
-                            events.add(new Event(2,"0","Interested Events"));
-                            jsonObj = new JSONObject(response);;
-                            JSONArray interestedEventArray= jsonObj.getJSONArray("interestedEvents");
-                            Log.e("beforeInterestedEvents",interestedEventArray.toString());
-                            for(int j=0;j<interestedEventArray.length();j++){
-                                events.add(new Event(1,String.valueOf(interestedEventArray.getJSONArray(j).get(0)),interestedEventArray.getJSONArray(j).get(1).toString()));
-                            }
-                            events.add(new Event(2,"0","Created Events"));
-                            jsonObj = new JSONObject(response);
-                            JSONArray createdEventArray= jsonObj.getJSONArray("createdEvents");
-                            Log.e("beforeCreatedEvents",createdEventArray.toString());
-                            for(int j=0;j<createdEventArray.length();j++){
-                                events.add(new Event(1, String.valueOf(createdEventArray.getJSONArray(j).get(0)),createdEventArray.getJSONArray(j).get(1).toString()));
-                            }
-                            recyclerView.setAdapter(eventAdapter);
-                            eventAdapter.notifyDataSetChanged();
-                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
-                params.put("Authorization", "JWT " + MainActivity.token);
-                return params;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
-            }
-        };
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjReq);
+        getProfile(userid);
     }
 
     private void getProfile(String id) {
         String UURL = USERS_URL + id;
+        events.clear();
+        followers.clear();
+        followings.clear();
+        isFriend = false;
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 UURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        MainActivity.progressBar.setVisibility(View.INVISIBLE);
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String username = toUTF(jsonObject.getString("username"));
-                            String fname = toUTF(jsonObject.getString("first_name"));
-                            String lname = toUTF(jsonObject.getString("last_name"));
-                            String bio = toUTF(jsonObject.getString("bio"));
-                            String image = toUTF(jsonObject.getString("profile_pic"));
+                            JSONObject jsonObj = new JSONObject(response);
+
+                            // get user base info
+                            String username = toUTF(jsonObj.getString("username"));
+                            String fname = toUTF(jsonObj.getString("first_name"));
+                            String lname = toUTF(jsonObj.getString("last_name"));
+                            String bio = toUTF(jsonObj.getString("bio"));
+                            String image = toUTF(jsonObj.getString("profile_pic"));
 
                             tvName.setText(fname + " " + lname);
                             //Glide.with(activity).load(image).into(ivProfile);
                             // TODO: 05.12.2018 Waiting for profile picture link from backend
                             tvBio.setText(bio);
-                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+
+
+
+                            // get events of user
+                            events.add(new Event(false, 2,"0","Future Events"));
+                            JSONArray futureEventArray= jsonObj.getJSONArray("futureEvents");
+                            for(int j=0;j<futureEventArray.length();j++){
+                                events.add(new Event(false,1, String.valueOf(futureEventArray.getJSONArray(j).get(0)),futureEventArray.getJSONArray(j).get(1).toString()));
+                            }
+                            events.add(new Event(false, 2,"0","Past Events"));
+                            jsonObj = new JSONObject(response);;
+                            JSONArray pastEventArray= jsonObj.getJSONArray("pastEvents");
+                            for(int j=0;j<pastEventArray.length();j++){
+                                events.add(new Event(false,1, String.valueOf(pastEventArray.getJSONArray(j).get(0)),pastEventArray.getJSONArray(j).get(1).toString()));
+                            }
+                            events.add(new Event(false, 2,"0","Interested Events"));
+                            jsonObj = new JSONObject(response);;
+                            JSONArray interestedEventArray= jsonObj.getJSONArray("interestedEvents");
+                            for(int j=0;j<interestedEventArray.length();j++){
+                                events.add(new Event(false, 1,String.valueOf(interestedEventArray.getJSONArray(j).get(0)),interestedEventArray.getJSONArray(j).get(1).toString()));
+                            }
+                            events.add(new Event(false, 2,"0","Created Events"));
+                            jsonObj = new JSONObject(response);
+                            JSONArray createdEventArray= jsonObj.getJSONArray("createdEvents");
+                            for(int j=0;j<createdEventArray.length();j++){
+                                if (isMe){
+                                    events.add(new Event(true, 1, String.valueOf(createdEventArray.getJSONArray(j).get(0)),createdEventArray.getJSONArray(j).get(1).toString()));
+                                }else{
+                                    events.add(new Event(false, 1, String.valueOf(createdEventArray.getJSONArray(j).get(0)),createdEventArray.getJSONArray(j).get(1).toString()));
+                                }
+                            }
+
+                            // get followers
+                            JSONArray followersArray = jsonObj.getJSONArray("followers");
+                            for (int i = 0; i < followersArray.length(); i++) {
+                                JSONArray array = followersArray.getJSONArray(i);
+                                String uid = array.getString(0);
+                                followers.add(new User(array.getString(0), array.getString(5), array.getString(1), array.getString(2), array.getString(3)));
+                                if (uid.equals(MainActivity.pk)){
+                                    isFriend = true;
+                                    buttonProfile.setText("Unfollow");
+                                }
+                            }
+
+                            // get followings
+                            JSONArray followingArray = jsonObj.getJSONArray("followedUsers");
+                            for (int i = 0; i < followingArray.length(); i++) {
+                                JSONArray array = followingArray.getJSONArray(i);
+                                followings.add(new User(array.getString(0), array.getString(5), array.getString(1), array.getString(2), array.getString(3)));
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -294,35 +285,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         queue.add(jsonObjReq);
     }
 
-    private void getFollowings() {
-        users.clear();
-        MainActivity.progressBar.setVisibility(View.VISIBLE);
-        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                USERS_URL,
+    private void follow(int requestType){
+        String url = Constants.FOLLOW_USER_URL + userid;
+        StringRequest jsonObjReq = new StringRequest(requestType, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = toUTF(jsonObject.getString("id"));
-                                String username = toUTF(jsonObject.getString("username"));
-                                String fname = toUTF(jsonObject.getString("first_name"));
-                                String lname = toUTF(jsonObject.getString("last_name"));
-                                String bio = toUTF(jsonObject.getString("bio"));
-                                //String colorScheme = jsonObject.getString("colorScheme");
-                                //String userimage = jsonObject.getString("profile_pic");
-                                double rating = Double.parseDouble(jsonObject.getString("rating"));
-                                users.add(new User(id, "", username, fname, lname, bio, null, ""));
-                            }
-                            recyclerView.setAdapter(userAdapter);
-                            userAdapter.notifyDataSetChanged();
-                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Toast.makeText(activity, response.substring(1, response.length()-1), Toast.LENGTH_SHORT).show();
+                        getProfile(userid);
                     }
                 }, new Response.ErrorListener() {
 
@@ -331,12 +301,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             }
         }) {
-
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("type", "post");
-                params.put("Content-Type", "application/json");
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
@@ -361,6 +328,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        int position = recyclerView.getChildLayoutPosition(view);
+        switch (tabLayout.getSelectedTabPosition()){
+            case 0:
+                break;
+            case 1:
+                FragmentTransaction transaction2 = activity.getSupportFragmentManager().beginTransaction();
+                transaction2.add(R.id.fragment, ProfileFragment.newInstance(followings.get(position).getId()));
+                transaction2.addToBackStack("addPF");
+                transaction2.commit();
+                break;
+            case 2:
+                FragmentTransaction transaction3 = activity.getSupportFragmentManager().beginTransaction();
+                transaction3.add(R.id.fragment, ProfileFragment.newInstance(followers.get(position).getId()));
+                transaction3.addToBackStack("addPF");
+                transaction3.commit();
+                break;
+        }
 
     }
     public String toUTF(String str){

@@ -16,7 +16,16 @@ public class User {
         this.password = password;
     }
 
-    public User(String id, String email, String username,  String name, String surname, String bio, String profileImage, String colorSchemeInf) {
+
+    public User(String id, String username, String name, String surname, String profileImage) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.profileImage = profileImage;
+    }
+
+    public User(String id, String email, String username, String name, String surname, String bio, String profileImage, String colorSchemeInf) {
         this.id = id;
         this.email = email;
         this.username = username;

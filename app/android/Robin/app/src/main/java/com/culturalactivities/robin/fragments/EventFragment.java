@@ -235,7 +235,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void getEventDetails() {
-        String url = Constants.EVENTS + eventid;
+        String url = Constants.EVENTS_URL + eventid;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -316,7 +316,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void setInterested(int requestCode) {
-        String url = Constants.EVENT_INTEREST + event.getId();
+        String url = Constants.EVENT_INTEREST_URL + event.getId();
         StringRequest jsonObjReq = new StringRequest(requestCode,
                 url,
                 new Response.Listener<String>() {
@@ -350,8 +350,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         queue.add(jsonObjReq);
     }
     private void setAttend(int requestType) {
-        String url = Constants.EVENT_ATTEND + event.getId();
-        Log.d("ATURRLLL", url);
+        String url = Constants.EVENT_ATTEND_URL + event.getId();
         StringRequest jsonObjReq = new StringRequest(requestType, url,
                 new Response.Listener<String>() {
                     @Override

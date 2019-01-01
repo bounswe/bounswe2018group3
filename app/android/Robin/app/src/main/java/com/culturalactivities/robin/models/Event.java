@@ -6,6 +6,7 @@ public class Event {
     private int type = 0;
     private String id, eventName, eventInfo, artistInfo, date, time;
     private double price;
+    private boolean isCreated = false;
     private float rating;
     private Location location;
     private ArrayList<Comment> comments = new ArrayList<>();
@@ -17,8 +18,9 @@ public class Event {
         eventName = "Event Title";
         images = new ArrayList<>();
     }
-    public Event(int type, String id, String eventName) {
+    public Event(boolean isCreated, int type, String id, String eventName) {
         this.type = type;
+        this.isCreated = isCreated;
         this.id=id;
         this.eventName=eventName;
         this.artistInfo = "";
@@ -64,6 +66,14 @@ public class Event {
         this.goingUser = goingUser;
         this.tags = tags;
         this.images = images;
+    }
+
+    public boolean isCreated() {
+        return isCreated;
+    }
+
+    public void setCreated(boolean created) {
+        isCreated = created;
     }
 
     public int getType() {

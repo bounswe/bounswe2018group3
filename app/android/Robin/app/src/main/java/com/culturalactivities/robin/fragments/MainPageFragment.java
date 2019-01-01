@@ -9,7 +9,6 @@ import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -49,9 +47,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,7 +132,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                    transaction.add(R.id.fragment, CreateEventFragment.newInstance());
+                    transaction.add(R.id.fragment, CreateEventFragment.newInstance(null));
                     transaction.addToBackStack("addEPF");
                     transaction.commit();
 

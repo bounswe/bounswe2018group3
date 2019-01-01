@@ -74,9 +74,10 @@ export default class ProfileCard extends React.Component{
       //likes: "",
       //hates: "",
       //favourites: "",
-      attendedEvents: "",
-      willAttendEvents: "",
-      createdEvents: "",
+      pastEvents: [],
+      futureEvents: [],
+      createdEvents: [],
+      interestedEvents: [],
       chosen_profile_pic: "",
       profile_pic: {},
       profile_photo: {},
@@ -110,7 +111,8 @@ export default class ProfileCard extends React.Component{
     };
     //console.log(options)
     await axios(options).then(async response => {
-      //console.log(response);
+      console.log("did mount");
+      console.log(response);
       if(response.status === 200){
         console.log(response)
         this.setState({
@@ -129,6 +131,10 @@ export default class ProfileCard extends React.Component{
           profile_pic: response.data.profile_pic,
           profile_photo: {},
           private: response.data.is_private,
+          pastEvents: response.data.pastEvents,
+          createdEvents: response.data.createdEvents,
+          futureEvents: response.data.futureEvents,
+          interestedEvents: response.data.interestedEvents,
         }); 
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){
@@ -306,6 +312,7 @@ export default class ProfileCard extends React.Component{
   }
 
   render(){
+    console.log(this.state);
     if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === ""){
       return(
         <div>
@@ -410,13 +417,36 @@ export default class ProfileCard extends React.Component{
                       <div className="row">
                         <div className="col-md-12">
                           <h5>Events I have attended to</h5>
-                          <p> {this.state.attendedEvents}</p>
+                          <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.willAttendEvents}</p>
+                          <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
+                          <hr/>
+                          <h5>Events I am interested in</h5>
+                          <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents}</p>
+                          <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                         </div>
                       </div>
@@ -812,14 +842,37 @@ export default class ProfileCard extends React.Component{
                     <div className="tab-pane" id="events">
                       <div className="row">
                         <div className="col-md-12">
-                          <h5>Events I have attended to</h5>
-                          <p> {this.state.attendedEvents}</p>
+                        <h5>Events I have attended to</h5>
+                          <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.willAttendEvents}</p>
+                          <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
+                          <hr/>
+                          <h5>Events I am interested in</h5>
+                          <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents}</p>
+                          <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
+                            var eventLink = "event/" + event.id;
+                            return(
+                              <Link to={eventLink}> {event.name} </Link>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                         </div>
                       </div>

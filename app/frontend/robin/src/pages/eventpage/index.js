@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { EVENT_URL, EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
 
 import "./eventpage.css"
 
@@ -131,10 +131,46 @@ handleDeleteEvent(e){
 }
 handleJoinClick(){
   this.setState({joined: !this.state.joined})
+
+  var headers= {
+    "Content-Type": "application/json",
+    "Authorization" : "JWT " + Cookies.get("token")
+  };
+  var options = {
+    method: "GET",
+    url: EVENT_ATTEND_URL + this.state.event.id,
+    headers: headers,
+  };
+  axios(options).then(response => {
+    if(response.status === 200){
+      console.log(response);      
+    }
+  }).catch(error => {
+    console.error(error);
+    this.setState({error: true});
+  })
 }
 
 handleInterestedClick(){
   this.setState({interested: !this.state.interested})
+
+  var headers= {
+    "Content-Type": "application/json",
+    "Authorization" : "JWT " + Cookies.get("token")
+  };
+  var options = {
+    method: "GET",
+    url: EVENT_INTEREST_URL + this.state.event.id,
+    headers: headers,
+  };
+  axios(options).then(response => {
+    if(response.status === 200){
+      console.log(response);      
+    }
+  }).catch(error => {
+    console.error(error);
+    this.setState({error: true});
+  })
 }
 
 handleJoin(){

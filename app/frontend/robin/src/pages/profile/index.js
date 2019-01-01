@@ -7,7 +7,7 @@ import axios from 'axios';
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 
-import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
+import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL, FOLLOW_URL } from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -94,6 +94,7 @@ export default class ProfileCard extends React.Component{
     //this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
     this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
+    this.follow = this.follow.bind(this);
   }
 
   async componentDidMount(){
@@ -258,6 +259,26 @@ export default class ProfileCard extends React.Component{
     await this.setState({profile_photo: file})
     //console.log(this.state);
   }
+
+  follow(){
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    options = {
+      method: "GET",
+      url: FOLLOW_URL + this.props.location.pathname.substring(9),
+      headers: headers,
+    }
+    await axios(options).then(response => {
+      console.log(response);
+      if(response.status === 200){
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  } 
 
   listFriends(people){
     var ret = [];
@@ -689,7 +710,7 @@ export default class ProfileCard extends React.Component{
                 </div>
                 <div className="col-lg-8 col-md-6 order-lg-2">
                 <div className="col-12 buttons mb-10 mx-auto">
-                  <button href="" className="btn btn-md btn-success btn-block col-4 ">
+                  <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
                     <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
                     Follow
                   </button>

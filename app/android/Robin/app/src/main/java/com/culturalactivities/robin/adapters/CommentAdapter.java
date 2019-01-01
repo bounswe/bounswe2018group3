@@ -28,12 +28,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     // you provide access to all the views for a data item in a view holder
     static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        TextView tvAuthor, tvComment, tvDate;
+        TextView tvAuthor, tvComment, tvDate, tvTitle;
         RatingBar rbComment;
         ImageView ivAuthor;
         ViewHolder(View v) {
             super(v);
             tvAuthor = v.findViewById(R.id.tvAuthor);
+            tvTitle = v.findViewById(R.id.tvTitle);
             tvComment = v.findViewById(R.id.tvComment);
             tvDate = v.findViewById(R.id.tvDate);
             rbComment = v.findViewById(R.id.rbComment);
@@ -68,10 +69,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         // - replace the contents of the view with that element
         Comment comment = comments.get(position);
         holder.tvAuthor.setText(comment.getAuthor().getName());
+        holder.tvTitle.setText(comment.getTitle());
         holder.tvComment.setText(comment.getContent());
         holder.tvDate.setText(comment.getDate());
         holder.rbComment.setRating(comment.getRating());
         holder.tvAuthor.setTypeface(MainActivity.ubuntuRegular);
+        holder.tvTitle.setTypeface(MainActivity.ubuntuBold);
         holder.tvComment.setTypeface(MainActivity.ubuntuItalic);
         holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
         //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);

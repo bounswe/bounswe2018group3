@@ -303,11 +303,12 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String content = toUTF(jsonObject.getString("content"));
+                            String title = toUTF(jsonObject.getString("title"));
                             String author = toUTF(jsonObject.getString("author"));
                             String date = toUTF(jsonObject.getString("date"));
                             date=date.substring(11,16)+"  "+date.substring(0,10);
                             String event = toUTF(jsonObject.getString("event"));
-                            Comment comment = new Comment(commentId, new User(author,"","",""),event, content, date, 4);
+                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 4);
                             comments.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {

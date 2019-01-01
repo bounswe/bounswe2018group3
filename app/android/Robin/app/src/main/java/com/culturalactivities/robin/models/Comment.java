@@ -2,12 +2,13 @@ package com.culturalactivities.robin.models;
 
 public class Comment {
     private User author;
-    private String eventId;
+    private String eventId,title;
     private String content, date,id;
     private int rating;
 
-    public Comment(String id, User author, String eventId, String content, String date, int rating) {
+    public Comment(String id, User author, String eventId, String title, String content, String date, int rating) {
         this.id=id;
+        this.title=title;
         this.author = author;
         this.eventId = eventId;
         this.content = content;
@@ -41,6 +42,14 @@ public class Comment {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

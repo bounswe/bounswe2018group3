@@ -16,37 +16,6 @@ import "jquery/dist/jquery.min.js";
 import 'font-awesome/css/font-awesome.min.css';
 import "./index.css"
 
-var examplePeople = [
-  {
-    id: 3,
-    first_name: "Debbie",
-    last_name: "Smith",
-    city: "New York",
-    country: "NY",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg",
-    private: true,
-  },
-  {
-    id: 4,
-    first_name: "Michael",
-    last_name: "Anderson",
-    city: "Boston",
-    country: "MA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
-    private: false,
-
-  },
-  {
-    id: 5,
-    first_name: "Jordan",
-    last_name: "Schlansky",
-    city: "Los Angeles",
-    country: "CA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
-    private: false,
-
-  },
-]
 
 export default class ProfileCard extends React.Component{
   constructor(props){

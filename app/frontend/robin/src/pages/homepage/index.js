@@ -3,10 +3,12 @@ import { Link, Redirect } from "react-router-dom";
 
 import NavBar from "../components/navbar/index"
 import EventComp from "./components/event/index"
-import "./index.css"
+import "./index.css";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
+import img from "./deneme.jpg";
+import Annotation from 'react-image-annotation';
 import { HOMEPAGE_URL } from "../constants/backend-urls";
 
 export default class Home extends React.Component{
@@ -17,7 +19,9 @@ export default class Home extends React.Component{
       query: this.props.location.query,
       token: Cookies.get("token"),
       events : [],
-      page : 0
+      page : 0 ,
+      annotations: [],
+      annotation: {}
     };
   }
 
@@ -50,6 +54,31 @@ export default class Home extends React.Component{
     })
   } 
 
+  onChange = (annotation) => {
+    //console.log(annotation);
+    this.setState({ annotation })
+    console.log(this.state.annotations);
+    console.log(this.state.type);
+    console.log(this.state.annotation);
+    console.log(this.state.annotations);
+    console.log(this.state.annotations);
+  }
+ 
+  onSubmit = (annotation) => {
+    const { geometry, data } = annotation
+    console.log(annotation);
+    this.setState({
+      annotation: {},
+      annotations: this.state.annotations.concat({
+        geometry,
+        data: {
+          ...data,
+          id: Math.random()
+        }
+      })
+    })
+  }
+
   render(){
     if(this.state.token === undefined){
       return(
@@ -63,11 +92,22 @@ export default class Home extends React.Component{
           <NavBar currentPath={this.props.location.pathname}/>
         </div>
         <div className="eventContainer col-md-6">
-        {this.state.events.map(comp => {
-              return <EventComp title={comp.name} subtitle={comp.locatio}
-              eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
+        {//this.state.events.map(comp => {
+           //   return <EventComp title={comp.name} subtitle={comp.locatio}
+             // eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
             })}
         </div>
+        <Annotation
+          src={img}
+          alt='Two pebbles anthropomorphized holding hands'
+ 
+          annotations={this.state.annotations}
+ 
+          type={this.state.type}
+          value={this.state.annotation}
+          onChange={this.onChange}
+          onSubmit={this.onSubmit}
+        />
       </div>
     );
   }

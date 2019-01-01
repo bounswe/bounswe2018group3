@@ -6,6 +6,9 @@ import Location from "../components/map/LocationPicker"
 
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import Annotation from 'react-image-annotation';
+
+import img from "./deneme.jpg";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
@@ -28,6 +31,8 @@ export default class EventPage extends React.Component{
       interested: false,
       comments: [],
       error: false,
+      annotations: [],
+      annotation: {}
     }
     this.onStarClick = this.onStarClick.bind(this);
     this.getUser = this.getUser.bind(this);
@@ -101,6 +106,26 @@ export default class EventPage extends React.Component{
   })
 
 } 
+
+onChange = (annotation) => {
+  this.setState({ annotation })
+}
+
+onSubmit = (annotation) => {
+  const { geometry, data } = annotation
+
+  this.setState({
+    annotation: {},
+    annotations: this.state.annotations.concat({
+      geometry,
+      data: {
+        ...data,
+        id: Math.random()
+      }
+    })
+  })
+}
+
 
 handleDeleteEvent(e){
   var data = {
@@ -354,7 +379,17 @@ handleEdit(){
               </div>
             </div>
           </div>
-     
+          <Annotation
+          src={img}
+          alt='Two pebbles anthropomorphized holding hands'
+ 
+          annotations={this.state.annotations}
+ 
+          type={this.state.type}
+          value={this.state.annotation}
+          onChange={this.onChange}
+          onSubmit={this.onSubmit}
+        />
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>

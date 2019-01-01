@@ -10,7 +10,7 @@ import axios from 'axios';
 
 import "./index.css";
 
-import { USERS_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
+import { USERS_URL, GET_USER_PIC_URL, FOLLOW_URL } from "../constants/backend-urls"
 
 export default class PrivateProfile extends React.Component{
   constructor(props){
@@ -22,7 +22,7 @@ export default class PrivateProfile extends React.Component{
       profile_pic: "",
     }
 
-    this.handleAddFriend = this.handleAddFriend.bind(this);
+    this.follow = this.follow.bind(this);
   }
 
   async componentDidMount(){
@@ -74,9 +74,48 @@ export default class PrivateProfile extends React.Component{
 
   }
 
-  handleAddFriend(){
-
-  }
+  async follow(){ 
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "GET",
+          url: FOLLOW_URL + this.props.location.pathname.substring(16),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+      else{
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "DELETE",
+          url: FOLLOW_URL + this.props.location.pathname.substring(16),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+    }
+  } 
 
   render(){
     if(this.props.location.pathname.substring(16) === undefined || this.props.location.pathname.substring(16) === ""){
@@ -105,7 +144,7 @@ export default class PrivateProfile extends React.Component{
             <div className="address">								
               <p className="text-center"><i className="fa fa-lock" aria-hidden="true"></i></p>
               <p className="text-center">This user's profile is private</p>
-              <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto">
+              <button href="" className="btn btn-md btn-success btn-block w-10 mx-auto" onClick={this.follow}>
                 <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
                 Follow
               </button>

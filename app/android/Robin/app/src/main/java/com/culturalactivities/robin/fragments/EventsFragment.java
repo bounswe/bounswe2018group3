@@ -94,7 +94,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String name = toUTF(jsonObject.getString("name"));
                                 String info = toUTF(jsonObject.getString("info"));
-                                events.add(new Event(name, info));
+                                events.add(new Event(1,name, info));
                             }
                             eventAdapter.notifyDataSetChanged();
 

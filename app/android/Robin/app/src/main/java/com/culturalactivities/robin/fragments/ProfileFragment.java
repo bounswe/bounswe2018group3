@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +32,10 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
+import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
+import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
 
 import org.json.JSONArray;
@@ -134,7 +137,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         tvName = view.findViewById(R.id.tvName);
         tvBio = view.findViewById(R.id.tvBio);
         getProfile(userid);
-        getEvents(null);
+        getEvents();
 
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -142,7 +145,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
-                        getEvents(null);
+                        getEvents();
                         break;
                     case 1:
                         getFollowings();
@@ -165,34 +168,44 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void getEvents(String query) {
-        String EURL = EVENTS_URL;
-        if (query != null){
-            EURL = EVENTS_URL + "search/?search=" + query;
-        }
+    private void getEvents() {
+        String USER_URL = USERS_URL+MainActivity.pk;
         events.clear();
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
-                EURL,
+                USER_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = toUTF(jsonObject.getString("id"));
-                                String name = toUTF(jsonObject.getString("name"));
-                                String info = toUTF(jsonObject.getString("info"));
-                                String artist = toUTF(jsonObject.getString("artist"));
-                                String date = toUTF(jsonObject.getString("date"));
-                                String time = toUTF(jsonObject.getString("time"));
-                                //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
-                                Double price = Double.valueOf(jsonObject.getString("price"));
-                                Float rating = Float.valueOf(jsonObject.getString("rating"));
-                                ArrayList<Image> images = new ArrayList<>();
-                                //images.add(new Image(image, null));
-                                events.add(new Event(id, name, info, artist, date, time, price, rating, null, null, null, null, images));
+                            events.add(new Event(2,"0","Future Events"));
+                            JSONObject jsonObj = new JSONObject(response);;
+                            JSONArray futureEventArray= jsonObj.getJSONArray("futureEvents");
+                            Log.e("beforeFutureEvents",futureEventArray.toString());
+                            for(int j=0;j<futureEventArray.length();j++){
+                                events.add(new Event(1, String.valueOf(futureEventArray.getJSONArray(j).get(0)),futureEventArray.getJSONArray(j).get(1).toString()));
+                            }
+
+                            events.add(new Event(2,"0","Past Events"));
+                            jsonObj = new JSONObject(response);;
+                            JSONArray pastEventArray= jsonObj.getJSONArray("pastEvents");
+                            Log.e("beforePastEvents",pastEventArray.toString());
+                            for(int j=0;j<pastEventArray.length();j++){
+                                events.add(new Event(1, String.valueOf(pastEventArray.getJSONArray(j).get(0)),pastEventArray.getJSONArray(j).get(1).toString()));
+                            }
+                            events.add(new Event(2,"0","Interested Events"));
+                            jsonObj = new JSONObject(response);;
+                            JSONArray interestedEventArray= jsonObj.getJSONArray("interestedEvents");
+                            Log.e("beforeInterestedEvents",interestedEventArray.toString());
+                            for(int j=0;j<interestedEventArray.length();j++){
+                                events.add(new Event(1,String.valueOf(interestedEventArray.getJSONArray(j).get(0)),interestedEventArray.getJSONArray(j).get(1).toString()));
+                            }
+                            events.add(new Event(2,"0","Created Events"));
+                            jsonObj = new JSONObject(response);
+                            JSONArray createdEventArray= jsonObj.getJSONArray("createdEvents");
+                            Log.e("beforeCreatedEvents",createdEventArray.toString());
+                            for(int j=0;j<createdEventArray.length();j++){
+                                events.add(new Event(1, String.valueOf(createdEventArray.getJSONArray(j).get(0)),createdEventArray.getJSONArray(j).get(1).toString()));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();

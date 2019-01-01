@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,12 +67,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         LayoutInflater inflater =(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
         assert inflater != null;
-        if(adapterType==0){
-            view = inflater.inflate(R.layout.simple_event, parent, false);
-        }else{
-            view = inflater.inflate(R.layout.simple_user_event, parent, false);
 
+        switch (viewType){
+            case 0:
+                view = inflater.inflate(R.layout.simple_event, parent, false);
+                break;
+            case 1:
+                view = inflater.inflate(R.layout.simple_user_event, parent, false);
+                break;
+            case 2:
+                view = inflater.inflate(R.layout.simple_title, parent, false);
+                break;
+                default:
+                    view = inflater.inflate(R.layout.simple_event, parent, false);
+                    break;
         }
+
         view.setOnClickListener(onClickListener);
         return new ViewHolder(view);
     }
@@ -85,13 +96,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         Event event = events.get(position);
         holder.tvName.setText(event.getEventName());
         holder.tvName.setTypeface(MainActivity.ubuntuBold);
-        holder.tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
-        holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
-        //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
-        holder.tvArtist.setText(event.getArtistInfo());
-        holder.tvArtist.setTypeface(MainActivity.ubuntuRegular);
+        if (getItemViewType(position) == 1 || getItemViewType(position) == 0 ){
+            //holder.tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
+            holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
+            //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
+            holder.tvArtist.setText(event.getArtistInfo());
+            holder.tvArtist.setTypeface(MainActivity.ubuntuRegular);
+        }
 
-        if(adapterType==0){
+        if(getItemViewType(position)==0){
             holder.ratingBar.setRating(event.getRating());
             holder.tvDescription.setText(event.getEventInfo());
             holder.tvDescription.setTypeface(MainActivity.ubuntuItalic);
@@ -102,6 +115,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.rvTags.setAdapter(new MyStringAdapter(context, event.getTags(), onClickListener));
         }
 
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return events.get(position).getType();
     }
 
     // Return the size of your dataset (invoked by the layout manager)

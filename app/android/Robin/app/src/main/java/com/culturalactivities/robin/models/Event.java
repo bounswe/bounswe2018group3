@@ -3,6 +3,7 @@ package com.culturalactivities.robin.models;
 import java.util.ArrayList;
 
 public class Event {
+    private int type = 0;
     private String id, eventName, eventInfo, artistInfo, date, time;
     private double price;
     private float rating;
@@ -16,41 +17,10 @@ public class Event {
         eventName = "Event Title";
         images = new ArrayList<>();
     }
-
-    public Event(String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
-        this.eventName = eventName;
-        this.eventInfo = eventInfo;
-        this.artistInfo = artistInfo;
-        this.date = date;
-        this.time = time;
-        this.price = price;
-        this.rating = rating;
-        this.location = location;
-        this.comments = comments;
-        this.goingUser = goingUser;
-        this.tags = tags;
-        this.images = images;
-    }
-
-    public Event(String id, String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
-        this.id = id;
-        this.eventName = eventName;
-        this.eventInfo = eventInfo;
-        this.artistInfo = artistInfo;
-        this.date = date;
-        this.time = time;
-        this.price = price;
-        this.rating = rating;
-        this.location = location;
-        this.comments = comments;
-        this.goingUser = goingUser;
-        this.tags = tags;
-        this.images = images;
-    }
-
-    public Event(String name, String info) {
-        this.eventName = name;
-        this.eventInfo = info;
+    public Event(int type, String id, String eventName) {
+        this.type = type;
+        this.id=id;
+        this.eventName=eventName;
         this.artistInfo = "";
         this.date = "";
         this.time = "";
@@ -63,6 +33,46 @@ public class Event {
         this.images = new ArrayList<>();
     }
 
+    public Event(String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
+        this.eventName = eventName;
+        this.eventInfo = eventInfo;
+        this.artistInfo = artistInfo;
+        this.date = date;
+        type = 0;
+        this.time = time;
+        this.price = price;
+        this.rating = rating;
+        this.location = location;
+        this.comments = comments;
+        this.goingUser = goingUser;
+        this.tags = tags;
+        this.images = images;
+    }
+
+    public Event(String id, String eventName, String eventInfo, String artistInfo, String date, String time, double price, float rating, Location location, ArrayList<Comment> comments, ArrayList<User> goingUser, ArrayList<Tag> tags, ArrayList<Image> images) {
+        this.id = id;
+        type = 0;
+        this.eventName = eventName;
+        this.eventInfo = eventInfo;
+        this.artistInfo = artistInfo;
+        this.date = date;
+        this.time = time;
+        this.price = price;
+        this.rating = rating;
+        this.location = location;
+        this.comments = comments;
+        this.goingUser = goingUser;
+        this.tags = tags;
+        this.images = images;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getTime() {
         return time;

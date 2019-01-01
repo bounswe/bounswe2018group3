@@ -12,4 +12,4 @@ class EventChangeForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = UserChangeForm.Meta.fields
+        fields = ('name', 'info', 'date')

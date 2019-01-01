@@ -391,7 +391,12 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        rbEvent.setRating(Float.parseFloat(response));
+                        JSONArray jsonArray = new JSONArray();
+                        try {
+                            rbEvent.setRating(Float.parseFloat(jsonArray.get(0).toString()));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 

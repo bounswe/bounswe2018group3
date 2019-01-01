@@ -54,4 +54,4 @@ urlpatterns = [
 
     # Annotation views
     path('annotations/', include('annotations.urls'))
-] + static("userImage/pic_folder/", document_root="./pic_folder") + static("eventImage/pic_folder/", document_root="./pic_folder")
+] + static("userimages/pic_folder/", document_root="./pic_folder") + static("eventimages/pic_folder/", document_root="./pic_folder")

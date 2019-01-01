@@ -15,12 +15,12 @@ export default class CreateEvent extends React.Component {
       super(props);
       this.state = {
         redirect: "",
-        eventName: "",
-        eventInfo: "",
+        name: "",
+        info: "",
         artistName: "",
-        eventDate: "",
-        eventTime: "",
-        eventPrice: "",
+        date: "",
+        time: "",
+        price: "",
         imageLink: "",
         creator: {},
         isGoing: true,
@@ -100,28 +100,37 @@ export default class CreateEvent extends React.Component {
     handleCreate(e){
       this.setState({submitClicked: true});
       if(this.checkError()){
-        Cookies.set("eventName", this.state.eventName);
-        Cookies.set("eventInfo", this.state.eventInfo);
-        Cookies.set("eventDate", this.state.eventDate);
-        Cookies.set("eventTime", this.state.eventTime);
-        Cookies.set("eventPrice", this.state.eventPrice);
+        Cookies.set("eventName", this.state.name);
+        Cookies.set("eventInfo", this.state.info);
+        Cookies.set("eventDate", this.state.date);
+        Cookies.set("eventTime", this.state.time);
+        Cookies.set("eventPrice", this.state.price);
         Cookies.set("numberOfGuests", this.state.numberOfGuests);
       }
       else
         return;
       var data = {
-        name : this.state.eventName,
-        info : this.state.eventInfo,
+        name : this.state.name,
+        info : this.state.info,
         artist : this.state.artistName,
-        date : this.state.eventDate,
-        time : this.state.eventTime,
-        price : this.state.eventPrice,
-        country : this.state.imageLink,
-        creator: this.state.creator,
+        date : this.state.date,
+        time : this.state.time,
+        price : this.state.price,
+        comments: [],
+        ratings: [],
+        images: [],
+        tags: [],
+        //country : this.state.imageLink,
+        //creator: this.state.creator,
       };
       var headers= {
+        //"Content-Type": "multipart/form-data;boundary",
+        "Authorization" : "JWT " + Cookies.get("token"),
+        "cache-control": "no-cache",
         "Content-Type": "application/json",
-        "Authorization" : "JWT " + Cookies.get("token")
+        //"Content-Type": "application/x-www-form-urlencoded",
+        //'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+
       };
       var options = {
         method: "POST",
@@ -129,10 +138,10 @@ export default class CreateEvent extends React.Component {
         data: data,
         headers: headers,
       };
-      //console.log(options);
+      console.log(options);
       axios(options).then(response => {
         console.log(response);
-        if(response.status === 201){
+        if(response.status === 200){
           console.log(response);
           this.setState({redirect: "/createEventSuccess"});
           //window.location.reload();
@@ -144,7 +153,7 @@ export default class CreateEvent extends React.Component {
     }
 
     checkError(){
-      if(this.state.eventName === "" || this.state.eventDate === "" || this.state.eventTime === ""){
+      if(this.state.name === "" || this.state.date === "" || this.state.time === ""){
         return false;
       }
       else return true;
@@ -152,21 +161,21 @@ export default class CreateEvent extends React.Component {
 
     handleErrorMessage(){
       if(this.state.submitClicked){
-        if(this.state.eventName === ""){
+        if(this.state.name === ""){
           return(
             <div className="text-danger text-center ">
               Event name cannot be empty
             </div>
           );
         }
-        else if(this.state.eventDate === ""){
+        else if(this.state.date === ""){
           return(
             <div className="text-danger text-center ">
               Event date cannot be empty
             </div>
           );
         }
-        else if(this.state.eventTime === ""){
+        else if(this.state.time === ""){
           return(
             <div className="text-danger text-center ">
               Event time cannot be empty
@@ -197,9 +206,9 @@ export default class CreateEvent extends React.Component {
                 <label>
                   <div className="col-lg-6 event-in">
                     <input
-                      name="eventName"
+                      name="name"
                       type="text"
-                      value={this.state.eventName}
+                      value={this.state.name}
                       placeholder="Name"
                       onChange={this.handleNameChange}/>
                   </div>
@@ -212,9 +221,9 @@ export default class CreateEvent extends React.Component {
                 <label>
                   <div className="col-lg-6 event-in">
                     <input
-                      name="eventInfo"
+                      name="info"
                       type="text"
-                      value={this.state.eventInfo}
+                      value={this.state.info}
                       placeholder="Info"
                       onChange={this.handleNameChange}/>
                   </div>
@@ -241,12 +250,7 @@ export default class CreateEvent extends React.Component {
                 </div>
                 <label>
                   <div className="col-lg-6 event-in">
-                    <input
-                      name="eventDate"
-                      type="text"
-                      value={this.state.eventDate}
-                      placeholder="Date"
-                      onChange={this.handleNameChange}/>
+                    <input type="text" placeholder="yyyy-mm-dd"  name="date" value={this.state.date} onChange={this.handleNameChange}/>
                   </div>
                 </label>
               </div>
@@ -257,10 +261,10 @@ export default class CreateEvent extends React.Component {
                 <label>
                   <div className="col-lg-6 event-in">
                     <input
-                      name="eventTime"
+                      name="time"
                       type="text"
-                      value={this.state.eventTime}
-                      placeholder="Time"
+                      value={this.state.time}
+                      placeholder="hh:mm"
                       onChange={this.handleNameChange}/>
                   </div>
                 </label>
@@ -287,9 +291,9 @@ export default class CreateEvent extends React.Component {
                 <label>
                   <div className="col-lg-6 event-in">
                     <input
-                      name="eventPrice"
+                      name="price"
                       type="text"
-                      value={this.state.eventPrice}
+                      value={this.state.price}
                       placeholder="Price"
                       onChange={this.handleNameChange}/>
                   </div>

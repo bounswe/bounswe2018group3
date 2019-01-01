@@ -97,12 +97,21 @@ export default class EventPage extends React.Component{
         //console.log(response);
         if(response.status === 200){
           var annot = response.data;
-          ann = {annotations: {data:{id:annot.id, text:annot.text},
-                geometry:{height:annot.height, 
-                  type: annot.type,
-                  width: annot.width, 
-                  x:annot.x,
-                  y:annot.y}}}
+          ann = { imageLink: annot.content,
+            annotations: []
+            }
+          annot.annotations.forEach(function(elem){
+            var a = elem.target.selector;
+            var ell = {data:{id:a.image_id, text:elem.body.value},
+                      geometry:{
+                        height:a.height, 
+                        type: a.type,
+                        width: a.width, 
+                        x:a.x,
+                        y:a.y
+                      }};
+            ann.annotations.push(ell);
+          });
           var newArray = this.state.annotationArr.slice();    
           newArray.push(ann);   
           this.setState({annotationArr:newArray, error: false});
@@ -426,7 +435,7 @@ handleEdit(){
                   src={annot.imageLink}
                   alt=''
         
-                  annotations={this.state.annotations}
+                  annotations={annot.annotations}
         
                   type={this.state.type}
                   value={this.state.annotation}

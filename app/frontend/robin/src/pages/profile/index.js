@@ -82,6 +82,7 @@ export default class ProfileCard extends React.Component{
       profile_photo: {},
        /*photo: {},
       uploadPhoto: {},*/
+      private: false,
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -111,7 +112,7 @@ export default class ProfileCard extends React.Component{
     await axios(options).then(async response => {
       //console.log(response);
       if(response.status === 200){
-        //console.log(response)
+        console.log(response)
         this.setState({
           ...this.state,
           id: response.data.id,
@@ -127,6 +128,7 @@ export default class ProfileCard extends React.Component{
           private: response.data.private,
           profile_pic: response.data.profile_pic,
           profile_photo: {},
+          private: response.data.is_private,
         }); 
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){
@@ -313,12 +315,8 @@ export default class ProfileCard extends React.Component{
         </div>
       )
     }
-    if(this.state.redirect !== ""){
-      return(
-        <Redirect to={this.state.redirect}/>
-      )
-    }
-    if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
+    
+    else if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
     return (
       <div>
         <div className="mb-70">
@@ -705,6 +703,11 @@ export default class ProfileCard extends React.Component{
         </div>
       </div>
     );
+    }
+    else if(this.state.redirect !== ""){
+      return(
+        <Redirect to={this.state.redirect}/>
+      )
     }
     else{
       return (

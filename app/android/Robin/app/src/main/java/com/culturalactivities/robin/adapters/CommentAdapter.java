@@ -68,7 +68,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         Comment comment = comments.get(position);
-        holder.tvAuthor.setText(comment.getAuthor().getName());
+        holder.tvAuthor.setText(comment.getAuthor().getUsername());
         holder.tvTitle.setText(comment.getTitle());
         holder.tvComment.setText(comment.getContent());
         holder.tvDate.setText(comment.getDate());

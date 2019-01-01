@@ -143,15 +143,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-        <TextView
-            android:id="@+id/tvComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textColor="@android:color/black"
-            style="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="@string/comments"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvComments"
             android:layout_width="match_parent"

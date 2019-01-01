@@ -53,6 +53,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -234,7 +235,7 @@ public class CreateEventFragment extends Fragment {
                     day = "" + d;
                 }
 
-                eventdate = day + "." + month + "." + y;
+                eventdate = y + "-" + month + "-" + day;
                 buttonSelectDate.setText(eventdate);
                 //buttonSelectDate.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimaryLigth));
                 isDateSelected = true;
@@ -333,9 +334,10 @@ public class CreateEventFragment extends Fragment {
     }
 
     private void editEvent() {
+        String EDIT_URL=Constants.EDIT_EVENTS_URL+eventid;
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         final StringRequest jsonObjReq = new StringRequest(Request.Method.PATCH,
-                Constants.EDIT_EVENTS_URL,
+                EDIT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -349,19 +351,19 @@ public class CreateEventFragment extends Fragment {
                 // As of f605da3 the following should work
                 NetworkResponse response = error.networkResponse;
                 if (error instanceof ServerError && response != null) {
-                    try {
+                    /*try {
                         String res = new String(response.data,
                                 HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                         // Now you can use any deserializer to make sense of data
                         Log.d("RESSOO", res);
-                        JSONObject obj = new JSONObject(res);
+                        //JSONObject obj = new JSONObject(res);
                     } catch (UnsupportedEncodingException e1) {
                         // Couldn't properly decode data to string
                         e1.printStackTrace();
                     } catch (JSONException e2) {
                         // returned data is not JSONObject?
                         e2.printStackTrace();
-                    }
+                    }*/
                 }
             }
         }) {
@@ -382,13 +384,13 @@ public class CreateEventFragment extends Fragment {
                 params.put("price", etPrice.getText().toString().trim());
 
                 ArrayList<Integer> arrayList = new ArrayList<>();
-                Gson gson = new Gson();
+                /*Gson gson = new Gson();
 
                 String myarray = gson.toJson(arrayList);
                 params.put("tags", myarray);
                 params.put("ratings", myarray);
                 params.put("comments", myarray);
-                params.put("images", myarray);
+                params.put("images", myarray);*/
 
                 Log.d("CREATE PARAMS", params.toString());
                 return params;
@@ -501,19 +503,24 @@ public class CreateEventFragment extends Fragment {
                 // As of f605da3 the following should work
                 NetworkResponse response = error.networkResponse;
                 if (error instanceof ServerError && response != null) {
-                    try {
+                    /*try {
                         String res = new String(response.data,
                                 HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                         // Now you can use any deserializer to make sense of data
                         Log.d("RESSOO", res);
                         JSONObject obj = new JSONObject(res);
+                        String[] temp=new String[1];
+                        obj.put("tags", new JSONArray(Arrays.asList( temp)));
+                        obj.put("ratings", new JSONArray(Arrays.asList( temp)));
+                        obj.put("comments", new JSONArray(Arrays.asList( temp)));
+                        obj.put("images", new JSONArray(Arrays.asList( temp)));
                     } catch (UnsupportedEncodingException e1) {
                         // Couldn't properly decode data to string
                         e1.printStackTrace();
                     } catch (JSONException e2) {
                         // returned data is not JSONObject?
                         e2.printStackTrace();
-                    }
+                    }*/
                 }
             }
         }) {
@@ -536,11 +543,7 @@ public class CreateEventFragment extends Fragment {
                 ArrayList<Integer> arrayList = new ArrayList<>();
                 Gson gson = new Gson();
 
-                String myarray = gson.toJson(arrayList);
-                params.put("tags", myarray);
-                params.put("ratings", myarray);
-                params.put("comments", myarray);
-                params.put("images", myarray);
+                //String myarray = gson.toJson(arrayList);
 
                 Log.d("CREATE PARAMS", params.toString());
                 return params;

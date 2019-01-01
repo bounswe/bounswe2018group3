@@ -29,6 +29,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -163,22 +165,26 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         rbMakeRate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.e("sizeee3","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
                 rateEvent(rating);
             }
         });
-
-        // image gallery
-        rvGallery = view.findViewById(R.id.rvGallery);
-        imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
-        rvGallery.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
-        rvGallery.setAdapter(imageAdapter);
-
+        Log.e("sizeee","here "+event.getComments().size()+" "+event.getArtistInfo()+" "+eventid);
         //comments part
         recyclerView = view.findViewById(R.id.rvComments);
         commentAdapter = new CommentAdapter(activity, comments, EventFragment.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(commentAdapter);
         getComments();
+
+        Log.e("sizeee2","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
+        getEventDetails();
+        // image gallery
+        rvGallery = view.findViewById(R.id.rvGallery);
+        imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
+        rvGallery.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        rvGallery.setAdapter(imageAdapter);
+
 
         mapView = view.findViewById(R.id.map);
         if (mapView != null){
@@ -231,7 +237,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             }
         });
 
-        getEventDetails();
+
     }
 
     private void getEventDetails() {
@@ -385,6 +391,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     private void rateEvent(float rating) {
         String url = Constants.RATE_URL + event.getId()+ "/" + (int) rating;
+        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 url,
                 new Response.Listener<String>() {
@@ -439,12 +446,19 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             e.printStackTrace();
         }*/
 
-        /*StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.COMMENT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // TODO: 15.12.2018
+
+                        try {
+                            JSONObject json= new JSONObject(response);
+                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -463,6 +477,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 params.put("content", comment);
                 params.put("date", date);
                 params.put("title", commentTitle);
+                params.put("Content-Type", "application/json");
                 return params;
             }
             @Override
@@ -474,15 +489,16 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             }
         };
         // Add the request to the RequestQueue.
-        queue.add(jsonObjReq);
-        */
+        queue.add(stringRequest);
+
     }
 
     private void getComments() {
         comments.clear();
         //User user = new User("0", "test@test.com", "Tester", "password");
+        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getEventName()+" "+eventid);
         for(int i=0;i<event.getComments().size();i++){
-            //Log.e("here","here "+event.getComments().get(i).getEventId()+" "+event.getId());
+            Log.e("here","here "+event.getComments().get(i).getEventId()+" "+event.getId());
             if(event.getComments().get(i).getEventId().equals(event.getId())){
                 getComment(event.getComments().get(i).getId());
                 //user.setName(event.getComments().get(i).getId());
@@ -507,11 +523,11 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                             JSONObject jsonObject = new JSONObject(response);
                             String content = toUTF(jsonObject.getString("content"));
                             String title = toUTF(jsonObject.getString("title"));
-                            String author = toUTF(jsonObject.getString("author"));
+                            String author = toUTF(jsonObject.get("author").toString());
                             String date = toUTF(jsonObject.getString("date"));
                             date=date.substring(11,16)+"  "+date.substring(0,10);
                             String event = toUTF(jsonObject.getString("event"));
-                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 4);
+                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 0);
                             comments.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {

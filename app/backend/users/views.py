@@ -116,19 +116,24 @@ class UserRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         futureEvents = []  # TODO also add this thing to UserCreateView
         pastEvents = []
+        interestedEvents = []
         for event in user.event_set.all():
             if(event.date > datetime.date(datetime.now())):
-                futureEvents.append(event.id)
+                futureEvents.append((event.id,event.name))
             else:
-                pastEvents.append(event.id)
+                pastEvents.append((event.id,event.name))
         data['futureEvents'] = futureEvents
         data['pastEvents'] = pastEvents
+
+        for event in user.interested_event_set.all():
+            interestedEvents.append((event.id, event.name))
+        data['interestedEvents'] = interestedEvents
 
         events = Event.objects.all()
         created_events = []
         for event in events:
             if event.creator.id == user.id:
-                created_events.append(event.id)
+                created_events.append((event.id,event.name))
 
         data['createdEvents'] = created_events
         (data['rating'], data['ratingNum']) = calcRating(user.id)

@@ -55,6 +55,7 @@ class EventRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
+        data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name))
         return JsonResponse(data)
 
 """

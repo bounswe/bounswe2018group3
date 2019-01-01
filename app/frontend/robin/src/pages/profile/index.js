@@ -459,53 +459,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(examplePeople)}                                
                                 </ul>
                               </div>
                             </div>
@@ -521,53 +475,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(examplePeople)} 
                                 </ul>
                               </div>
                             </div>
@@ -885,53 +793,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(examplePeople)}
                                 </ul>
                               </div>
                             </div>
@@ -947,53 +809,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(examplePeople)}
                                 </ul>
                               </div>
                             </div>

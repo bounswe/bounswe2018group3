@@ -32,7 +32,6 @@ export default class EventPage extends React.Component{
       user: {},
     }
     this.onStarClick = this.onStarClick.bind(this);
-    this.getUser = this.getUser.bind(this);
     this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
     this.handleJoin = this.handleJoin.bind(this);
     this.handleInterested = this.handleInterested.bind(this);
@@ -73,7 +72,6 @@ export default class EventPage extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    //this.getUser(this.state.event.creator)
     if(this.state.token !== undefined){
       console.log("logged in")
       var headers= {
@@ -103,12 +101,12 @@ export default class EventPage extends React.Component{
         if(this.state.user.futureEvents.includes(parseInt(this.state.id))){
           this.setState({joined: true, interested: true});
         }
-        if(this.state.user.createdEvents.includes(parseInt(this.state.id))){
+        /*if(this.state.user.createdEvents.includes(parseInt(this.state.id))){
           this.setState({joined: true, interested: true});
         }
         if(this.state.user.pastEvents.includes(parseInt(this.state.id))){
           this.setState({joined: true, interested: true});
-        }
+        }*/
         if(this.state.user.interestedEvents.includes(parseInt(this.state.id))){
           this.setState({interested: true});
         }
@@ -118,34 +116,6 @@ export default class EventPage extends React.Component{
     }
   } 
 
-  getUser(e){
-    var data = {
-    // TODO: Change here according to API
-    //id: Cookies.get("clickedEvent")
-  };
-  var headers= {
-    "Content-Type": "application/json",
-    //"Authorization" : "JWT " + Cookies.get("token")
-  };
-  var options = {
-    method: "GET",
-    // TODO: Update search url page.
-    url: USERS_URL + e,
-    data: data,
-    headers: headers,
-  };
-  axios(options).then(response => {
-    if(response.status === 200){
-      var resp = response.data;
-      this.setState({creator: resp});
-      return resp.username;
-    }
-  }).catch(error => {
-    console.error(error);
-    this.setState({error: true});
-  })
-
-} 
 
 handleDeleteEvent(e){
   var data = {
@@ -174,48 +144,89 @@ handleDeleteEvent(e){
     this.setState({error: true});
   })
 }
-handleJoinClick(){
-  this.setState({joined: !this.state.joined})
-
-  var headers= {
-    "Content-Type": "application/json",
-    "Authorization" : "JWT " + Cookies.get("token")
-  };
-  var options = {
-    method: "GET",
-    url: EVENT_ATTEND_URL + this.state.event.id,
-    headers: headers,
-  };
-  axios(options).then(response => {
-    if(response.status === 200){
-      console.log(response);      
-    }
-  }).catch(error => {
-    console.error(error);
-    this.setState({error: true});
-  })
+async handleJoinClick(){
+  await this.setState({joined: !this.state.joined})
+  if(this.state.joined){
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "GET",
+      url: EVENT_ATTEND_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  else{
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "DELETE",
+      url: EVENT_ATTEND_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
 }
 
-handleInterestedClick(){
-  this.setState({interested: !this.state.interested})
-
-  var headers= {
-    "Content-Type": "application/json",
-    "Authorization" : "JWT " + Cookies.get("token")
-  };
-  var options = {
-    method: "GET",
-    url: EVENT_INTEREST_URL + this.state.event.id,
-    headers: headers,
-  };
-  axios(options).then(response => {
-    if(response.status === 200){
-      console.log(response);      
-    }
-  }).catch(error => {
-    console.error(error);
-    this.setState({error: true});
-  })
+async handleInterestedClick(){
+  await this.setState({interested: !this.state.interested})
+  if(this.state.interested){
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "GET",
+      url: EVENT_INTEREST_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  else{
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "DELETE",
+      url: EVENT_INTEREST_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  
 }
 
 handleJoin(){
@@ -423,9 +434,7 @@ handleEdit(){
                   Date-Time : {this.state.event.date} {this.state.event.time}
                   </div>
                   <div class="col-sm-3">
-                  {
-                    //this.getUser(this.state.event.creator)
-                  }
+                 
                   </div>
                 </div>
 

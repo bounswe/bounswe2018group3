@@ -28,6 +28,8 @@ export default class EventPage extends React.Component{
       interested: false,
       comments: [],
       error: false,
+      token: Cookies.get("token"),
+      user: {},
     }
     this.onStarClick = this.onStarClick.bind(this);
     this.getUser = this.getUser.bind(this);
@@ -72,6 +74,48 @@ export default class EventPage extends React.Component{
       this.setState({error: true});
     })
     //this.getUser(this.state.event.creator)
+    if(this.state.token !== undefined){
+      console.log("logged in")
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            ...this.state, 
+            user: {           
+              pastEvents: response.data.pastEvents.map((event, key) => {return event[0]}),
+              createdEvents: response.data.createdEvents.map((event, key) => {return event[0]}),
+              futureEvents: response.data.futureEvents.map((event, key) => {return event[0]}),
+              interestedEvents: response.data.interestedEvents.map((event, key) => {return event[0]}),
+            }
+          });
+        } 
+      }).then(() => {
+        if(this.state.user.futureEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }
+        if(this.state.user.createdEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }
+        if(this.state.user.pastEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }
+        if(this.state.user.interestedEvents.includes(parseInt(this.state.id))){
+          this.setState({interested: true});
+        }
+      }).catch(error => {
+        console.error(error);
+      })
+    }
   } 
 
   getUser(e){
@@ -175,52 +219,60 @@ handleInterestedClick(){
 }
 
 handleJoin(){
-  if(!this.state.joined){
-    return(
-      <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
-    )
-  }
-  else{
-    return(
-      <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
+  if(this.state.token !== undefined){
+    if(!this.state.joined ){
+      return(
+        <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
+      )
+    }
+    else{
+      return(
+        <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
 
-    )
+      )
+    }
   }
 }
 
 handleInterested(){
-  if(!this.state.interested){
-    return(
-      <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
-    )
-  }
-  else{
-    return(
-      <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
+  if(this.state.token !== undefined){
+    if(!this.state.interested){
+      return(
+        <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
+      )
+    }
+    else{
+      return(
+        <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
 
-    )
+      )
+    }
   }
 }
 
 handleDelete(){
-  //console.log(Cookies.get("userid") == this.state.creator.id)
-  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
-    return(
-      <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
-    )
+  if(this.state.token !== undefined){
+    //console.log(Cookies.get("userid") == this.state.creator.id)
+    if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+      return(
+        <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
+      )
+    }
+    else 
+      return;
   }
-  else 
-    return;
 }
 
 handleEdit(){
-  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
-    return(
-      <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
-    )
+  if(this.state.token !== undefined){
+    if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+      return(
+        <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
+      )
+    }
+    else 
+      return;
   }
-  else 
-    return;
 }
 
   onStarClick(nextValue, prevValue, name) {     
@@ -271,15 +323,13 @@ handleEdit(){
       body: data,
       headers: headers,
     };
-    console.log(options)
+    //console.log(options)
     axios(options).then(response => {
       if(response.status === 200){
-        console.log("comment add" + response);
         window.location.reload();
       }
     }).catch(error => {
       console.error(error);
-      console.log("error in the comment")
       this.setState({error: true});
     })
     this.setState({commentValue: ""});
@@ -312,6 +362,7 @@ handleEdit(){
   }
 
   render(){
+    console.log("state in the render");
     console.log(this.state);
     const { rating } = this.state;
     if(this.state.redirect !== ""){

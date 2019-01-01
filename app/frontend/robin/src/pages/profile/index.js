@@ -137,7 +137,7 @@ export default class ProfileCard extends React.Component{
           interestedEvents: response.data.interestedEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
         }); 
         //if(response.data.private || this.state.private){
-        if(this.state.id === 3){
+        if(this.state.private && this.state.id !== Cookies.get("userid")){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
         }
       }

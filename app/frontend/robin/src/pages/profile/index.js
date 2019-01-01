@@ -244,9 +244,11 @@ export default class ProfileCard extends React.Component{
         headers: headers,
         data: formData,
       }
+      console.log(options)
       await axios(options).then(response => {
         //console.log(response);
         if(response.status === 200){
+          //window.location.reload();
         }
         }).catch(error => {
         console.error(error);
@@ -475,14 +477,15 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interests}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                      <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>
@@ -623,7 +626,7 @@ export default class ProfileCard extends React.Component{
                           <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
                             <div className="col-lg-9">
                               <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
-                              <label value="choose a photo" for="photo">{this.state.profile_photo ? "Choose a file": this.state.profile_photo.name}</label>
+                              <label value="choose a photo" for="photo">{this.state.profile_photo.name ? this.state.profile_photo.name : "Choose a file" }</label>
                               <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
                             </div>
                           </div>
@@ -815,14 +818,15 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interests}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                        <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>

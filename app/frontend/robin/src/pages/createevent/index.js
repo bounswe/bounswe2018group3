@@ -8,7 +8,7 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
-import { EVENT_URL, USERS_URL } from "../constants/backend-urls";
+import { EVENT_URL, USERS_URL, EVENT_IMAGES_URL } from "../constants/backend-urls";
 
 export default class CreateEvent extends React.Component {
     constructor(props) {
@@ -21,7 +21,8 @@ export default class CreateEvent extends React.Component {
         date: "",
         time: "",
         price: "",
-        imageLink: "",
+        location: "",
+        photo: {},
         creator: {},
         isGoing: true,
         numberOfGuests: 2,
@@ -36,6 +37,8 @@ export default class CreateEvent extends React.Component {
       //this.handleSubmit = this.handleSubmit.bind(this);
       this.checkError = this.checkError.bind(this);
       this.getUser = this.getUser.bind(this);
+      this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
+      this.photoHandler = this.photoHandler.bind(this);
     }
 
     componentDidMount(){
@@ -109,24 +112,24 @@ export default class CreateEvent extends React.Component {
       }
       else
         return;
+        var eventId = {};
       var data = {
         name : this.state.name,
         info : this.state.info,
         artist : this.state.artistName,
         date : this.state.date,
         time : this.state.time,
+        location: this.state.location,
         price : this.state.price,
         comments: [],
         ratings: [],
         images: [],
         tags: [],
-        //country : this.state.imageLink,
         //creator: this.state.creator,
       };
       var headers= {
         //"Content-Type": "multipart/form-data;boundary",
         "Authorization" : "JWT " + Cookies.get("token"),
-        "cache-control": "no-cache",
         "Content-Type": "application/json",
         //"Content-Type": "application/x-www-form-urlencoded",
         //'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
@@ -139,13 +142,46 @@ export default class CreateEvent extends React.Component {
         headers: headers,
       };
       console.log(options);
-      axios(options).then(response => {
+      axios(options).then(async response =>  {
         console.log(response);
         if(response.status === 200){
-          console.log(response);
-          this.setState({redirect: "/createEventSuccess"});
+          eventId.id = response.data.id;
+          if(this.state.photo){
+            var headers= {
+              "Authorization" : "JWT " + Cookies.get("token"),
+              "Content-Type": "application/json",      
+            };
+            const formData = new FormData()
+            formData.append('content', this.state.photo, this.state.photo.name);
+            formData.append('event_id', response.data.id);
+      
+            console.log(formData);
+            var data = {
+              //content: formData,
+              //event_id: response.data.id,
+              //creator: this.state.creator,
+            };
+            options = {
+              method: "POST",
+              url: EVENT_IMAGES_URL,
+              headers: headers,
+              data: formData,
+            }
+            console.log(options)
+            await axios(options).then(response => {
+              //console.log(response);
+              if(response.status === 200){
+                this.setState({redirect: "event/" + eventId.id})
+              }
+              }).catch(error => {
+              console.error(error);
+              this.setState({error: true});
+            })
+          }          
+          //this.setState({redirect: "/createEventSuccess"});
           //window.location.reload();
         }
+        this.setState({redirect: "event/" + eventId.id})
       }).catch(error => {
         console.error(error);
         this.setState({error: true});
@@ -153,7 +189,7 @@ export default class CreateEvent extends React.Component {
     }
 
     checkError(){
-      if(this.state.name === "" || this.state.date === "" || this.state.time === ""){
+      if(this.state.name === "" || this.state.date === "" || this.state.time === "" || this.state.location === ""){
         return false;
       }
       else return true;
@@ -182,15 +218,36 @@ export default class CreateEvent extends React.Component {
             </div>
           );
         }
+        else if(this.state.location === ""){
+          return(
+            <div className="text-danger text-center ">
+              Event location cannot be empty
+            </div>
+          );
+        }
       }
       return;
     }
+
+    async uploadPhotoHandler(e){
+      e.preventDefault();
+      await this.setState({pic: this.state.photo});
+      //console.log(this.state);
+    }
+  
+    async photoHandler(e){
+      const file = e.target.files[0];
+      await this.setState({photo: file})
+      //console.log(this.state);
+    }
   
     render() {
+      console.log("state")
       console.log(this.state);
-      if(this.state.redirect === "/createEventSuccess"){
+      if(this.state.redirect !== ""){
         return (<Redirect to={this.state.redirect}/>)
       }
+    
       return (
         <React.Fragment>
           <div>
@@ -271,15 +328,15 @@ export default class CreateEvent extends React.Component {
               </div>
               <div className="row">
                 <div className="col-lg-6">
-                  Image link for event:
+                  Location of the event:
                 </div>
                 <label>
                   <div className="col-lg-6 event-in">
                     <input
-                      name="imageLink"
+                      name="location"
                       type="text"
-                      value={this.state.imageLink}
-                      placeholder="Image Link"
+                      value={this.state.location}
+                      placeholder="Location"
                       onChange={this.handleNameChange}/>
                   </div>
                 </label>
@@ -299,8 +356,17 @@ export default class CreateEvent extends React.Component {
                   </div>
                 </label>
               </div>
-              
-
+              <div className="row">
+              <div className="col-lg-6">
+                  Photo for the event:
+                </div>
+                
+              <div className="col-lg-6">
+                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.photoHandler(e)}/>
+                <label value="choose a photo" for="photo">{this.state.photo.name ? this.state.photo.name : "Choose a file"}</label>
+                {/*<button className="btn btn-primary" onClick={e => this.uploadPhotoHandler(e)}>Add photo</button>*/}
+              </div>
+              </div>
               <br />
               
               {this.handleErrorMessage()}

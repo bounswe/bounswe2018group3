@@ -7,9 +7,6 @@ import Location from "../components/map/LocationPicker"
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Annotation from 'react-image-annotation';
-
-import img from "./deneme.jpg";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
@@ -30,9 +27,8 @@ export default class EventPage extends React.Component{
       joined: false,
       interested: false,
       comments: [],
+      annotationArr: [],
       error: false,
-      annotations: [],
-      annotation: {}
     }
     this.onStarClick = this.onStarClick.bind(this);
     this.getUser = this.getUser.bind(this);
@@ -68,15 +64,81 @@ export default class EventPage extends React.Component{
     await axios(options).then(response => {
       //console.log(response);
       if(response.status === 200){
-        var eventList = response.data;
-        this.setState({event: eventList, error: false});
+        var event_ = response.data;
+        this.setState({event: event_, error: false});
       }
     }).catch(error => {
       console.error(error);
       this.setState({error: true});
     })
     //this.getUser(this.state.event.creator)
+    //this.getAnnotations(this.state.event.images);
   } 
+
+  getAnnotations(images){
+    images.forEach(function(element) {
+      var data = {
+        // TODO: Change here according to API
+        id: element
+      };
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        // TODO: Update search url page.
+        url: EVENT_IMAGE_URL + element,
+        data: data,
+        headers: headers,
+      };
+      //console.log(options);
+      axios(options).then(response => {
+        //console.log(response);
+        if(response.status === 200){
+          var annot = response.data;
+          ann = {data:{id:annot.id, text:annot.text},
+                geometry:{height:annot.height, 
+                  type: annot.type,
+                  width: annot.width, 
+                  x:annot.x,
+                  y:annot.y}}
+          var newArray = this.state.annotationArr.slice();    
+          newArray.push(ann);   
+          this.setState({annotationArr:newArray, error: false});
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    });
+
+  }
+  onChange = (annotation) => {
+    //console.log(annotation);
+    this.setState({ annotation })
+    console.log("Annotations");
+    console.log(this.state.annotations);
+    console.log("Type");
+    console.log(this.state.type);
+    console.log("Annotation");
+    console.log(this.state.annotation);
+  }
+ 
+  onSubmit = (annotation) => {
+    const { geometry, data } = annotation
+    console.log(annotation);
+    this.setState({
+      annotation: {},
+      annotations: this.state.annotations.concat({
+        geometry,
+        data: {
+          ...data,
+          id: Math.random()
+        }
+      })
+    })
+  }
 
   getUser(e){
     var data = {
@@ -106,26 +168,6 @@ export default class EventPage extends React.Component{
   })
 
 } 
-
-onChange = (annotation) => {
-  this.setState({ annotation })
-}
-
-onSubmit = (annotation) => {
-  const { geometry, data } = annotation
-
-  this.setState({
-    annotation: {},
-    annotations: this.state.annotations.concat({
-      geometry,
-      data: {
-        ...data,
-        id: Math.random()
-      }
-    })
-  })
-}
-
 
 handleDeleteEvent(e){
   var data = {
@@ -379,17 +421,19 @@ handleEdit(){
               </div>
             </div>
           </div>
-          <Annotation
-          src={img}
-          alt='Two pebbles anthropomorphized holding hands'
- 
-          annotations={this.state.annotations}
- 
-          type={this.state.type}
-          value={this.state.annotation}
-          onChange={this.onChange}
-          onSubmit={this.onSubmit}
-        />
+        {/* {this.state.annotationArr.map(annot => {
+              return<Annotation
+                  src={annot.imageLink}
+                  alt=''
+        
+                  annotations={this.state.annotations}
+        
+                  type={this.state.type}
+                  value={this.state.annotation}
+                  onChange={this.onChange}
+                  onSubmit={this.onSubmit}
+        /> */}
+            })}
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>

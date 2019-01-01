@@ -20,7 +20,13 @@ export default class Home extends React.Component{
       token: Cookies.get("token"),
       events : [],
       page : 0 ,
-      annotations: [],
+      annotations: [{data:{id:0.123123, text:"asdasd"},
+      geometry:{ 
+       height:21.0, 
+       type: "RECTANGLE",
+       width:11.04, 
+       x:11.3,
+       y:8.51}}],
       annotation: {}
     };
   }
@@ -54,31 +60,6 @@ export default class Home extends React.Component{
     })
   } 
 
-  onChange = (annotation) => {
-    //console.log(annotation);
-    this.setState({ annotation })
-    console.log("Annotations");
-    console.log(this.state.annotations);
-    console.log("Type");
-    console.log(this.state.type);
-    console.log("Annotation");
-    console.log(this.state.annotation);
-  }
- 
-  onSubmit = (annotation) => {
-    const { geometry, data } = annotation
-    console.log(annotation);
-    this.setState({
-      annotation: {},
-      annotations: this.state.annotations.concat({
-        geometry,
-        data: {
-          ...data,
-          id: Math.random()
-        }
-      })
-    })
-  }
 
   render(){
     if(this.state.token === undefined){
@@ -102,7 +83,7 @@ export default class Home extends React.Component{
           src={img}
           alt='Two pebbles anthropomorphized holding hands'
  
-          annotations={[{data:{id:0.123123, text:"asdasd"}, geometry:{height:21.0, type: "RECTANGLE", width:21.0}}]}
+          annotations={this.state.annotations}
  
           type={this.state.type}
           value={this.state.annotation}

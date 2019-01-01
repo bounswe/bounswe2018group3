@@ -418,7 +418,7 @@ export default class ProfileCard extends React.Component{
                         <div className="col-md-12">
                           <h5>Events I have attended to</h5>
                           <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -426,7 +426,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I will attend to</h5>
                           <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -434,7 +434,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I am interested in</h5>
                           <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -442,7 +442,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I have created</h5>
                           <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -844,7 +844,7 @@ export default class ProfileCard extends React.Component{
                         <div className="col-md-12">
                         <h5>Events I have attended to</h5>
                           <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -852,7 +852,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I will attend to</h5>
                           <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -860,7 +860,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I am interested in</h5>
                           <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}
@@ -868,7 +868,7 @@ export default class ProfileCard extends React.Component{
                           <hr/>
                           <h5>Events I have created</h5>
                           <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
-                            var eventLink = "event/" + event.id;
+                            var eventLink = "/event/" + event.id;
                             return(
                               <Link to={eventLink}> {event.name} </Link>
                             )}

@@ -46,22 +46,22 @@ class UserCreateView(mixins.ListModelMixin,
 
             userArray = []
             for tmpUser in user.followedUsers.all():
-                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
             data['followedUsers'] = userArray
 
             userArray = []
             for tmpUser in user.followers.all():
-                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
             data['followers'] = userArray
 
             userArray = []
             for tmpUser in user.blockedUsers.all():
-                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
             data['blockedUsers'] = userArray
 
             userArray = []
             for tmpUser in user.blockers.all():
-                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
             data['blockers'] = userArray
 
             userList.append(data)
@@ -172,7 +172,7 @@ class UserRetrieveView(viewsets.ModelViewSet):
 
         userArray = []
         for tmpUser in user.blockedUsers.all():
-            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.name, tmpUser.is_private, tmpUser.username))
+            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
         data['blockedUsers'] = userArray
 
         userArray = []

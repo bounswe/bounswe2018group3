@@ -264,9 +264,9 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("userid", MainActivity.pk);
-                params.put("eventid", event.getId());
-                params.put("comment", comment);
+                params.put("author", MainActivity.pk);
+                params.put("event", event.getId());
+                params.put("content", comment);
                 params.put("Content-Type", "application/json; charset=utf-8");
                 return params;
             }

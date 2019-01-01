@@ -57,11 +57,12 @@ export default class Home extends React.Component{
   onChange = (annotation) => {
     //console.log(annotation);
     this.setState({ annotation })
+    console.log("Annotations");
     console.log(this.state.annotations);
+    console.log("Type");
     console.log(this.state.type);
+    console.log("Annotation");
     console.log(this.state.annotation);
-    console.log(this.state.annotations);
-    console.log(this.state.annotations);
   }
  
   onSubmit = (annotation) => {

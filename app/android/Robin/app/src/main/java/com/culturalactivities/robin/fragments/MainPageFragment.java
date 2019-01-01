@@ -39,6 +39,7 @@ import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.adapters.SearchUserAdapter;
+import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
 import com.culturalactivities.robin.models.Tag;
@@ -245,6 +246,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         // Some Test Tags
         String[] tagsArray = {"concert", "istanbul", "event", "new", "smile", "newest", "notification", "tag", "comment"};
         final ArrayList<Tag> tags = new ArrayList<>();
+        final ArrayList<Comment> comments = new ArrayList<>();
         for(String s: tagsArray){
             tags.add(new Tag(s, 0, null));
         }
@@ -265,11 +267,15 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 String date = toUTF(jsonObject.getString("date"));
                                 String time = toUTF(jsonObject.getString("time"));
                                 //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
+                                JSONArray commentArray= jsonObject.getJSONArray("comments");
+                                for(int j=0;j<commentArray.length();j++){
+                                    comments.add(new Comment(commentArray.get(j).toString(),id));
+                                }
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
                                 //images.add(new Image(image, null));
-                                events.add(new Event(id, name,info, artist, date, time, price, rating, null, null, null, tags, images));
+                                events.add(new Event(id, name,info, artist, date, time, price, rating, null, comments, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();

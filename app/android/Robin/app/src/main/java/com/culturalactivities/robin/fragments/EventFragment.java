@@ -49,9 +49,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,7 +153,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         tvArtistInfo.setTypeface(MainActivity.ubuntuRegular);
         tvPrice.setTypeface(MainActivity.ubuntuRegular);
 
-        Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
+        //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
         tvTitle.setText(event.getEventName());
         tvDescription.setText(event.getEventInfo());
         rbEvent.setRating(event.getRating());
@@ -275,17 +277,62 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     private void getComments() {
         comments.clear();
-        User user = new User("0", "test@test.com", "Tester", "password");
-        user.setName("Tuğçe Karaman");
-        Comment comment = new Comment(user, getString(R.string.lorem_ipsum_base), "7 November 2018", 4);
-        comments.add(comment);
-        User user2 = new User("0", "test@test.com", "Tester", "pass");
+        //User user = new User("0", "test@test.com", "Tester", "password");
+        for(int i=0;i<event.getComments().size();i++){
+            //Log.e("here","here "+event.getComments().get(i).getEventId()+" "+event.getId());
+            if(event.getComments().get(i).getEventId().equals(event.getId())){
+                getComment(event.getComments().get(i).getId());
+                //user.setName(event.getComments().get(i).getId());
+            }
+        }
+        //Comment comment = new Comment("",user,"", getString(R.string.lorem_ipsum_base), "7 November 2018", 4);
+        //comments.add(comment);
+        /*User user2 = new User("0", "test@test.com", "Tester", "pass");
         user2.setName("Fatih Arslan");
-        Comment comment2 = new Comment(user2, getString(R.string.lorem_ipsum_content), "5 April 2018", 3);
+        Comment comment2 = new Comment("",user2,"", getString(R.string.lorem_ipsum_content), "5 April 2018", 3);
         comments.add(comment2);
-        commentAdapter.notifyDataSetChanged();
+        commentAdapter.notifyDataSetChanged();*/
     }
+    private void getComment(final String commentId) {
+        String getCommentURL= Constants.COMMENT_URL+commentId;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                getCommentURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String content = toUTF(jsonObject.getString("content"));
+                            String title = toUTF(jsonObject.getString("title"));
+                            String author = toUTF(jsonObject.getString("author"));
+                            String date = toUTF(jsonObject.getString("date"));
+                            date=date.substring(11,16)+"  "+date.substring(0,10);
+                            String event = toUTF(jsonObject.getString("event"));
+                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 4);
+                            comments.add(comment);
+                            commentAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
     @Override
     public void onClick(View view) {
 
@@ -299,5 +346,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         map.addMarker(new MarkerOptions().position(new LatLng(41.085830, 29.046891)).title(event.getEventName()).snippet("huhuu"));
         CameraPosition position = CameraPosition.builder().target(new LatLng(41.085830, 29.046891)).zoom(14).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ex){
+
+        }
+        return str;
     }
 }

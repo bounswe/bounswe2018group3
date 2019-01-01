@@ -190,7 +190,7 @@ class UserImageSerializer(serializers.HyperlinkedModelSerializer):
 class EventImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.EventImage
-        fields = ('url', 'id', 'content')
+        fields = ('url', 'id', 'content', 'annotations')
         #user = serializers.Field(source='user.id')
 
     def create(self, data):

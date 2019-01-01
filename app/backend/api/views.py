@@ -25,6 +25,9 @@ import django_filters
 from . import models
 from . import serializers
 
+from annotations.models import Body, Selector, Target, Annotation
+from annotations.serializers import AnnotationRWSerializer, BodyRWSerializer, SelectorRWSerializer, TargetRWSerializer
+
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
@@ -535,7 +538,44 @@ class EventImageDetail(APIView):
     def get(self, request, pk, format=None):
         photo = self.get_object(pk)
         serializer = serializers.EventImageSerializer(photo, context={'request': request})
-        return Response(serializer.data)
+
+        annotation_list = []
+        for annotation in serializer.data["annotations"]:
+            data = AnnotationRWSerializer(annotation.obj).data
+            body_object = Body.objects.get(id=data["body"])
+            body_data = BodyRWSerializer(body_object).data
+            data["body"] = body_data
+            target_object = Target.objects.get(id=data["target"])
+            target_data = TargetRWSerializer(target_object).data
+            data["target"] = target_data
+            selector_object = Selector.objects.get(id= data["target"]["selector"])
+            selector_data = SelectorRWSerializer(selector_object).data
+            data["target"]["selector"] = selector_data
+            deleted_keys = []
+            for key in data["target"]["selector"]:
+                if data["target"]["selector"][key] is None:
+                    deleted_keys.append(key)
+            for key in deleted_keys:
+                del data["target"]["selector"][key]
+            deleted_keys = []
+            for key in data["target"]:
+                if data["target"][key] is None:
+                    deleted_keys.append(key)
+            for key in deleted_keys:
+                del data["target"][key]
+            del data["id"]
+            del data["body"]["id"]
+            del data["target"]["id"]
+            del data["target"]["selector"]["id"]
+            del data["image"]
+            data["@context"] = data["context"]
+            del data["context"]
+            annotation_list.append(data)
+
+        returned_data = serializer.data
+        returned_data["annotations"] = annotation_list
+
+        return Response(returned_data)
 
     def post(self, request, pk, format=None):
         photo = self.get_object(pk)

@@ -55,11 +55,6 @@ class EventRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
-        if event.creator is not None:
-            data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
-        else:
-            data['creator'] = ((-1, "Deleted User", "", "Deleted User"))
-        
         return JsonResponse(data)
 
 """
@@ -98,10 +93,6 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
-            if event.creator is not None:
-                data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
-            else:
-                data['creator'] = ((-1, "Deleted User", "", "Deleted User"))
             returned_events.append(data)
         
         return JsonResponse(returned_events, safe=False)
@@ -123,10 +114,6 @@ class EventUserRelated(APIView):
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
-            if event.creator is not None:
-                data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
-            else:
-                data['creator'] = ((-1, "Deleted User", "", "Deleted User"))
             returned_events.append(data)
         return JsonResponse(returned_events[page*10:(page+1)*10], safe=False)
 
@@ -213,10 +200,6 @@ class EventCreateView(mixins.ListModelMixin,
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
-            if event.creator is not None:
-                data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
-            else:
-                data['creator'] = ((-1, "Deleted User", "", "Deleted User"))
             eventList.append(data)
         return Response(eventList)
 
@@ -234,8 +217,4 @@ class EventCreateView(mixins.ListModelMixin,
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
-        if event.creator is not None:
-            data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
-        else:
-            data['creator'] = ((-1, "Deleted User", "", "Deleted User"))
         return JsonResponse(data)

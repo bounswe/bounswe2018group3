@@ -51,4 +51,7 @@ urlpatterns = [
     path('tags/delete/<int:pk>', views.TagDeleteView.as_view({'delete': 'delete'})),
     path('tags/search/', views.TagSearchView.as_view()),
     path('tags/<int:pk>', views.TagRetrieveView.as_view()),
+
+    # Annotation views
+    path('annotations/', include('annotations.urls'))
 ] + static("userImage/pic_folder/", document_root="./pic_folder") + static("eventImage/pic_folder/", document_root="./pic_folder")

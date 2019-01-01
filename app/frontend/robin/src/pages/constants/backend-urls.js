@@ -14,6 +14,8 @@ export const GET_USER_PIC_URL = "http://139.59.128.92:8080/api/v1/users/getpic/"
 
 export const EVENT_URL = "http://139.59.128.92:8080/api/v1/events/";
 export const EVENT_COMMENTS_URL = "http://139.59.128.92:8080/api/v1/eventcomments/"
+export const EVENT_ATTEND_URL = "http://139.59.128.92:8080/api/v1/users/attend/"
+export const EVENT_INTEREST_URL = "http://139.59.128.92:8080/api/v1/users/interest/"
 
 export const HOMEPAGE_URL = "http://139.59.128.92:8080/api/v1/events/homepage/";
 

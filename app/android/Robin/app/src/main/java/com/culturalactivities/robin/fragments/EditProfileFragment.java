@@ -14,9 +14,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ public class EditProfileFragment extends Fragment {
     RequestQueue queue;
     private ImageView ivProfile;
     private EditText etName, etSurname, etBio;
+    private Button updateButton;
 
     private static final int GALLERY_INTENT = 21;
 
@@ -89,6 +92,7 @@ public class EditProfileFragment extends Fragment {
         etName = view.findViewById(R.id.etName);
         etSurname = view.findViewById(R.id.etSurname);
         etBio = view.findViewById(R.id.etBio);
+        updateButton=view.findViewById(R.id.buttonUpdate);
 
         getProfileInfo();
 
@@ -102,8 +106,52 @@ public class EditProfileFragment extends Fragment {
                 }
             }
         });
+        updateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                editProfile();
+                Toast.makeText(activity, "Your profile is updated.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+    private void editProfile() {
+        String UURL = Constants.USERS_URL + "edit/" + MainActivity.pk;
 
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.PATCH,
+                UURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MainActivity.progressBar.setVisibility(View.VISIBLE);
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("first_name", etName.getText().toString());
+                params.put("last_name", etSurname.getText().toString());
+                params.put("bio", etBio.getText().toString());
+                return params;
+            }
+        };
+        queue.add(jsonObjReq);
+    }
     private void getProfileInfo() {
         String UURL = Constants.USERS_URL + MainActivity.pk;
         MainActivity.progressBar.setVisibility(View.VISIBLE);

@@ -22,6 +22,7 @@ export default class ProfileCard extends React.Component{
     super(props);
     this.state = {
       redirect: "",
+      token: Cookies.get("token"),
       propsToken: this.props.location.token,
       id: this.props.location.pathname.substring(9),
       email: "",
@@ -55,6 +56,8 @@ export default class ProfileCard extends React.Component{
       private: false,
       followedUsers: [],
       followers: [],
+      following: false,
+      userFollowing: [],
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -66,6 +69,7 @@ export default class ProfileCard extends React.Component{
     this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
     this.follow = this.follow.bind(this);
+    this.handleFollowButton = this.handleFollowButton.bind(this);
   }
 
   async componentDidMount(){
@@ -131,8 +135,53 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+    if(this.state.token !== undefined){
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log("did mount");
+        console.log(response);
+        if(response.status === 200){
+          console.log(response)
+          this.setState({
+            userFollowing: response.data.followedUsers.map((person, key) => {return person[0]}),
+          });
+        }
+      }).catch(error => {
+        console.error(error);
+      }) 
+    }
     this.oldState = this.state;
 
+  }
+
+  handleFollowButton(){
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        return(
+          <button href="" className="btn btn-md btn-primary btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Follow
+          </button>
+        )
+      }
+      else{
+        return(
+          <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Following
+          </button>
+        )
+      }
+    }
   }
 
   async handleChange(e) {
@@ -231,24 +280,48 @@ export default class ProfileCard extends React.Component{
     //console.log(this.state);
   }
 
-  async follow(){
-    var headers= {
-      "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
-    };
-    var options = {
-      method: "GET",
-      url: FOLLOW_URL + this.props.location.pathname.substring(9),
-      headers: headers,
-    }
-    await axios(options).then(response => {
-      console.log(response);
-      if(response.status === 200){
+  async follow(){ 
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "GET",
+          url: FOLLOW_URL + this.props.location.pathname.substring(9),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
       }
-    }).catch(error => {
-      console.error(error);
-      this.setState({error: true});
-    })
+      else{
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "DELETE",
+          url: FOLLOW_URL + this.props.location.pathname.substring(9),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      
+      }
+    }
   } 
 
   listFriends(people){
@@ -265,7 +338,7 @@ export default class ProfileCard extends React.Component{
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-right my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
               <Link to={profileLink}>
@@ -284,7 +357,7 @@ export default class ProfileCard extends React.Component{
         ret.push(
           <li className="list-item col-xs-12 col-lg-6 float-left my-3">
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
               <Link to={profileLink}>
@@ -409,7 +482,7 @@ export default class ProfileCard extends React.Component{
                       <div className="row">
                         <div className="col-md-12">
                           <h5>Events I have attended to</h5>
-                          <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
+                          <p> {this.state.pastEvents.length > 0 ? this.state.pastEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -419,7 +492,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
+                          <p>{this.state.futureEvents.length > 0 ? this.state.futureEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -429,7 +502,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I am interested in</h5>
-                          <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
+                          <p>{this.state.interestedEvents.length > 0 ? this.state.interestedEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -439,7 +512,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
+                          <p>{this.state.createdEvents.length > 0 ? this.state.createdEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -690,11 +763,8 @@ export default class ProfileCard extends React.Component{
                 </div>
                 <div className="col-lg-8 col-md-6 order-lg-2">
                 <div className="col-12 buttons mb-10 mx-auto">
-                  <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
-                    <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                    Follow
-                  </button>
-                  <button href="" className="btn btn-md btn-primary btn-block col-4 ">
+                  {this.handleFollowButton()}
+                  <button href="" className="btn btn-md btn-secondary btn-block col-4 ">
                     <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
                     Message
                   </button>
@@ -752,7 +822,7 @@ export default class ProfileCard extends React.Component{
                       <div className="row">
                         <div className="col-md-12">
                         <h5>Events I have attended to</h5>
-                          <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
+                          <p> {this.state.pastEvents.length > 0 ? this.state.pastEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -762,7 +832,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
+                          <p>{this.state.futureEvents.length > 0 ? this.state.futureEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -772,7 +842,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I am interested in</h5>
-                          <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
+                          <p>{this.state.interestedEvents.length > 0 ? this.state.interestedEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>
@@ -782,7 +852,7 @@ export default class ProfileCard extends React.Component{
                           ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
+                          <p>{this.state.createdEvents.length > 0 ? this.state.createdEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
                               <div>

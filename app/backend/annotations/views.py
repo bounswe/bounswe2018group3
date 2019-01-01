@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework import generics
 from api.models import EventImage
+from users.models import CustomUser
 from rest_framework.views import APIView
 
 # Create your views here.
@@ -51,15 +52,18 @@ class AnnotationCreateView(mixins.ListModelMixin,
             del data["image"]
             data["@context"] = data["context"]
             del data["context"]
+            if data['creator'] is not None:
+                creator = CustomUser.objects.get(pk=data['creator'])
+                data['creator'] = (creator.id, creator.first_name, creator.last_name, creator.profile_pic.url, creator.is_private, creator.username)
+            else:
+                data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
             annotationList.append(data)
         return Response(annotationList)
     
     def post(self, request, *args, **kwargs):
-        print("*"*70)
         selector_data = {}
         target_data = {}
         annotation_data = {}
-        print("*"*70)
         selector_data["sel_type"] = request.data["target"]["selector"]["sel_type"]
         if request.data["target"]["selector"]["sel_type"] == "ImagePositionSelector":
             selector_data["type"] = request.data["target"]["selector"]["type"]
@@ -91,6 +95,8 @@ class AnnotationCreateView(mixins.ListModelMixin,
 
         annotation.save()
         data = serializers.AnnotationRWSerializer(annotation).data
+        creator = CustomUser.objects.get(pk=data['creator'])
+        data['creator'] = (creator.id, creator.first_name, creator.last_name, creator.profile_pic.url, creator.is_private, creator.username)
 
         return JsonResponse(data, safe=False)
 
@@ -100,13 +106,8 @@ class AnnotationDetail(APIView):
     queryset = Annotation.objects.all()
     serializer_class = serializers.AnnotationRWSerializer
 
-    def get_object(self, pk):
-        return Annotation.objects.get(pk=pk)
-
-
     def get(self, request, pk, format=None):
-        annotation = self.get_object(pk)
-
+        annotation = Annotation.objects.get(pk=pk)
         serializer =  serializers.AnnotationRWSerializer(annotation)
         data = serializer.data
         body_object = Body.objects.get(id=data["body"])
@@ -137,6 +138,11 @@ class AnnotationDetail(APIView):
         del data["image"]
         data["@context"] = data["context"]
         del data["context"]
+        if data['creator'] is not None:
+            creator = CustomUser.objects.get(pk=data['creator'])
+            data['creator'] = (creator.id, creator.first_name, creator.last_name, creator.profile_pic.url, creator.is_private, creator.username)
+        else:
+            data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
 
         return Response(data)
 

@@ -195,6 +195,7 @@ class EventImageSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, data):
         request = self.context.get("request")
+        del data["annotations"]
         if "event_id" in request.data:
             print("*"*70)
             event = models.Event.objects.get(pk =int(request.data["event_id"]))

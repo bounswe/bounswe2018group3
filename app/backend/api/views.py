@@ -570,6 +570,12 @@ class EventImageDetail(APIView):
             del data["image"]
             data["@context"] = data["context"]
             del data["context"]
+            if annotation['creator'] is not None:
+                creator = annotation['creator']
+                data['creator'] = (creator.id, creator.first_name, creator.last_name, creator.profile_pic.url, creator.is_private, creator.username)
+            else:
+                data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
+
             annotation_list.append(data)
 
         returned_data = serializer.data

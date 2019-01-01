@@ -22,7 +22,7 @@ export default class EventPage extends React.Component{
       id: this.props.location.pathname.substring(7),
       redirect : "",
       event: {},
-      creator : {},
+      creator : [],
       rating : "",
       joined: false,
       interested: false,
@@ -65,6 +65,7 @@ export default class EventPage extends React.Component{
       if(response.status === 200){
         var eventList = response.data;
         this.setState({event: eventList, error: false});
+        this.setState({creator: {id: this.state.event.creator[0], firstName: this.state.event.creator[1], lastName: this.state.event.creator[2]}});
       }
     }).catch(error => {
       console.error(error);
@@ -352,7 +353,7 @@ handleEdit(){
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
                 <div class="col-sm-9">
-                    Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.id}</a>
+                    Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.firstName + " " + this.state.creator.lastName}</a>
                   </div>
                   <div class="col-sm-9">
                     Price: {this.state.event.price}

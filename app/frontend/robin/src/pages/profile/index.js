@@ -131,10 +131,10 @@ export default class ProfileCard extends React.Component{
           profile_pic: response.data.profile_pic,
           profile_photo: {},
           private: response.data.is_private,
-          pastEvents: response.data.pastEvents,
-          createdEvents: response.data.createdEvents,
-          futureEvents: response.data.futureEvents,
-          interestedEvents: response.data.interestedEvents,
+          pastEvents: response.data.pastEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          createdEvents: response.data.createdEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          futureEvents: response.data.futureEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          interestedEvents: response.data.interestedEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
         }); 
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){

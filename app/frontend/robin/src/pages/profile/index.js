@@ -412,7 +412,9 @@ export default class ProfileCard extends React.Component{
                           <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -420,7 +422,9 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -428,7 +432,9 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -436,9 +442,12 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
+                          
                           <hr/>
                         </div>
                       </div>
@@ -746,7 +755,9 @@ export default class ProfileCard extends React.Component{
                           <p> {this.state.pastEvents ? this.state.pastEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -754,7 +765,9 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.futureEvents ? this.state.futureEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -762,7 +775,9 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.interestedEvents ? this.state.interestedEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>
@@ -770,7 +785,9 @@ export default class ProfileCard extends React.Component{
                           <p>{this.state.createdEvents ? this.state.createdEvents.map((event, key) => {
                             var eventLink = "/event/" + event.id;
                             return(
-                              <Link to={eventLink}> {event.name} </Link>
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
                             )}
                           ) : "Wow such empty"}</p>
                           <hr/>

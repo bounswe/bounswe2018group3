@@ -97,12 +97,12 @@ export default class EventPage extends React.Component{
         //console.log(response);
         if(response.status === 200){
           var annot = response.data;
-          ann = {data:{id:annot.id, text:annot.text},
+          ann = {annotations: {data:{id:annot.id, text:annot.text},
                 geometry:{height:annot.height, 
                   type: annot.type,
                   width: annot.width, 
                   x:annot.x,
-                  y:annot.y}}
+                  y:annot.y}}}
           var newArray = this.state.annotationArr.slice();    
           newArray.push(ann);   
           this.setState({annotationArr:newArray, error: false});

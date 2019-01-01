@@ -77,9 +77,11 @@ export default class ProfileCard extends React.Component{
       attendedEvents: "",
       willAttendEvents: "",
       createdEvents: "",
-      profile_pic: "",
       chosen_profile_pic: "",
-      photo: "",
+      profile_pic: {},
+      profile_photo: {},
+       /*photo: {},
+      uploadPhoto: {},*/
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -87,7 +89,7 @@ export default class ProfileCard extends React.Component{
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.listFriends = this.listFriends.bind(this);
-    this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
+    //this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
     this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
   }
@@ -120,13 +122,12 @@ export default class ProfileCard extends React.Component{
           email: response.data.email,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          profile_pic: response.data.profile_pic,
           followedUsers: response.data.followedUsers,
           followers: response.data.followers,
           private: response.data.private,
-          photo: "",
-          uploadPhoto: {},
-        });
+          profile_pic: response.data.profile_pic,
+          profile_photo: {},
+        }); 
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
@@ -150,6 +151,7 @@ export default class ProfileCard extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
+    this.oldState = this.state;
 
   }
 
@@ -164,23 +166,43 @@ export default class ProfileCard extends React.Component{
   }
 
   async handleSave(){
-    this.oldState = this.state;
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
     };
-    var body = {
-      /*bio: this.state.bio,
-      birthday: this.state.birthday,
-      city: this.state.city,
-      country: this.state.country,
-      email: this.state.email,*/
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      profile_pic: this.state.profile_pic,
-      /*followedUsers: this.state.followedUsers,
-      followers: this.state.followers,*/
-    };
+    if(this.state.profile_pic === this.oldState.profile_pic){ 
+      console.log("profilepic not changed");
+      var body = {
+        bio: this.state.bio,
+        birthday: this.state.birthday,
+        city: this.state.city,
+        country: this.state.country,
+        email: this.state.email,
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        //profile_pic: this.state.profile_pic,
+        //followedUsers: this.state.followedUsers,
+        followers: this.state.followers,
+      };
+    }
+    else{
+      console.log("profilepic changed");
+
+      var body = {
+        bio: this.state.bio,
+        birthday: this.state.birthday,
+        city: this.state.city,
+        country: this.state.country,
+        email: this.state.email,
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        profile_pic: this.state.profile_pic,
+        //followedUsers: this.state.followedUsers,
+        followers: this.state.followers,
+      };
+    }
+    this.oldState = this.state;
+
     var options = {
       method: "PATCH",
       url: EDIT_USER_URL + Cookies.get("userid"),
@@ -197,7 +219,7 @@ export default class ProfileCard extends React.Component{
       this.setState({error: true});
     })
   }
-
+/*
   uploadPhotoHandler(e){
     e.preventDefault();
     this.setState({uploadPhoto: e.target.files[0]});
@@ -206,21 +228,21 @@ export default class ProfileCard extends React.Component{
     //console.log(this.state);
   }
 
-  uploadProfilePhotoHandler(e){
-    e.preventDefault();
-    //console.log(this.state);
-  }
-
   fileChangedHandler(event){
     const file = event.target.files[0];
     this.setState({photo: file})
   }
+*/
+  async uploadProfilePhotoHandler(e){
+    e.preventDefault();
+    await this.setState({profile_pic: this.state.profile_photo, profile_photo: {}});
+    console.log(this.state);
+  }
 
-  profilePhotoHandler(e){
+  async profilePhotoHandler(e){
     const file = e.target.files[0];
-    this.setState({profile_pic: file})
-    console.log(e.target.files[0])
-
+    await this.setState({profile_photo: file})
+    console.log(this.state);
   }
 
   listFriends(people){
@@ -519,6 +541,7 @@ export default class ProfileCard extends React.Component{
                         </div>
                       </div>
                     </div>
+                    {/*
                     <div className="tab-pane" id="photos">
                       <div className="row">
                         <div className="col-md-12">
@@ -526,7 +549,7 @@ export default class ProfileCard extends React.Component{
                           <form role="form">
                             <div className="form-group row">
                               <div className="col-lg-9">
-                                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)}/>
+                                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)} />
                                 <label value="choose a photo" for="photo">{this.state.photo==="" ? "Choose a file": this.state.photo.name}</label>
                                 <button className="btn btn-primary" onClick={e => this.uploadPhotoHandler(e)}>Upload</button>
                               </div>
@@ -537,6 +560,7 @@ export default class ProfileCard extends React.Component{
                         </div>
                       </div>
                     </div>
+                    */}
                     <div className="tab-pane" id="edit">
                       <form role="form">
                         <div className="form-group row">
@@ -575,7 +599,7 @@ export default class ProfileCard extends React.Component{
                           <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
                             <div className="col-lg-9">
                               <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
-                              <label value="choose a photo" for="photo">{this.state.photo==="" ? "Choose a file": this.state.photo.name}</label>
+                              <label value="choose a photo" for="photo">{this.state.profile_photo ? "Choose a file": this.state.profile_photo.name}</label>
                               <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
                             </div>
                           </div>

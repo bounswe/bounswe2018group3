@@ -99,6 +99,7 @@ class UserCommentCreateView(mixins.ListModelMixin,
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
             del data['ratings']
+            data['authorName'] = comment.author.username
             commentList.append(data)
         return Response(commentList)
     
@@ -109,6 +110,7 @@ class UserCommentCreateView(mixins.ListModelMixin,
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
         del data['ratings']
+        data['authorName'] = comment.author.username
         return JsonResponse(data)
 
 class UserCommentEditView(generics.UpdateAPIView):
@@ -127,6 +129,7 @@ class UserCommentRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
         del data['ratings']
+        data['authorName'] = comment.author.username
         return JsonResponse(data)
 
 class UserCommentDeleteView(viewsets.ModelViewSet):
@@ -168,6 +171,7 @@ class UserCommentSearchView(generics.ListAPIView): # TODO does not show ratings
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRatingU(comment.id)
             del data['ratings']
+            data['authorName'] = comment.author.username
             returned_usercomments.append(data)
         
         return JsonResponse(returned_usercomments, safe=False)
@@ -257,6 +261,7 @@ class EventCommentCreateView(mixins.ListModelMixin,
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
             del data['ratings']
+            data['authorName'] = comment.author.username
             commentList.append(data)
         return Response(commentList)
 
@@ -267,6 +272,7 @@ class EventCommentCreateView(mixins.ListModelMixin,
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
         del data['ratings']
+        data['authorName'] = comment.author.username
         return JsonResponse(data)
 
 class EventCommentEditView(generics.UpdateAPIView):
@@ -297,6 +303,7 @@ class EventCommentRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
         del data['ratings']
+        data['authorName'] = comment.author.username
         return JsonResponse(data)
 
 class EventCommentFilter(django_filters.FilterSet):
@@ -327,6 +334,7 @@ class EventCommentSearchView(generics.ListAPIView): # TODO does not show ratings
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
             del data['ratings']
+            data['authorName'] = comment.author.username
             returned_eventcomments.append(data)
         
         return JsonResponse(returned_eventcomments, safe=False)

@@ -55,7 +55,7 @@ class EventRetrieveView(viewsets.ModelViewSet):
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
-        data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name))
+        data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
         return JsonResponse(data)
 
 """
@@ -94,6 +94,7 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
+            data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
             returned_events.append(data)
         
         return JsonResponse(returned_events, safe=False)
@@ -115,6 +116,7 @@ class EventUserRelated(APIView):
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
+            data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
             returned_events.append(data)
         return JsonResponse(returned_events[page*10:(page+1)*10], safe=False)
 
@@ -201,6 +203,7 @@ class EventCreateView(mixins.ListModelMixin,
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
+            data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
             eventList.append(data)
         return Response(eventList)
 
@@ -218,4 +221,5 @@ class EventCreateView(mixins.ListModelMixin,
         data = serializer.data
         (data['rating'], data['ratingNum']) = calcRating(event.id)
         del data['ratings']
+        data['creator'] = ((event.creator.id, event.creator.first_name, event.creator.last_name, event.creator.username))
         return JsonResponse(data)

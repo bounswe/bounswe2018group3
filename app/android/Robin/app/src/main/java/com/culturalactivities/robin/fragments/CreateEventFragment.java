@@ -311,28 +311,16 @@ public class CreateEventFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     public void createEvent(){
+        MainActivity.progressBar.setVisibility(View.VISIBLE);
         final StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 EVENTS_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-                            jsonObject.put("name", etTitle.getText().toString().trim());
-                            jsonObject.put("info", etDescription.getText().toString().trim());
-                            jsonObject.put("artist", etArtist.getText().toString().trim());
-                            jsonObject.put("price", etPrice.getText().toString().trim());
-                            jsonObject.put("tags", new JSONArray("[]"));
-                            jsonObject.put("ratings", new JSONArray("[]"));
-                            jsonObject.put("comments", new JSONArray("[]"));
-                            jsonObject.put("images", new JSONArray("[]"));
-
-                            Toast.makeText(activity, jsonObject.getString("detail"), Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        MainActivity.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
@@ -341,15 +329,21 @@ public class CreateEventFragment extends Fragment {
             }
         }) {
 
-            /*@Override
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", etTitle.getText().toString().trim());
-                params.put("info", etDescription.getText().toString().trim());
                 params.put("artist", etArtist.getText().toString().trim());
                 params.put("price", etPrice.getText().toString().trim());
+                /*params.put("info", etDescription.getText().toString().trim());
+                params.put("loc_lattitude", etLatitude.getText().toString());
+                params.put("loc_longitude", etLongitude.getText().toString());
+                params.put("tags", "");
+                params.put("ratings", "");
+                params.put("comments", "");
+                params.put("images", "");*/
                 return params;
-            }*/
+            }
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();

@@ -356,8 +356,7 @@ export default class ProfileCard extends React.Component{
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )
@@ -375,8 +374,7 @@ export default class ProfileCard extends React.Component{
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )

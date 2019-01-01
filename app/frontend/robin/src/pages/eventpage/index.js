@@ -472,6 +472,14 @@ handleEdit(){
                  
                   </div>
                 </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Artist : {this.state.event.artist ? this.state.event.artist : "Anonymous" } 
+                  </div>
+                  <div class="col-sm-3">
+                 
+                  </div>
+                </div>
 
                 <div class="row" style={{marginTop: '15px'}}>
                 <div class="col-sm-12">

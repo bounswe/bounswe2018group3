@@ -98,11 +98,8 @@ export default class EventPage extends React.Component{
               //data: data,
               headers: headers,
             };
-            await axios(options).then(response => {
-              console.log(response)
-              this.setState({shownImage: response.data.content})
-            }
-          )
+            this.setState({shownImage: response.data.content})
+            
         })
         }
       }
@@ -456,7 +453,7 @@ handleEdit(){
                     Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.firstName + " " + this.state.creator.lastName}</a>
                   </div>
                   <div class="col-sm-9">
-                    Price: {this.state.event.price}
+                    Price: {this.state.event.price} $
                   </div>
                   <div class="col-sm-3">
                   <StarRatingComponent 

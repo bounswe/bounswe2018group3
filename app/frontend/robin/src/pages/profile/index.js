@@ -78,21 +78,20 @@ export default class ProfileCard extends React.Component{
 
     var headers= {
       "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
+      //"Authorization" : "JWT " + Cookies.get("token")
     };
     var options = {
       method: "GET",
       url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
-    //console.log(options)
+    console.log(options)
     await axios(options).then(async response => {
       console.log("did mount");
       console.log(response);
       if(response.status === 200){
-        console.log(response)
         this.setState({
-          ...this.state,
+          //...this.state,
           id: response.data.id,
           bio: response.data.bio,
           birthday: response.data.birthday,
@@ -101,8 +100,8 @@ export default class ProfileCard extends React.Component{
           email: response.data.email,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          followedUsers: response.data.followedUsers.map((person, key) => {return {id: person[0], firstName: person[1], lastName: person[2], pic: person[3], private: person[4]}}),
-          followers: response.data.followers.map((person, key) => {return {id: person[0], firstName: person[1], lastName: person[2], pic: person[3], private: person[4]}}),
+          followedUsers: response.data.followedUsers.map((person, key) => {return {id: person[0], first_name: person[1], last_name: person[2], pic: person[3], private: person[4]}}),
+          followers: response.data.followers.map((person, key) => {return {id: person[0], first_name: person[1], last_name: person[2], pic: person[3], private: person[4]}}),
           private: response.data.private,
           profile_pic: response.data.profile_pic,
           profile_photo: {},
@@ -148,9 +147,9 @@ export default class ProfileCard extends React.Component{
       //console.log(options)
       await axios(options).then(async response => {
         console.log("did mount");
-        console.log(response);
+        //console.log(response);
         if(response.status === 200){
-          console.log(response)
+          //console.log(response)
           this.setState({
             userFollowing: response.data.followedUsers.map((person, key) => {return person[0]}),
           });
@@ -210,7 +209,7 @@ export default class ProfileCard extends React.Component{
       last_name: this.state.last_name,
       //profile_pic: this.state.profile_pic,
       //followedUsers: this.state.followedUsers,
-      followers: this.state.followers,
+      //followers: this.state.followers,
     };
     if(this.state.profile_pic !== this.oldState.profile_pic){ 
       profile_pic_changed = true;
@@ -293,7 +292,7 @@ export default class ProfileCard extends React.Component{
           headers: headers,
         }
         await axios(options).then(response => {
-          console.log(response);
+          //console.log(response);
           if(response.status === 200){
           }
         }).catch(error => {
@@ -312,7 +311,7 @@ export default class ProfileCard extends React.Component{
           headers: headers,
         }
         await axios(options).then(response => {
-          console.log(response);
+          //console.log(response);
           if(response.status === 200){
           }
         }).catch(error => {
@@ -377,6 +376,7 @@ export default class ProfileCard extends React.Component{
   }
 
   render(){
+    console.log("state in render");
     console.log(this.state);
     if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === ""){
       return(
@@ -738,7 +738,7 @@ export default class ProfileCard extends React.Component{
                   <div className="card w-100" >
                     <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
-                      <h4 className="card-title">{this.state.name}</h4>
+                      <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
                       <div className="address">								
                         <ul>
@@ -764,7 +764,7 @@ export default class ProfileCard extends React.Component{
                 <div className="col-lg-8 col-md-6 order-lg-2">
                 <div className="col-12 buttons mb-10 mx-auto">
                   {this.handleFollowButton()}
-                  <button href="" className="btn btn-md btn-secondary btn-block col-4 ">
+                  <button href="" className="btn btn-md btn-warning btn-block col-4 ">
                     <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
                     Message
                   </button>

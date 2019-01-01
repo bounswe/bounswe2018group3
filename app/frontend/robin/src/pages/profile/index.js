@@ -125,6 +125,7 @@ export default class ProfileCard extends React.Component{
           followers: response.data.followers,
           private: response.data.private,
           photo: "",
+          uploadPhoto: {},
         });
         //if(response.data.private || this.state.private){
         if(this.state.id === 3){
@@ -176,15 +177,15 @@ export default class ProfileCard extends React.Component{
       email: this.state.email,*/
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      /*profile_pic: this.state.profile_pic,
-      followedUsers: this.state.followedUsers,
+      profile_pic: this.state.profile_pic,
+      /*followedUsers: this.state.followedUsers,
       followers: this.state.followers,*/
     };
     var options = {
       method: "PATCH",
       url: EDIT_USER_URL + Cookies.get("userid"),
       headers: headers,
-      body: body,
+      data: body,
     };
     console.log(options);
     await axios(options).then(response => {
@@ -199,12 +200,15 @@ export default class ProfileCard extends React.Component{
 
   uploadPhotoHandler(e){
     e.preventDefault();
-    console.log(this.state);
+    this.setState({uploadPhoto: e.target.files[0]});
+    console.log(e.target.files[0])
+
+    //console.log(this.state);
   }
 
   uploadProfilePhotoHandler(e){
     e.preventDefault();
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   fileChangedHandler(event){
@@ -212,9 +216,11 @@ export default class ProfileCard extends React.Component{
     this.setState({photo: file})
   }
 
-  profilePhotoHandler(event){
-    const file = event.target.files[0];
+  profilePhotoHandler(e){
+    const file = e.target.files[0];
     this.setState({profile_pic: file})
+    console.log(e.target.files[0])
+
   }
 
   listFriends(people){

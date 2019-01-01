@@ -43,6 +43,27 @@ class UserCreateView(mixins.ListModelMixin,
             data = serializer.data
             (data['rating'], data['ratingNum']) = calcRating(user.id)
             del data['ratings']
+
+            userArray = []
+            for tmpUser in user.followedUsers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followedUsers'] = userArray
+
+            userArray = []
+            for tmpUser in user.followers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followers'] = userArray
+
+            userArray = []
+            for tmpUser in user.blockedUsers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['blockedUsers'] = userArray
+
+            userArray = []
+            for tmpUser in user.blockers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['blockers'] = userArray
+
             userList.append(data)
         return Response(userList)
 
@@ -138,6 +159,27 @@ class UserRetrieveView(viewsets.ModelViewSet):
         data['createdEvents'] = created_events
         (data['rating'], data['ratingNum']) = calcRating(user.id)
         del data['ratings']
+
+        userArray = []
+        for tmpUser in user.followedUsers.all():
+            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
+        data['followedUsers'] = userArray
+
+        userArray = []
+        for tmpUser in user.followers.all():
+            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
+        data['followers'] = userArray
+
+        userArray = []
+        for tmpUser in user.blockedUsers.all():
+            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.name, tmpUser.is_private, tmpUser.username))
+        data['blockedUsers'] = userArray
+
+        userArray = []
+        for tmpUser in user.blockers.all():
+            userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username))
+        data['blockers'] = userArray
+        print(data)
         return JsonResponse(data)
 
 class UserAttendView(viewsets.ModelViewSet):
@@ -277,6 +319,26 @@ class UserSearchView(generics.ListAPIView):  # TODO does not display ratings nic
             data['createdEvents'] = created_events
             (data['rating'], data['ratingNum']) = calcRating(user.id)
             del data['ratings']
+
+            userArray = []
+            for tmpUser in user.followedUsers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followedUsers'] = userArray
+
+            userArray = []
+            for tmpUser in user.followers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followedUsers'] = userArray
+
+            userArray = []
+            for tmpUser in user.blockedUsers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followedUsers'] = userArray
+
+            userArray = []
+            for tmpUser in user.blockers.all():
+                userArray.append((tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic, tmpUser.is_private, tmpUser.username))
+            data['followedUsers'] = userArray
 
             returned_users.append(data)
         

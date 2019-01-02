@@ -64,6 +64,11 @@ class EventRetrieveView(viewsets.ModelViewSet):
         else:
             data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
 
+        tagList = []
+        for tag in event.tags.all():
+            tagList.append((tag.id, tag.name))
+
+        data['tags'] = tagList
         return JsonResponse(data)
 
 """
@@ -101,6 +106,11 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
                 data['creator'] = (tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username)
             else:
                 data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
+
+            tagList = []
+            for tag in event.tags.all():
+                tagList.append((tag.id, tag.name))
+            data["tags"] = tagList
             returned_events.append(data)
         
         return JsonResponse(returned_events, safe=False)
@@ -128,6 +138,10 @@ class EventUserRelated(APIView):
                 data['creator'] = (tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username)
             else:
                 data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
+            tagList = []
+            for tag in event.tags.all():
+                tagList.append((tag.id, tag.name))
+            data["tags"] = tagList
             returned_events.append(data)
 
         if type(request.user) != type(AnonymousUser()):
@@ -237,6 +251,11 @@ class EventCreateView(mixins.ListModelMixin,
                 data['creator'] = (tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username)
             else:
                 data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
+            
+            tagList = []
+            for tag in event.tags.all():
+                tagList.append((tag.id, tag.name))
+            data["tags"] = tagList
             eventList.append(data)
         return Response(eventList)
 
@@ -259,6 +278,10 @@ class EventCreateView(mixins.ListModelMixin,
             data['creator'] = (tmpUser.id, tmpUser.first_name, tmpUser.last_name, tmpUser.profile_pic.url, tmpUser.is_private, tmpUser.username)
         else:
             data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
+        tagList = []
+        for tag in event.tags.all():
+            tagList.append((tag.id, tag.name))
+        data["tags"] = tagList
         return JsonResponse(data)
 
 """

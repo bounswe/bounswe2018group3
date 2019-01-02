@@ -12,6 +12,7 @@ export default class Event extends React.Component {
     this.props = props;
     this.state = {
       redirect: "",
+      event: {},
     }
     this.handleEventClick = this.handleEventClick.bind(this);
   }
@@ -89,20 +90,23 @@ export default class Event extends React.Component {
 
 
   render() {
+    console.log(this.state)
     if(this.state.redirect !== ""){
       return(
         <Redirect to={this.state.redirect}/>
       )
     }
     return (
+      
       <div>
       <div class="row">
         <div className="event-container"></div>
         <div class="col">
         <div class="card">
           <div class="card-body">
-            <a href="../event" onClick={e => this.handleEventClick(e)}>{this.props.title}</a>
-            <div class="card-title">{this.props.subtitle}</div>
+            <div class="card-title"><a href="../event" onClick={e => this.handleEventClick(e)}>{this.props.title}</a></div>
+            <p class="card-text float-left">{this.state.event.location + " - " + this.state.event.date + ", " + this.state.event.time}</p>
+            <p class="card-text float-right">{this.state.event.price + " $"}</p>
           </div>
           <img width="100%" src={this.state.shownImage} alt="Card image cap" />
           <div class="card-body">

@@ -7,7 +7,7 @@ import axios from 'axios';
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 
-import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL, FOLLOW_URL } from "../constants/backend-urls"
+import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL, FOLLOW_URL, TAGS_URL, USER_WATCH_TAGS_URL } from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -40,7 +40,6 @@ export default class ProfileCard extends React.Component{
       //languages: "",
       //about: "",
       bio: "",
-      interests: "",
       //likes: "",
       //hates: "",
       //favourites: "",
@@ -58,6 +57,10 @@ export default class ProfileCard extends React.Component{
       followers: [],
       following: false,
       userFollowing: [],
+      interests: "",
+      interestsArray: [],
+      existingTagsInDB: [],
+      watchingTags: [],
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -77,11 +80,31 @@ export default class ProfileCard extends React.Component{
     if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === "")
       return;
 
-    var headers= {
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: TAGS_URL ,
+        headers: headers,
+      };
+      await axios(options).then(async response => {
+        console.log("tags");
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            existingTagsInDB: response.data,
+  
+          })
+        }
+        })
+
+    headers= {
       "Content-Type": "application/json",
       //"Authorization" : "JWT " + Cookies.get("token")
     };
-    var options = {
+    options = {
       method: "GET",
       url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
@@ -91,7 +114,7 @@ export default class ProfileCard extends React.Component{
       console.log("did mount");
       console.log(response);
       if(response.status === 200){
-        this.setState({
+        await this.setState({
           //...this.state,
           id: response.data.id,
           bio: response.data.bio,
@@ -111,7 +134,16 @@ export default class ProfileCard extends React.Component{
           createdEvents: response.data.createdEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
           futureEvents: response.data.futureEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
           interestedEvents: response.data.interestedEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          watchingTags: response.data.watchingTags,
+            interestsArray: response.data.watchingTags.map((tag, key) => {
+              for(let i = 0; i < this.state.existingTagsInDB.length; i++){
+                if(this.state.existingTagsInDB[i].id === tag){
+                  return this.state.existingTagsInDB[i].name;
+                }
+              }
+              }),
         }); 
+        this.setState({interests: this.state.interestsArray.toString()})
         //if(response.data.private || this.state.private){
         if(this.state.private && this.state.id !== Cookies.get("userid")){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
@@ -160,6 +192,7 @@ export default class ProfileCard extends React.Component{
         console.error(error);
       }) 
     }
+    
     this.oldState = this.state;
 
   }
@@ -197,6 +230,7 @@ export default class ProfileCard extends React.Component{
 
   async handleSave(){
     var profile_pic_changed = false;
+    var interests_changed = false;
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
@@ -215,7 +249,9 @@ export default class ProfileCard extends React.Component{
     };
     if(this.state.profile_pic !== this.oldState.profile_pic){ 
       profile_pic_changed = true;
-
+    }
+    if(this.state.interests !== this.oldState.interests){
+      interests_changed = true;
     }
       
     this.oldState = this.state;
@@ -255,6 +291,102 @@ export default class ProfileCard extends React.Component{
         this.setState({error: true});
       })
     }
+    if(interests_changed){
+      console.log("interests changed")
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      for(let i = 0; i < this.state.interestsArray.length; i++){
+        for(let j = 0; j < this.state.existingTagsInDB.length; j++){
+          console.log(this.state.interestsArray[i])
+          console.log(this.state.existingTagsInDB[j].name)
+          if(this.state.interestsArray[i] === this.state.existingTagsInDB[j].name ){
+            found = true;
+            var options = {
+              method: "DELETE",
+              url: USER_WATCH_TAGS_URL + this.state.existingTagsInDB[j].id,
+              headers: headers,
+            };
+            console.log(options);
+            await axios(options).then(response => {
+              console.log(response);
+              if(response.status === 200){
+                
+              }
+              }).catch(error => {
+              console.error(error);
+              this.setState({error: true});
+          })
+          
+          }
+        }
+      }
+
+      await this.setState({interestsArray: this.state.interests.split(",")});
+      for(let i = 0; i < this.state.interestsArray.length; i++){
+        var found = false;
+        for(let j = 0; j < this.state.existingTagsInDB.length; j++){
+          console.log(this.state.interestsArray[i])
+          console.log(this.state.existingTagsInDB[j].name)
+          if(this.state.interestsArray[i] === this.state.existingTagsInDB[j].name ){
+            found = true;
+            var options = {
+              method: "GET",
+              url: USER_WATCH_TAGS_URL + this.state.existingTagsInDB[j].id,
+              headers: headers,
+            };
+            await axios(options).then(response => {
+              console.log(response);
+              if(response.status === 200){
+                
+              }
+              }).catch(error => {
+              console.error(error);
+              this.setState({error: true});
+          })
+          
+          }
+        }
+        if(found){
+          found = false;
+          continue;
+        }
+        var data = {name: this.state.interestsArray[i]};
+        var options = {
+          method: "POST",
+          url: TAGS_URL,
+          headers: headers,
+          data: data,
+        };
+        console.log(options);
+        await axios(options).then(async response => {
+          console.log(response);
+          if(response.status === 200){
+            await this.setState({existingTagsInDB: this.state.existingTagsInDB.append(response.data)})
+          }
+          var options = {
+            method: "GET",
+            url: USER_WATCH_TAGS_URL + response.data.id,
+            headers: headers,
+          };
+          await axios(options).then(response => {
+            console.log(response);
+            if(response.status === 200){
+              
+            }
+            }).catch(error => {
+            console.error(error);
+            this.setState({error: true});
+        })
+          }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+      })
+      
+      }
+      
+  }
 
   }
 /*
@@ -475,7 +607,9 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <p>{this.state.interests}</p>
+                          <p>{this.state.interestsArray.map((tag, key) => {
+                            return (<div className="badge badge-success badge-pill interest-pills">{tag}</div>)
+                          })}</p>
                           {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
@@ -600,7 +734,7 @@ export default class ProfileCard extends React.Component{
                             <input className="form-control" type="text" name="last_name" value={this.state.last_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
-                        <div className="form-group row">
+                        {/*<div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Email</label>
                           <div className="col-lg-9">
                             <input className="form-control" type="email" name="email" value={this.state.email} onChange={e => this.handleChange(e)}/>
@@ -612,6 +746,7 @@ export default class ProfileCard extends React.Component{
                             <input className="form-control" type="password" name="password" onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
+                        */}
                         {/*
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Short Summary</label>
@@ -703,7 +838,7 @@ export default class ProfileCard extends React.Component{
                         */}
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Interests</label>
-                          <div className="col-lg-9">
+                          <div className="col-lg-9">                        
                             <input className="form-control" type="text" name="interests" value={this.state.interests} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
@@ -816,7 +951,9 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <p>{this.state.interests}</p>
+                          <p>{this.state.interestsArray.map((tag, key) => {
+                            return (<div className="badge badge-success badge-pill interest-pills">{tag}</div>)
+                          })}</p>
                           {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>

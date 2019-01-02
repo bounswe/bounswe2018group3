@@ -20,7 +20,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minut
     }
   
     render() {
-      const { userName, text, date } = this.props;
+      const { pp, userName, text, date } = this.props;
       const { rating } = this.state;
 
         return (
@@ -28,7 +28,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minut
             <div class="card-body">
             <div class="row">
             <div class="col-sm-2">
-              <img width="100%" class="rounded-circle" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
+              <img width="80%" class="rounded-circle" src={pp} alt="Card image cap" />
             </div>
             <div class="col-sm-10">
             <div class="row"> 

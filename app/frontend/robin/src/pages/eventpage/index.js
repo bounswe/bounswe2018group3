@@ -76,8 +76,38 @@ export default class EventPage extends React.Component{
       //console.log(response);
       if(response.status === 200){
         var eventList = response.data;
+        console.log(eventList);
+        var commentArray = [];
+        eventList.comments.forEach(element =>{
+          var data = {
+            // TODO: Change here according to API
+            id: this.state.id
+          };
+          var headers= {
+            "Content-Type": "application/json",
+            //"Authorization" : "JWT " + Cookies.get("token")
+          };
+          var options = {
+            method: "GET",
+            // TODO: Update search url page.
+            url: EVENT_COMMENTS_URL + element,
+            data: data,
+            headers: headers,
+          };
+          axios(options).then(response => {
+            //console.log(response);
+            if(response.status === 200){
+              commentArray.push(response.data);
+            }
+          }).catch(error => {
+            console.error(error);
+            this.setState({error: true});
+          })
+          
+        });
         this.setState({event: eventList, error: false});
         this.setState({creator: {id: this.state.event.creator[0], firstName: this.state.event.creator[1], lastName: this.state.event.creator[2]}});
+        this.setState({comments: commentArray});
         if(this.state.event.images.length > 0){
           var data = {
             // TODO: Change here according to API
@@ -501,7 +531,8 @@ handleEdit(){
       //id: Cookies.get("clickedEvent")
       title: this.state.event.name,
       content: this.state.commentValue,
-      id: this.state.id,
+      event: this.state.id,
+      ratings: []
     };
     var headers= {
       "Content-Type": "application/json",
@@ -510,8 +541,8 @@ handleEdit(){
     var options = {
       method: "POST",
       // TODO: Update search url page.
-      url: EVENT_COMMENTS_URL + this.state.id,
-      body: data,
+      url: EVENT_COMMENTS_URL,
+      data: data,
       headers: headers,
     };
     //console.log(options)
@@ -648,7 +679,8 @@ handleEdit(){
               </div>
             </div>
           </div>
-          <div class="col-sm-12">
+          <br></br>
+          <div class="col-sm-6">
         {this.state.annotationArr.map(annot => {
               return<Annotation
                   src={annot.imageLink}
@@ -666,7 +698,8 @@ handleEdit(){
         
         {this.handleAddcommentBox()}
         {this.state.comments.map(comment => {
-          return <Comment userName={comment.userName} text={comment.text} date={Date.now()}/>
+          console.log(comment);
+          return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.FirstName} text={comment.content} date={Date.parse(comment.date)}/>
         })}
       </React.Fragment>
     );

@@ -754,7 +754,7 @@ handleAddPhotoButton(){
           <h2 style={{margin:'22px'}}>
           Pictures:
           </h2>
-          <div className="col-sm-6 margin-auto">
+          <div className="col-sm-6 offset-3">
         {this.state.annotationArr.map(annot => {
               return(<div><Annotation
                   src={annot.imageLink}

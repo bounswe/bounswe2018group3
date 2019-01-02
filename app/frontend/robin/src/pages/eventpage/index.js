@@ -690,12 +690,7 @@ handleAddPhotoButton(){
                     Price: {this.state.event.price} $
                   </div>
                   <div class="col-sm-3">
-                  <StarRatingComponent 
-                  name="rate1" 
-                  starCount={5}
-                  value={this.state.rating}
-                  onStarClick={this.onStarClick}
-                  />  
+                 
                   </div>
                 </div>
                 <div class="row" style={{marginLeft:'15px'}}>

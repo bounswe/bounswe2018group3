@@ -36,12 +36,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minut
             <div class="card-title">{ userName } - { dateTimeFormat.format(date) }</div>
             </div>
             <div class="col-sm-2">
-                <StarRatingComponent 
-                  name="rate1" 
-                  starCount={5}
-                  value={rating}
-                  onStarClick={this.onStarClick.bind(this)}
-              />
+              
             </div>
             </div>
             <p class="card-text" style={{marginRight:'30px', marginTop:'20px', fontSize: '20px'}}>{ text }</p>

@@ -12,6 +12,7 @@ class Event(models.Model):
     city = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=255, blank=True)
     creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='created_events')
+    #banner_pic = models.ImageField(upload_to='pic_folder/banner_pics/', default=)
     artist = models.CharField(max_length=255, blank=True)
     date = models.DateField(db_index=True) #default=timezone.localdate())
     time = models.TimeField(db_index=True) #default=timezone.localtime().time())

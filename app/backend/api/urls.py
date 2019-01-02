@@ -13,6 +13,7 @@ from . import views
 urlpatterns = [
     path('users/', include('users.urls')),
     path('events/', include('events.urls')),
+    #path('message/', include('message.urls')),
     path('rest-auth/registration/account-confirm-email/<str:key>/', allauthemailconfirmation, name='account_confirm_email'),
     path('rest-auth/registration/account-email-verification-sent/', VerificationSentView.as_view(), name='account_email_verification_sent'),
     path('rest-auth/registration/complete/', CompleteView.as_view(), name='account_confirm_complete'),

@@ -81,3 +81,10 @@ class EventRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = ('id', 'ratings', 'flaggers')
+
+"""
+class BannerPicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Event
+        fields = ('banner_pic', )"""

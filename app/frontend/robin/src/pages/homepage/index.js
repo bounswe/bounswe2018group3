@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 
 import NavBar from "../components/navbar/index"
 import EventComp from "./components/event/index"
-import "./index.css"
+import "./index.css";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ export default class Home extends React.Component{
       query: this.props.location.query,
       token: Cookies.get("token"),
       events : [],
-      page : 0
+      page : 0 
     };
   }
 
@@ -50,6 +50,7 @@ export default class Home extends React.Component{
     })
   } 
 
+
   render(){
     if(this.state.token === undefined){
       return(
@@ -69,6 +70,7 @@ export default class Home extends React.Component{
             })}
         </div>
       </div>
+      
     );
   }
 };

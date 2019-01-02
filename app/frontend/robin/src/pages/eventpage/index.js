@@ -6,12 +6,18 @@ import Location from "../components/map/LocationPicker"
 
 import Cookies from 'js-cookie';
 import axios from 'axios';
-
+import Annotation from 'react-image-annotation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_URL, EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL, EVENT_IMAGES_URL } from "../constants/backend-urls";
+import { ANNOTATION_URL,EVENT_IMAGES_URL,EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+
+import {
+  PointSelector,
+  RectangleSelector,
+  OvalSelector
+} from 'react-image-annotation/lib/selectors';
 
 import "./eventpage.css"
 
@@ -27,6 +33,7 @@ export default class EventPage extends React.Component{
       joined: false,
       interested: false,
       comments: [],
+      annotationArr: [],
       images: [],
       shownImage: "",
       error: false,
@@ -44,6 +51,7 @@ export default class EventPage extends React.Component{
     this.handleEdit = this.handleEdit.bind(this);
     this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
     this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
+    //this.getAnnotations = this.getAnnotations.bind(this);
   }
 
   async componentDidMount(e){
@@ -149,8 +157,130 @@ export default class EventPage extends React.Component{
       }).catch(error => {
         console.error(error);
       })
-    }
+    this.state.event.images.forEach(element =>{
+      var data = {
+        // TODO: Change here according to API
+        id: element
+      };
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        // TODO: Update search url page.
+        url: EVENT_IMAGE_URL + element,
+        data: data,
+        headers: headers,
+      };
+      //console.log(options);
+      axios(options).then(response => {
+        //console.log(response);
+        if(response.status === 200){
+          var resp = response.data;
+          var ann = { 
+            id: element,
+            imageLink: resp.content,
+            annotation: {},
+            annotations: []
+            }
+          //console.log(ann.imageLink);
+           if(resp.annotations.length == 0){
+             var newArray = [];    
+             newArray.push(ann); 
+             this.setState({annotationArr:newArray, error: false});
+             this.annotationArr = newArray;
+             return;
+           }
+          resp.annotations.forEach(function(elem){
+            var a = elem.target.selector;
+            var ell = {data:{id:a.image_id, text:elem.body.value},
+                      geometry:{
+                        height:a.height, 
+                        type: a.type,
+                        width: a.width, 
+                        x:a.x,
+                        y:a.y
+                      }};
+            ann.annotations.push(ell);
+          });
+          var newArray = [];    
+          newArray.push(ann); 
+          this.setState({annotationArr:newArray, error: false});
+          this.annotationArr = newArray;
+        }
+      }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    });
+    //this.getUser(this.state.event.creator)
+
   } 
+
+  onChange = (annotation ,id) => {
+    //console.log(this.annotationArr[id].annotation);
+    this.annotationArr[id].annotation = annotation;
+    this.setState({ annotation });
+  }
+
+
+  onSubmit = (annotation ,id, img_id) => {
+    const { geometry, data } = annotation;
+    var gg = {
+      geometry,
+      data: {
+        ...data,
+        id: Math.random()
+      }
+    };
+    console.log(gg);
+    this.annotationArr[id].annotations.push(gg);
+    this.setState({ annotation : {}, annotationArr: this.annotationArr });
+
+    var d = {
+      // TODO: Change here according to API
+      body: {
+        value: data.text,
+      },
+      target: {
+        source: img_id,
+        selector: {
+          sel_type: "ImagePositionSelector",
+          type: geometry.type,
+          image_id: gg.data.id,
+          width: geometry.width,
+          height: geometry.height,
+          x: geometry.x,
+          y: geometry.y,
+        }
+      }
+    };
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "POST",
+      // TODO: Update search url page.
+      url: ANNOTATION_URL,
+      data: d,
+      headers: headers,
+    };
+    //console.log(options);
+    axios(options).then(response => {
+      //console.log(response);
+      if(response.status === 200){
+        var event_ = response.data;
+        this.setState({event: event_, error: false});
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+
+  }
+
 
 
 handleDeleteEvent(e){
@@ -504,7 +634,18 @@ handleEdit(){
               </div>
             </div>
           </div>
-     
+          <div class="col-sm-12">
+        {this.state.annotationArr.map(annot => {
+              return<Annotation
+                  src={annot.imageLink}
+                  alt=''
+                  annotations={annot.annotations}
+                  type={RectangleSelector.TYPE}
+                  value={annot.annotation}
+                  onChange={e => this.onChange(e,this.state.annotationArr.indexOf(annot))}
+                  onSubmit={e => this.onSubmit(e,this.state.annotationArr.indexOf(annot), annot.id)}
+        />})}
+        </div>
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>

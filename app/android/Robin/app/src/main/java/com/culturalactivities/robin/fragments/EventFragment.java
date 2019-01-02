@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.CommentAdapter;
@@ -53,6 +55,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -78,7 +81,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
     private RatingBar rbEvent, rbMakeRate;
-
+    private ArrayList<Image> images = new ArrayList<>();
 
     //comments part
     private RecyclerView recyclerView;
@@ -294,8 +297,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                             }*/
                             Double price = Double.valueOf(jsonObject.getString("price"));
                             Float rating = Float.valueOf(jsonObject.getString("rating"));
-                            ArrayList<Image> images = new ArrayList<>();
-                            //images.add(new Image(image, null));
 
                             JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
 
@@ -318,9 +319,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                                 }
                             }
 
-                            event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
+                            JSONArray imagesArray= jsonObject.getJSONArray("images");
+                            if (imagesArray.length()>0){
+                                getImage(imagesArray.get(0).toString());
+                            }else {
+                                Glide.with(activity).load(R.drawable.eventimage).into(ivBanner);
+                            }
 
-                            //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
+                            event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
                             tvTitle.setText(event.getEventName());
                             tvDescription.setText(event.getEventInfo());
                             rbEvent.setRating(event.getRating());
@@ -347,6 +353,60 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
+    }
+
+    /*private void getImages(JSONArray imagesArray) {
+        images.clear();
+        for (int i = 0; i < imagesArray.length(); i++) {
+            try {
+                getImage(imagesArray.get(i).toString());
+                Log.d("IMAGES"+i, images.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (images.size()>0){
+            Glide.with(activity).load(images.get(0).getUrl()).into(ivBanner);
+            imageAdapter.notifyDataSetChanged();
+        }
+    }*/
+
+    private void getImage(final String imageid) {
+        String url = Constants.EVENT_IMAGES_URL + imageid;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String url = jsonObject.getString("content");
+                            Glide.with(activity).load(url).into(ivBanner);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }

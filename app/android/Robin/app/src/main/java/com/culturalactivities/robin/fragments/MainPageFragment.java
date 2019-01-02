@@ -42,6 +42,7 @@ import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
 import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -239,22 +240,22 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         }
         events.clear();
         // Some Test Tags
-        String[] tagsArray = {"concert", "istanbul", "event", "new", "smile", "newest", "notification", "tag", "comment"};
-        final ArrayList<Tag> tags = new ArrayList<>();
-        final ArrayList<Comment> comments = new ArrayList<>();
-        for(String s: tagsArray){
+        //String[] tagsArray = {"concert", "istanbul", "event", "new", "smile", "newest", "notification", "tag", "comment"};
+        /*for(String s: tagsArray){
             tags.add(new Tag(s, 0, null));
-        }
+        }*/
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 EURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("EVENTOO", response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
+
                             for (int i = 0; i < jsonArray.length(); i++) {
+                                ArrayList<Tag> tags = new ArrayList<>();
+                                ArrayList<Comment> comments = new ArrayList<>();
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String id = toUTF(jsonObject.getString("id"));
                                 String name = toUTF(jsonObject.getString("name"));
@@ -267,6 +268,11 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 for(int j=0;j<commentArray.length();j++){
                                     comments.add(new Comment(commentArray.get(j).toString(),id));
                                 }
+                                JSONArray tagArray= jsonObject.getJSONArray("tags");
+                                for(int j=0;j<tagArray.length();j++){
+                                    tags.add(new Tag(tagArray.get(j).toString().substring(tagArray.get(j).toString().indexOf(",")+2,tagArray.get(j).toString().indexOf("]")-1),0,null));
+                                }
+
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
                                 ArrayList<Image> images = new ArrayList<>();
@@ -274,7 +280,6 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
 
                                 JSONArray arrayCreator = jsonObject.getJSONArray("creator");
                                 JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
-
                                 events.add(new Event(id, name,info, artist, date, time, price, rating, null, comments, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);

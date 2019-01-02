@@ -329,7 +329,9 @@ class EventCommentRetrieveView(viewsets.ModelViewSet):
         (data['rating'], data['ratingNum']) = calcRatingE(comment.id)
         del data['ratings']
         if comment.author is not None:
-            data['authorName'] = comment.author.username
+            data['authorFirstName'] = comment.author.first_name
+            data['authorLastName'] = comment.author.last_name
+            data['authorProfilePic'] = comment.author.profile_pic
         else:
             data['authorName'] = "Deleted User"
         return JsonResponse(data)

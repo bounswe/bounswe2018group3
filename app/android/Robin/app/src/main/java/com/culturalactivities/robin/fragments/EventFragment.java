@@ -25,10 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -68,7 +71,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
 
     RequestQueue queue;
-    private Event event = new Event();
+    private Event event= new Event();
     private String eventid;
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
@@ -144,7 +147,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         return view;
     }
 
-    @SuppressLint("SetTextI18n")
+    //@SuppressLint("SetTextI18n")
     private void setView(View view) {
         queue = Volley.newRequestQueue(activity);
         ivBanner = view.findViewById(R.id.ivProfile);
@@ -165,19 +168,20 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         rbMakeRate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Log.e("sizeee3","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
+               // Log.e("sizeee3","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
                 rateEvent(rating);
+                //Log.e("sizeee4","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
             }
         });
-        Log.e("sizeee","here "+event.getComments().size()+" "+event.getArtistInfo()+" "+eventid);
+        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getArtistInfo()+" "+eventid);
         //comments part
         recyclerView = view.findViewById(R.id.rvComments);
         commentAdapter = new CommentAdapter(activity, comments, EventFragment.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(commentAdapter);
-        getComments();
 
-        Log.e("sizeee2","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
+
+        //Log.e("sizeee2","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
         getEventDetails();
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
@@ -278,7 +282,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                             }
 
                             event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
-
+                            getComments();
 
                             //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
                             tvTitle.setText(event.getEventName());
@@ -432,6 +436,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void makeComment(final String comment, final String commentTitle) {
+        Log.e("commentxxx",comment+" "+commentTitle);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         /*try {
             HttpResponse<String> response = Unirest.post("http://139.59.128.92:8080/api/v1/eventcomments/")
@@ -454,6 +459,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
                         try {
                             JSONObject json= new JSONObject(response);
+                            Toast.makeText(activity, "Thanks for your comment", Toast.LENGTH_SHORT).show();
                             MainActivity.progressBar.setVisibility(View.INVISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -465,6 +471,19 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        Log.d("RESSOO", res);
+                        //JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        e1.printStackTrace();
+                    }
+                }
                 Toast.makeText(activity, "Failed!", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -472,18 +491,14 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("author", MainActivity.pk);
-                params.put("event", event.getId());
+                params.put("event", eventid);
                 params.put("content", comment);
-                params.put("date", date);
                 params.put("title", commentTitle);
-                params.put("Content-Type", "application/json");
                 return params;
             }
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
@@ -494,7 +509,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void getComments() {
-        comments.clear();
+        //comments.clear();
         //User user = new User("0", "test@test.com", "Tester", "password");
         //Log.e("sizeee","here "+event.getComments().size()+" "+event.getEventName()+" "+eventid);
         for(int i=0;i<event.getComments().size();i++){

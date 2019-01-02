@@ -24,6 +24,7 @@ from rest_framework import mixins
 import django_filters
 from . import models
 from . import serializers
+from users.models import CustomUser
 
 from annotations.models import Body, Selector, Target, Annotation
 from annotations.serializers import AnnotationRWSerializer, BodyRWSerializer, SelectorRWSerializer, TargetRWSerializer
@@ -570,8 +571,8 @@ class EventImageDetail(APIView):
             del data["image"]
             data["@context"] = data["context"]
             del data["context"]
-            if annotation['creator'] is not None:
-                creator = annotation['creator']
+            if data['creator'] is not None:
+                creator = CustomUser.objects.get(pk=data['creator'])
                 data['creator'] = (creator.id, creator.first_name, creator.last_name, creator.profile_pic.url, creator.is_private, creator.username)
             else:
                 data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")

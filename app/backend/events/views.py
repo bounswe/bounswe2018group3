@@ -245,7 +245,7 @@ class EventCreateView(mixins.ListModelMixin,
         event = models.Event.objects.get(id=event_response.data["id"])
         if "tag_ids" in request.data:
             tag_ids = request.data["tag_ids"]
-            tag_ids = '{"tag_ids":'+tag_ids+'}'
+            tag_ids = '{"tag_ids":'+str(tag_ids)+'}'
             for tag_id in json.loads(tag_ids)["tag_ids"]:
                 tag = Tag.objects.get(id=tag_id)
                 event.tags.add(tag)

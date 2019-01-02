@@ -8,7 +8,7 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
-import { EVENT_URL, USERS_URL, EVENT_IMAGES_URL } from "../constants/backend-urls";
+import { EVENT_URL, USERS_URL, EVENT_IMAGES_URL , TAGS_URL} from "../constants/backend-urls";
 
 export default class CreateEvent extends React.Component {
     constructor(props) {
@@ -27,6 +27,10 @@ export default class CreateEvent extends React.Component {
         isGoing: true,
         numberOfGuests: 2,
         submitClicked: false,
+        existingTagsInDB: [],
+        existingTags: [],
+        nonexistingTags: [],
+        tags: "",
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
@@ -41,9 +45,31 @@ export default class CreateEvent extends React.Component {
       this.photoHandler = this.photoHandler.bind(this);
     }
 
-    componentDidMount(){
+    async componentDidMount(){
       this.setState({creator: this.getUser(Cookies.get("userid"))})
-      
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: TAGS_URL ,
+        headers: headers,
+      };
+      await axios(options).then(async response => {
+        console.log("tags");
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            existingTagsInDB: response.data,
+          })
+        }
+      })
+
+      // At this point, we have all the tags in the database stored in this.state.existingTagsInDB
+      var tagsArray = this.state.tags.split(",");
+      console.log(tagsArray);
+
     }
   
     handleInputChange(event) {
@@ -66,7 +92,7 @@ export default class CreateEvent extends React.Component {
         const name = target.name;
     
         this.setState({
-          [name]: value
+          [name]: value,
         });
     }
 
@@ -100,19 +126,62 @@ export default class CreateEvent extends React.Component {
 
     }
 
-    handleCreate(e){
+    async handleCreate(e){
+      var tag_ids = [];
+      var id;
       this.setState({submitClicked: true});
-      if(this.checkError()){
-        Cookies.set("eventName", this.state.name);
+      var headers= {
+        //"Content-Type": "multipart/form-data;boundary",
+        "Authorization" : "JWT " + Cookies.get("token"),
+        "Content-Type": "application/json",
+        //"Content-Type": "application/x-www-form-urlencoded",
+        //'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+
+      };
+      if(this.checkError()){}
+      /*  Cookies.set("eventName", this.state.name);
         Cookies.set("eventInfo", this.state.info);
         Cookies.set("eventDate", this.state.date);
         Cookies.set("eventTime", this.state.time);
         Cookies.set("eventPrice", this.state.price);
         Cookies.set("numberOfGuests", this.state.numberOfGuests);
-      }
+      }*/
+      
       else
         return;
-        var eventId = {};
+      var tagsArray = this.state.tags.split(",");
+      console.log(tagsArray);
+      for(let i = 0; i < tagsArray.length; i++){
+        var found = false;
+        for(let j = 0; j < this.state.existingTagsInDB.length; j++){
+          console.log(this.state.existingTagsInDB[j].name)
+          if(tagsArray[i] === this.state.existingTagsInDB[j].name){
+            found = true;
+            id = j;
+          }
+        }
+        if(!found){
+          var data = {name: tagsArray[i]};
+          var options = {
+            method: "POST",
+            url: TAGS_URL,
+            headers: headers,
+            data: data,
+          };
+          console.log(options);
+          await axios(options).then(async response => {
+            console.log(response);
+            if(response.status === 200){
+              await this.setState({existingTagsInDB: this.state.existingTagsInDB.append(response.data) })
+              tag_ids.push(response.data.id)
+            }
+          })
+        }
+        else{
+          tag_ids.push(id);
+        }
+      }
+      var eventId = {};
       var data = {
         name : this.state.name,
         info : this.state.info,
@@ -125,16 +194,10 @@ export default class CreateEvent extends React.Component {
         ratings: [],
         images: [],
         tags: [],
+        tag_ids:tag_ids,
         //creator: this.state.creator,
       };
-      var headers= {
-        //"Content-Type": "multipart/form-data;boundary",
-        "Authorization" : "JWT " + Cookies.get("token"),
-        "Content-Type": "application/json",
-        //"Content-Type": "application/x-www-form-urlencoded",
-        //'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
-
-      };
+      
       var options = {
         method: "POST",
         url: EVENT_URL,
@@ -343,7 +406,7 @@ export default class CreateEvent extends React.Component {
               </div>
               <div className="row">
                 <div className="col-lg-6">
-                  Price of the event:
+                  Price of the event in dollar:
                 </div>
                 <label>
                   <div className="col-lg-6 event-in">
@@ -352,6 +415,21 @@ export default class CreateEvent extends React.Component {
                       type="text"
                       value={this.state.price}
                       placeholder="Price"
+                      onChange={this.handleNameChange}/>
+                  </div>
+                </label>
+              </div>
+              <div className="row">
+                <div className="col-lg-6">
+                  Tags:
+                </div>
+                <label>
+                  <div className="col-lg-6 event-in">
+                    <input
+                      name="tags"
+                      type="text"
+                      value={this.state.tags}
+                      placeholder="Tags"
                       onChange={this.handleNameChange}/>
                   </div>
                 </label>

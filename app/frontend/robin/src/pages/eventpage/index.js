@@ -41,6 +41,7 @@ export default class EventPage extends React.Component{
     this.handleEdit = this.handleEdit.bind(this);
     this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
     this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
+    //this.getAnnotations = this.getAnnotations.bind(this);
   }
 
   async componentDidMount(e){
@@ -71,12 +72,7 @@ export default class EventPage extends React.Component{
       console.error(error);
       this.setState({error: true});
     })
-    //this.getUser(this.state.event.creator)
-    //this.getAnnotations(this.state.event.images);
-  } 
-
-  getAnnotations(images){
-    images.forEach(function(element) {
+    this.state.event.images.forEach(element =>{
       var data = {
         // TODO: Change here according to API
         id: element
@@ -96,11 +92,22 @@ export default class EventPage extends React.Component{
       axios(options).then(response => {
         //console.log(response);
         if(response.status === 200){
-          var annot = response.data;
-          var ann = { imageLink: annot.content,
+          var resp = response.data;
+          var ann = { 
+            id: element,
+            imageLink: resp.content,
+            annotation: {},
             annotations: []
             }
-          annot.annotations.forEach(function(elem){
+          //console.log(ann.imageLink);
+           if(resp.annotations.length == 0){
+             var newArray = [];    
+             newArray.push(ann); 
+             this.setState({annotationArr:newArray, error: false});
+             this.annotationArr = newArray;
+             return;
+           }
+          resp.annotations.forEach(function(elem){
             var a = elem.target.selector;
             var ell = {data:{id:a.image_id, text:elem.body.value},
                       geometry:{
@@ -112,42 +119,39 @@ export default class EventPage extends React.Component{
                       }};
             ann.annotations.push(ell);
           });
-          var newArray = this.state.annotationArr.slice();    
-          newArray.push(ann);   
-          this.setState({annotationArr:newArray, error: false});
+          this.state.annotationArr.push(ann);   
         }
       }).catch(error => {
         console.error(error);
         this.setState({error: true});
       })
     });
+    //this.getUser(this.state.event.creator)
 
-  }
-  onChange = (annotation) => {
-    //console.log(annotation);
-    this.setState({ annotation })
-    console.log("Annotations");
-    console.log(this.state.annotations);
-    console.log("Type");
-    console.log(this.state.type);
-    console.log("Annotation");
-    console.log(this.state.annotation);
-  }
- 
-  onSubmit = (annotation) => {
-    const { geometry, data } = annotation
+  } 
+
+  onChange = (annotation ,id) => {
+    console.log(id);
     console.log(annotation);
-    this.setState({
-      annotation: {},
-      annotations: this.state.annotations.concat({
-        geometry,
-        data: {
-          ...data,
-          id: Math.random()
-        }
-      })
-    })
+    console.log(this.annotationArr);
+    this.annotationArr[id].annotation = annotation;
   }
+
+
+  onSubmit = (annotation ,id) => {
+    console.log(id);
+    console.log(annotation);
+    console.log(this.annotationArr[id])
+    const { geometry, data } = annotation
+    this.annotationArr[id].annotations.concat({
+      geometry,
+      data: {
+        ...data,
+        id: Math.random()
+      }
+    });
+  }
+
 
   getUser(e){
     var data = {
@@ -214,6 +218,7 @@ handleInterestedClick(){
 }
 
 handleJoin(){
+  console.log(this.annotationArr);
   if(!this.state.joined){
     return(
       <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
@@ -310,10 +315,10 @@ handleEdit(){
       body: data,
       headers: headers,
     };
-    console.log(options)
+    //console.log(options)
     axios(options).then(response => {
       if(response.status === 200){
-        console.log("comment add" + response);
+        //console.log("comment add" + response);
         window.location.reload();
       }
     }).catch(error => {
@@ -351,7 +356,7 @@ handleEdit(){
   }
 
   render(){
-    console.log(this.state);
+    //console.log(this.state);
     const { rating } = this.state;
     if(this.state.redirect !== ""){
       return (<Redirect to={this.state.redirect}/>)
@@ -430,19 +435,18 @@ handleEdit(){
               </div>
             </div>
           </div>
-        {/* {this.state.annotationArr.map(annot => {
+          <div class="col-sm-12">
+        {this.state.annotationArr.map(annot => {
               return<Annotation
                   src={annot.imageLink}
                   alt=''
-        
                   annotations={annot.annotations}
-        
                   type={this.state.type}
-                  value={this.state.annotation}
-                  onChange={this.onChange}
-                  onSubmit={this.onSubmit}
-        /> */}
-            })}
+                  value={annot.annotation}
+                  onChange={e => this.onChange(e, annot.id)}
+                  onSubmit={e => this.onSubmit(e, annot.id)}
+        />})}
+        </div>
         <h2 style={{margin:'22px'}}>
         Comments:
         </h2>

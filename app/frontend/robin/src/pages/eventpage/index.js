@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { ANNOTATION_URL,EVENT_IMAGES_URL,EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { ANNOTATION_URL, EVENT_IMAGES_URL,EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, EVENT_IMAGE_URL, EVENT_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
 
 import {
   PointSelector,
@@ -215,71 +215,85 @@ export default class EventPage extends React.Component{
       })
     });
     //this.getUser(this.state.event.creator)
-
   } 
-
+}
   onChange = (annotation ,id) => {
-    //console.log(this.annotationArr[id].annotation);
-    this.annotationArr[id].annotation = annotation;
-    this.setState({ annotation });
+    if(this.state.token !== undefined){
+      //console.log(Cookies.get("userid") == this.state.creator.id)
+      if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+            //console.log(this.annotationArr[id].annotation);
+          this.annotationArr[id].annotation = annotation;
+          this.setState({ annotation });
+      }
+      else 
+        return;
+    }
+
   }
 
 
   onSubmit = (annotation ,id, img_id) => {
-    const { geometry, data } = annotation;
-    var gg = {
-      geometry,
-      data: {
-        ...data,
-        id: Math.random()
-      }
-    };
-    console.log(gg);
-    this.annotationArr[id].annotations.push(gg);
-    this.setState({ annotation : {}, annotationArr: this.annotationArr });
 
-    var d = {
-      // TODO: Change here according to API
-      body: {
-        value: data.text,
-      },
-      target: {
-        source: img_id,
-        selector: {
-          sel_type: "ImagePositionSelector",
-          type: geometry.type,
-          image_id: gg.data.id,
-          width: geometry.width,
-          height: geometry.height,
-          x: geometry.x,
-          y: geometry.y,
-        }
-      }
-    };
-    var headers= {
-      "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
-    };
-    var options = {
-      method: "POST",
-      // TODO: Update search url page.
-      url: ANNOTATION_URL,
-      data: d,
-      headers: headers,
-    };
-    //console.log(options);
-    axios(options).then(response => {
-      //console.log(response);
-      if(response.status === 200){
-        var event_ = response.data;
-        this.setState({event: event_, error: false});
-      }
-    }).catch(error => {
-      console.error(error);
-      this.setState({error: true});
-    })
+    if(this.state.token !== undefined){
+      //console.log(Cookies.get("userid") == this.state.creator.id)
+      if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+        const { geometry, data } = annotation;
+        var gg = {
+          geometry,
+          data: {
+            ...data,
+            id: Math.random()
+          }
+        };
+        console.log(gg);
+        this.annotationArr[id].annotations.push(gg);
+        this.setState({ annotation : {}, annotationArr: this.annotationArr });
 
-  }
+        var d = {
+          // TODO: Change here according to API
+          body: {
+            value: data.text,
+          },
+          target: {
+            source: img_id,
+            selector: {
+              sel_type: "ImagePositionSelector",
+              type: geometry.type,
+              image_id: gg.data.id,
+              width: geometry.width,
+              height: geometry.height,
+              x: geometry.x,
+              y: geometry.y,
+            }
+          }
+        };
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "POST",
+          // TODO: Update search url page.
+          url: ANNOTATION_URL,
+          data: d,
+          headers: headers,
+        };
+        //console.log(options);
+        axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+            var event_ = response.data;
+            this.setState({event: event_, error: false});
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+      else 
+        return;
+    }
+  };
 
 
 
@@ -591,7 +605,7 @@ handleEdit(){
                   name="rate1" 
                   starCount={5}
                   value={this.state.rating}
-                  onStarClick={this.onStarClick.bind(this)}
+                  onStarClick={this.onStarClick}
                   />  
                   </div>
                 </div>

@@ -51,6 +51,7 @@ export default class EventPage extends React.Component{
     this.handleEdit = this.handleEdit.bind(this);
     this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
     this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
+    this.handleAddPhoto = this.handleAddPhoto.bind(this);
     //this.getAnnotations = this.getAnnotations.bind(this);
   }
 
@@ -413,7 +414,7 @@ handleJoin(){
   if(this.state.token !== undefined){
     if(!this.state.joined ){
       return(
-        <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
+        <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join</button>
       )
     }
     else{
@@ -547,6 +548,10 @@ handleEdit(){
     }
   }
 
+  handleAddPhoto(){
+    
+  }
+
   handleRedirectToCreatorProfile(e){
     e.preventDefault();
     this.setState({redirect: "/profile/" + this.state.creator.id});
@@ -642,7 +647,8 @@ handleEdit(){
                 </div>
                 {this.handleJoin()}
                 {this.handleInterested()}
-                {this.handleEdit()}
+                {/*this.handleEdit()*/}
+                <button href="#" class="btn btn-warning" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleAddPhoto}>Add photo</button>
                 {this.handleDelete()}
                 </div>
               </div>

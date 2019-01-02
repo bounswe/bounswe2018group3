@@ -7,13 +7,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
-
+from django.contrib.auth.models import AnonymousUser
 import django_filters
 import json
 from . import models
 from . import serializers
 from api.models import EventRating
 from api.models import Tag
+from users.models import CustomUser
+from datetime import datetime
 
  # Function for calculating rating of an event
 def calcRating(event_id):
@@ -110,7 +112,7 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
         return JsonResponse(returned_events, safe=False)
 
 class EventUserRelated(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = models.Event.objects.all()
 
     def get(self, request, page, format=None):
@@ -118,12 +120,13 @@ class EventUserRelated(APIView):
         events = []
         for event in event_set:
             events.append(event)
-        events.sort(key=lambda x: x.date, reverse=True)
-        
+        events.sort(key=lambda x: abs((datetime.date(datetime.today()) - x.date).days))
+
         returned_events = []
         for event in events:
             serializer =  serializers.EventRWSerializer(event)
             data = serializer.data
+
             (data['rating'], data['ratingNum']) = calcRating(event.id)
             del data['ratings']
             if event.creator is not None:
@@ -132,6 +135,24 @@ class EventUserRelated(APIView):
             else:
                 data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
             returned_events.append(data)
+
+        if type(request.user) != type(AnonymousUser()):
+            user = CustomUser.objects.get(pk=request.user.id)
+            tags = request.user.watchingTags.all()
+            user_tag_ids = []
+            for tag in tags:
+                user_tag_ids.append(tag.id)
+
+            changed_indexes = []
+            for ix in range(len(returned_events)-1,-1,-1):
+                if returned_events[ix]["tags"]:
+                    for event_tag in returned_events[ix]["tags"]:
+                        if event_tag in user_tag_ids:
+                            changed_indexes.append(ix)
+            old_index_offset = 0
+            for ix in changed_indexes:
+                returned_events.insert(0, returned_events.pop(ix+old_index_offset))
+
         return JsonResponse(returned_events[page*10:(page+1)*10], safe=False)
 
 class EventRateView(viewsets.ModelViewSet):

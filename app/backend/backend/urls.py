@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from . import views
 
 urlpatterns = [
     path('api/v1/', include('api.urls')),
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
+    path('login/', views.login_view, name='login'),
+    path('api/v1/', include(api_patterns)),
+]
+
+api_patterns = [
+    path('', include('auth_fb.urls')),
 ]

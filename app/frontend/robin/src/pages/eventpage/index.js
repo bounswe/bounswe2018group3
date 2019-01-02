@@ -220,7 +220,7 @@ export default class EventPage extends React.Component{
              var newArray = [];    
              newArray.push(ann); 
              this.setState({annotationArr:newArray, error: false});
-             this.annotationArr = newArray;
+             this.state.annotationArr = newArray;
              return;
            }
           resp.annotations.forEach(function(elem){
@@ -257,7 +257,7 @@ export default class EventPage extends React.Component{
       //console.log(Cookies.get("userid") == this.state.creator.id)
       if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
             //console.log(this.annotationArr[id].annotation);
-          this.annotationArr[id].annotation = annotation;
+          this.state.annotationArr[id].annotation = annotation;
           this.setState({ annotation });
       }
       else 
@@ -281,7 +281,7 @@ export default class EventPage extends React.Component{
           }
         };
         console.log(gg);
-        this.annotationArr[id].annotations.push(gg);
+        this.state.annotationArr[id].annotations.push(gg);
         this.setState({ annotation : {}, annotationArr: this.annotationArr });
 
         var d = {
@@ -677,10 +677,10 @@ handleAddPhotoButton(){
       <div class="card">
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
-            <div class="col-sm-3">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%'}}/>
+          <div class="col-sm-6">
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/> 
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-6">
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
                 <div class="col-sm-9">
@@ -754,7 +754,7 @@ handleAddPhotoButton(){
           <h2 style={{margin:'22px'}}>
           Pictures:
           </h2>
-          <div class="col-sm-6">
+          <div className="col-sm-6 margin-auto">
         {this.state.annotationArr.map(annot => {
               return(<div><Annotation
                   src={annot.imageLink}

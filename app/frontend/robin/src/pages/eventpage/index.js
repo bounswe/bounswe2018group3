@@ -40,6 +40,8 @@ export default class EventPage extends React.Component{
       token: Cookies.get("token"),
       user: {},
       tags: [],
+      photo: {},
+      imageUrls: [],
     }
     this.onStarClick = this.onStarClick.bind(this);
     this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
@@ -52,6 +54,7 @@ export default class EventPage extends React.Component{
     this.handleAddCommentClick = this.handleAddCommentClick.bind(this);
     this.handleRedirectToCreatorProfile = this.handleRedirectToCreatorProfile.bind(this);
     this.handleAddPhoto = this.handleAddPhoto.bind(this);
+    this.handleAddPhotoButton = this.handleAddPhotoButton.bind(this);
     //this.getAnnotations = this.getAnnotations.bind(this);
   }
 
@@ -88,29 +91,26 @@ export default class EventPage extends React.Component{
             "Content-Type": "application/json",
             //"Authorization" : "JWT " + Cookies.get("token")
           };
-          var options = {
-            method: "GET",
-            // TODO: Update search url page.
-            url: EVENT_IMAGES_URL + this.state.event.images[0],
-            data: data,
-            headers: headers,
-          };
-          await axios(options).then(async response => {
-            console.log(response);
-            var headers= {
-              "Content-Type": "application/json",
-              //"Authorization" : "JWT " + Cookies.get("token")
-            };
+          for(let i = 0; i < this.state.event.images.length; i++){
             var options = {
               method: "GET",
               // TODO: Update search url page.
-              url: response.data.content,
+              url: EVENT_IMAGES_URL + this.state.event.images[i],
               //data: data,
               headers: headers,
             };
-            this.setState({shownImage: response.data.content})
-            
-        })
+            console.log("options")
+            console.log(options)
+            await axios(options).then(async response => {
+              console.log("resp")
+              console.log(response);
+              var newArr = this.state.imageUrls;
+              newArr.push(response.data.content);
+              this.setState({imageUrls: newArr})
+              if(i === 0)
+                this.setState({shownImage: response.data.content})
+            }).catch(error => console.error(error))
+          }
         }
       }
     }).catch(error => {
@@ -205,10 +205,14 @@ export default class EventPage extends React.Component{
                       }};
             ann.annotations.push(ell);
           });
-          var newArray = [];    
+          /*var newArray = [];    
           newArray.push(ann); 
           this.setState({annotationArr:newArray, error: false});
-          this.annotationArr = newArray;
+          this.annotationArr = newArray;*/
+          var newArray = this.state.annotationArr;    
+          newArray.push(ann); 
+          this.setState({annotationArr:newArray, error: false});
+          //this.annotationArr = newArray;
         }
       }).catch(error => {
         console.error(error);
@@ -467,6 +471,21 @@ handleEdit(){
   }
 }
 
+handleAddPhotoButton(){
+  if(this.state.token !== undefined){
+    if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+      return(
+        <div>
+          <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.handleAddPhoto(e)}/>
+          <label value="choose a photo" for="photo">{this.state.photo.name ? this.state.photo.name : "Add photo"}</label>
+        </div>
+      )
+    }
+    else 
+      return;
+  }
+}
+
   onStarClick(nextValue, prevValue, name) {     
     var data = {
       // TODO: Change here according to API
@@ -548,8 +567,42 @@ handleEdit(){
     }
   }
 
-  handleAddPhoto(){
+  async handleAddPhoto(e){
+    const file = e.target.files[0];
+    await this.setState({photo: file})
+    //console.log(this.state);
     
+    var headers= {
+      "Authorization" : "JWT " + Cookies.get("token"),
+      "Content-Type": "application/json",      
+    };
+    const formData = new FormData()
+    formData.append('content', this.state.photo, this.state.photo.name);
+    formData.append('event_id', this.state.id);
+
+    console.log(formData);
+    var data = {
+      //content: formData,
+      //event_id: response.data.id,
+      //creator: this.state.creator,
+    };
+    var options = {
+      method: "POST",
+      url: EVENT_IMAGES_URL,
+      headers: headers,
+      data: formData,
+    }
+    console.log(options)
+    await axios(options).then(response => {
+      //console.log(response);
+      if(response.status === 200){
+        //this.setState({redirect: "event/" + eventId.id})
+        window.location.reload();
+      }
+      }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
   }
 
   handleRedirectToCreatorProfile(e){
@@ -594,7 +647,7 @@ handleEdit(){
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
             <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/> 
             </div>
             <div class="col-sm-6">
             <div class="card-body">
@@ -648,15 +701,16 @@ handleEdit(){
                 {this.handleJoin()}
                 {this.handleInterested()}
                 {/*this.handleEdit()*/}
-                <button href="#" class="btn btn-warning" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleAddPhoto}>Add photo</button>
                 {this.handleDelete()}
+                <p className="float-right add-photo">{this.handleAddPhotoButton()}</p>
+                
                 </div>
               </div>
             </div>
           </div>
           <div class="col-sm-12">
         {this.state.annotationArr.map(annot => {
-              return<Annotation
+              return(<div><Annotation
                   src={annot.imageLink}
                   alt=''
                   annotations={annot.annotations}
@@ -664,7 +718,9 @@ handleEdit(){
                   value={annot.annotation}
                   onChange={e => this.onChange(e,this.state.annotationArr.indexOf(annot))}
                   onSubmit={e => this.onSubmit(e,this.state.annotationArr.indexOf(annot), annot.id)}
-        />})}
+        />
+        <br/>
+        </div>)})}
         </div>
         <h2 style={{margin:'22px'}}>
         Comments:

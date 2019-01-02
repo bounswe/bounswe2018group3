@@ -51,6 +51,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 
@@ -73,6 +74,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     RequestQueue queue;
     private Event event= new Event();
     private String eventid;
+    private double lat = 0, lon = 0;
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
     private RatingBar rbEvent, rbMakeRate;
@@ -108,7 +110,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         super.onAttach(context);
     }
 
-
     public EventFragment() {
         // Required empty public constructor
     }
@@ -118,9 +119,20 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         fragment.setEvent(eventid);
         return fragment;
     }
+    public static EventFragment newInstance(String eventid, double lat, double lon) {
+        EventFragment fragment = new EventFragment();
+        fragment.setEvent(eventid, lat, lon);
+        return fragment;
+    }
 
     private void setEvent(String eventid){
         this.eventid = eventid;
+    }
+
+    private void setEvent(String eventid, double lat, double lon){
+        this.eventid = eventid;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     @Override
@@ -180,9 +192,13 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(commentAdapter);
 
+        buttonInterested = view.findViewById(R.id.buttonInterested);
+        buttonAttend = view.findViewById(R.id.buttonAttend);
+
+        getEventDetails();
+        getComments();
 
         //Log.e("sizeee2","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
-        getEventDetails();
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
         imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
@@ -216,9 +232,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         });
 
 
-        buttonInterested = view.findViewById(R.id.buttonInterested);
-        buttonAttend = view.findViewById(R.id.buttonAttend);
-
         buttonInterested.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,6 +240,9 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 }else {
                     setInterested(Request.Method.GET);
                 }
+
+                buttonInterested.setText("Interested?");
+                buttonInterested.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
             }
         });
 
@@ -238,13 +254,23 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 }else {
                     setAttend(Request.Method.GET);
                 }
+                buttonAttend.setText("Attend?");
+                buttonAttend.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
             }
         });
-
-
+        if (MainActivity.isGuest){
+            etComment.setVisibility(View.INVISIBLE);
+            etCommentTitle.setVisibility(View.INVISIBLE);
+            buttonComment.setVisibility(View.INVISIBLE);
+            buttonInterested.setVisibility(View.INVISIBLE);
+            buttonAttend.setVisibility(View.INVISIBLE);
+            rbMakeRate.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void getEventDetails() {
+        isInterested = false;
+        isAttended= false;
         String url = Constants.EVENTS_URL + eventid;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -259,30 +285,40 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                             String artist = toUTF(jsonObject.getString("artist"));
                             String date = toUTF(jsonObject.getString("date"));
                             String time = toUTF(jsonObject.getString("time"));
+                            double lattitude = jsonObject.getDouble("loc_lattitude");
+                            double longitude = jsonObject.getDouble("loc_longitude");
                             //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
-                            JSONArray commentArray= jsonObject.getJSONArray("comments");
+                            /*JSONArray commentArray= jsonObject.getJSONArray("comments");
                             for(int j=0;j<commentArray.length();j++){
                                 comments.add(new Comment(commentArray.get(j).toString(),id));
-                            }
+                            }*/
                             Double price = Double.valueOf(jsonObject.getString("price"));
                             Float rating = Float.valueOf(jsonObject.getString("rating"));
                             ArrayList<Image> images = new ArrayList<>();
                             //images.add(new Image(image, null));
 
-                            //JSONArray arrayCreator = jsonObject.getJSONArray("creator");
                             JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
 
                             for (int i = 0; i < arrayAttendants.length(); i++) {
                                 String attendantid = arrayAttendants.get(i).toString();
                                 if (attendantid.equals(MainActivity.pk)){
                                     isAttended = true;
-                                    buttonAttend.setText("Attended");
+                                    buttonAttend.setText("Attending");
                                     buttonAttend.setBackgroundColor(Color.GREEN);
+                                }
+                            }
+                            JSONArray arrayInterestants = jsonObject.getJSONArray("interestants");
+
+                            for (int i = 0; i < arrayInterestants.length(); i++) {
+                                String interestantid = arrayInterestants.get(i).toString();
+                                if (interestantid.equals(MainActivity.pk)){
+                                    isInterested = true;
+                                    buttonInterested.setText("Interested");
+                                    buttonInterested.setBackgroundColor(Color.GREEN);
                                 }
                             }
 
                             event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
-                            getComments();
 
                             //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
                             tvTitle.setText(event.getEventName());
@@ -333,6 +369,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     @Override
                     public void onResponse(String response) {
                         Log.d("INTERESTEDDD", response);
+                        getEventDetails();
                     }
                 }, new Response.ErrorListener() {
 
@@ -366,6 +403,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     @Override
                     public void onResponse(String response) {
                         Log.d("ATTENDED", response);
+                        getEventDetails();
                     }
                 }, new Response.ErrorListener() {
 
@@ -507,43 +545,33 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         queue.add(stringRequest);
 
     }
-
     private void getComments() {
-        //comments.clear();
-        //User user = new User("0", "test@test.com", "Tester", "password");
-        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getEventName()+" "+eventid);
-        for(int i=0;i<event.getComments().size();i++){
-            Log.e("here","here "+event.getComments().get(i).getEventId()+" "+event.getId());
-            if(event.getComments().get(i).getEventId().equals(event.getId())){
-                getComment(event.getComments().get(i).getId());
-                //user.setName(event.getComments().get(i).getId());
-            }
-        }
-        //Comment comment = new Comment("",user,"", getString(R.string.lorem_ipsum_base), "7 November 2018", 4);
-        //comments.add(comment);
-        /*User user2 = new User("0", "test@test.com", "Tester", "pass");
-        user2.setName("Fatih Arslan");
-        Comment comment2 = new Comment("",user2,"", getString(R.string.lorem_ipsum_content), "5 April 2018", 3);
-        comments.add(comment2);
-        commentAdapter.notifyDataSetChanged();*/
-    }
-    private void getComment(final String commentId) {
-        String getCommentURL= Constants.COMMENT_URL+commentId;
+        String getCommentURL= Constants.COMMENT_URL;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 getCommentURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String content = toUTF(jsonObject.getString("content"));
-                            String title = toUTF(jsonObject.getString("title"));
-                            String author = toUTF(jsonObject.get("author").toString());
-                            String date = toUTF(jsonObject.getString("date"));
-                            date=date.substring(11,16)+"  "+date.substring(0,10);
-                            String event = toUTF(jsonObject.getString("event"));
-                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 0);
-                            comments.add(comment);
+                            JSONArray jsonArray = new JSONArray(response);
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = toUTF(jsonObject.getString("id"));
+                                String content = toUTF(jsonObject.getString("content"));
+                                String title = toUTF(jsonObject.getString("title"));
+                                String author = toUTF(jsonObject.get("author").toString());
+                                String date = toUTF(jsonObject.getString("date"));
+                                String authorfirstname = toUTF(jsonObject.getString("authorFirstName"));
+                                String authorlastname = toUTF(jsonObject.getString("authorLastName"));
+                                String authorpicture = toUTF(jsonObject.getString("authorProfilePic"));
+                                date=date.substring(11,16)+"  "+date.substring(0,10);
+                                String commenteventid = toUTF(jsonObject.getString("event"));
+                                if (commenteventid.equals(eventid)){
+                                    comments.add(new Comment(id, new User(author,"",authorfirstname,  authorlastname, authorpicture), commenteventid, title, content, date, 0));
+                                }
+                            }
+                            event.setComments(comments);
                             commentAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -577,8 +605,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         MapsInitializer.initialize(activity);
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.addMarker(new MarkerOptions().position(new LatLng(41.085830, 29.046891)).title(event.getEventName()).snippet("huhuu"));
-        CameraPosition position = CameraPosition.builder().target(new LatLng(41.085830, 29.046891)).zoom(14).build();
+        map.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(event.getEventName()).snippet("Event Location"));
+        CameraPosition position = CameraPosition.builder().target(new LatLng(lat, lon)).zoom(14).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
     public String toUTF(String str){

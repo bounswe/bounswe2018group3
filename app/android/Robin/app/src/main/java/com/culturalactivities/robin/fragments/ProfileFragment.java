@@ -235,6 +235,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 }
                             }
 
+                            recyclerView.setAdapter(eventAdapter);
+                            eventAdapter.notifyDataSetChanged();
+
                             // get followers
                             JSONArray followersArray = jsonObj.getJSONArray("followers");
                             for (int i = 0; i < followersArray.length(); i++) {
@@ -331,6 +334,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         int position = recyclerView.getChildLayoutPosition(view);
         switch (tabLayout.getSelectedTabPosition()){
             case 0:
+                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position).getId()));
+                transaction.addToBackStack("addEF");
+                transaction.commit();
                 break;
             case 1:
                 FragmentTransaction transaction2 = activity.getSupportFragmentManager().beginTransaction();

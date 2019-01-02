@@ -300,8 +300,12 @@ public class CreateEventFragment extends Fragment {
                             etLongitude.setText(lon);
                             etPrice.setText(price);
                             buttonSelectDate.setText(date);
-                            buttonSelectHour.setText(hour);
-
+                            if(time.length()>4){
+                                buttonSelectHour.setText(time.substring(0,5));
+                            }
+                            else{
+                                buttonSelectHour.setText(time);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -349,23 +353,7 @@ public class CreateEventFragment extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                // As of f605da3 the following should work
-                NetworkResponse response = error.networkResponse;
-                if (error instanceof ServerError && response != null) {
-                    /*try {
-                        String res = new String(response.data,
-                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                        // Now you can use any deserializer to make sense of data
-                        Log.d("RESSOO", res);
-                        //JSONObject obj = new JSONObject(res);
-                    } catch (UnsupportedEncodingException e1) {
-                        // Couldn't properly decode data to string
-                        e1.printStackTrace();
-                    } catch (JSONException e2) {
-                        // returned data is not JSONObject?
-                        e2.printStackTrace();
-                    }*/
-                }
+                error.printStackTrace();
             }
         }) {
 

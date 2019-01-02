@@ -12,5 +12,7 @@ public class Constants {
     public static final String DELETE_EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/delete/";
     public static final String EDIT_EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/edit/";
     public static final String COMMENT_URL = "http://139.59.128.92:8080/api/v1/eventcomments/";
+    public static final String EVENT_IMAGES_URL = "http://139.59.128.92:8080/api/v1/eventimages/";
+    public static final String TAGS_URL = "http://139.59.128.92:8080/api/v1/tags/";
     public static final String FOLLOW_USER_URL = "http://139.59.128.92:8080/api/v1/users/follow/";
 }

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,6 +34,9 @@ import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.fragments.CreateEventFragment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.utilities.Constants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,11 +124,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvName.setText(event.getEventName());
         holder.tvName.setTypeface(MainActivity.ubuntuBold);
         if (getItemViewType(position) == 1 || getItemViewType(position) == 0 ){
-            //holder.tvDate.setText(event.getTime().substring(0,5) +"  " + event.getDate());
+            String hour = event.getTime();
+            if (event.getTime().length()> 5){
+                hour = event.getTime().substring(0, 5);
+            }
+            holder.tvDate.setText(hour + "  " + event.getDate());
             holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
-            //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
             holder.tvArtist.setText(event.getArtistInfo());
             holder.tvArtist.setTypeface(MainActivity.ubuntuRegular);
+            if (event.getImages().size()>0){
+                getImage(event.getImages().get(0).getId(), holder.ivBanner);
+            }
 
             if (event.isCreated()){
                 holder.buttonEdit.setVisibility(View.VISIBLE);
@@ -160,6 +170,44 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.rvTags.setAdapter(new MyStringAdapter(context, event.getTags(), onClickListener));
         }
 
+    }
+
+    private void getImage(String imageid, final ImageView ivBanner) {
+        String url = Constants.EVENT_IMAGES_URL + imageid;
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String image = jsonObject.getString("content");
+                            Glide.with(context).load(image).into(ivBanner);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     private void openAlertDialog(final String eventid) {

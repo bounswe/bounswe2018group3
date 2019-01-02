@@ -280,7 +280,7 @@ class EventCommentCreateView(mixins.ListModelMixin,
             if comment.author is not None:
                 data['authorFirstName'] = comment.author.first_name
                 data['authorLastName'] = comment.author.last_name
-                data['authorProfilePic'] = comment.author.profile_pic
+                data['authorProfilePic'] = comment.author.profile_pic.url
 
             else:
                 data['authorName'] = "Deleted User"
@@ -331,7 +331,7 @@ class EventCommentRetrieveView(viewsets.ModelViewSet):
         if comment.author is not None:
             data['authorFirstName'] = comment.author.first_name
             data['authorLastName'] = comment.author.last_name
-            data['authorProfilePic'] = comment.author.profile_pic
+            data['authorProfilePic'] = comment.author.profile_pic.url
         else:
             data['authorName'] = "Deleted User"
         return JsonResponse(data)

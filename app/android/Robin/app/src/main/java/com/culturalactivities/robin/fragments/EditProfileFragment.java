@@ -48,7 +48,7 @@ public class EditProfileFragment extends Fragment {
 
     RequestQueue queue;
     private ImageView ivProfile;
-    private EditText etName, etSurname, etBio;
+    private EditText etName, etSurname, etBio, etCity, etCountry;
     private Button updateButton;
 
     private static final int GALLERY_INTENT = 21;
@@ -92,6 +92,8 @@ public class EditProfileFragment extends Fragment {
         etName = view.findViewById(R.id.etName);
         etSurname = view.findViewById(R.id.etSurname);
         etBio = view.findViewById(R.id.etBio);
+        etCity = view.findViewById(R.id.etCity);
+        etCountry = view.findViewById(R.id.etCountry);
         updateButton=view.findViewById(R.id.buttonUpdate);
 
         getProfileInfo();
@@ -138,6 +140,8 @@ public class EditProfileFragment extends Fragment {
                 params.put("first_name", etName.getText().toString());
                 params.put("last_name", etSurname.getText().toString());
                 params.put("bio", etBio.getText().toString());
+                params.put("city", etCity.getText().toString());
+                params.put("country", etCountry.getText().toString());
                 return params;
             }
             @Override
@@ -165,6 +169,9 @@ public class EditProfileFragment extends Fragment {
                             String fname = toUTF(jsonObject.getString("first_name"));
                             String lname = toUTF(jsonObject.getString("last_name"));
                             String bio = toUTF(jsonObject.getString("bio"));
+                            String city = toUTF(jsonObject.getString("city"));
+                            String country = toUTF(jsonObject.getString("country"));
+
                             String image = jsonObject.getString("profile_pic");
 
                             etName.setText(fname);
@@ -172,6 +179,9 @@ public class EditProfileFragment extends Fragment {
                             //Glide.with(activity).load(image).into(ivProfile);
                             // TODO: 05.12.2018 Waiting for profile picture link from backend
                             etBio.setText(bio);
+                            etCity.setText(city);
+                            etCountry.setText(country);
+
                             MainActivity.progressBar.setVisibility(View.INVISIBLE);
 
                         } catch (JSONException e) {
@@ -190,7 +200,6 @@ public class EditProfileFragment extends Fragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("type", "post");
-                params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }

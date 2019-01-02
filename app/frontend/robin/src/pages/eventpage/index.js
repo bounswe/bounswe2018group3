@@ -11,7 +11,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { ANNOTATION_URL, EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+
+import {
+  PointSelector,
+  RectangleSelector,
+  OvalSelector
+} from 'react-image-annotation/lib/selectors';
 
 import "./eventpage.css"
 
@@ -119,7 +125,10 @@ export default class EventPage extends React.Component{
                       }};
             ann.annotations.push(ell);
           });
-          this.state.annotationArr.push(ann);   
+          var newArray = [];    
+          newArray.push(ann); 
+          this.setState({annotationArr:newArray, error: false});
+          this.annotationArr = newArray;
         }
       }).catch(error => {
         console.error(error);
@@ -131,25 +140,66 @@ export default class EventPage extends React.Component{
   } 
 
   onChange = (annotation ,id) => {
-    console.log(id);
-    console.log(annotation);
-    console.log(this.annotationArr);
+    //console.log(this.annotationArr[id].annotation);
     this.annotationArr[id].annotation = annotation;
+    this.setState({ annotation });
   }
 
 
-  onSubmit = (annotation ,id) => {
-    console.log(id);
-    console.log(annotation);
-    console.log(this.annotationArr[id])
-    const { geometry, data } = annotation
-    this.annotationArr[id].annotations.concat({
+  onSubmit = (annotation ,id, img_id) => {
+    const { geometry, data } = annotation;
+    var gg = {
       geometry,
       data: {
         ...data,
         id: Math.random()
       }
-    });
+    };
+    console.log(gg);
+    this.annotationArr[id].annotations.push(gg);
+    this.setState({ annotation : {}, annotationArr: this.annotationArr });
+
+    var d = {
+      // TODO: Change here according to API
+      body: {
+        value: data.text,
+      },
+      target: {
+        source: img_id,
+        selector: {
+          sel_type: "ImagePositionSelector",
+          type: geometry.type,
+          image_id: gg.data.id,
+          width: geometry.width,
+          height: geometry.height,
+          x: geometry.x,
+          y: geometry.y,
+        }
+      }
+    };
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "POST",
+      // TODO: Update search url page.
+      url: ANNOTATION_URL,
+      data: d,
+      headers: headers,
+    };
+    //console.log(options);
+    axios(options).then(response => {
+      //console.log(response);
+      if(response.status === 200){
+        var event_ = response.data;
+        this.setState({event: event_, error: false});
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+
   }
 
 
@@ -218,7 +268,6 @@ handleInterestedClick(){
 }
 
 handleJoin(){
-  console.log(this.annotationArr);
   if(!this.state.joined){
     return(
       <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
@@ -391,7 +440,7 @@ handleEdit(){
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
             <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.event.country} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.event.imageLink} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
             </div>
             <div class="col-sm-6">
             <div class="card-body">
@@ -441,10 +490,10 @@ handleEdit(){
                   src={annot.imageLink}
                   alt=''
                   annotations={annot.annotations}
-                  type={this.state.type}
+                  type={RectangleSelector.TYPE}
                   value={annot.annotation}
-                  onChange={e => this.onChange(e, annot.id)}
-                  onSubmit={e => this.onSubmit(e, annot.id)}
+                  onChange={e => this.onChange(e,this.state.annotationArr.indexOf(annot))}
+                  onSubmit={e => this.onSubmit(e,this.state.annotationArr.indexOf(annot), annot.id)}
         />})}
         </div>
         <h2 style={{margin:'22px'}}>

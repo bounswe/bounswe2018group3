@@ -22,4 +22,4 @@ export const DELETE_URL = "http://139.59.128.92:8080/api/v1/events/delete/";
 
 export const EVENT_IMAGE_URL = "http://139.59.128.92:8080/api/v1/eventimages/";
 
-
+export const ANNOTATION_URL = "http://139.59.128.92:8080/api/v1/annotations/"; 

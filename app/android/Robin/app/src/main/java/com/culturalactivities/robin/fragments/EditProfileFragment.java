@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.utilities.Constants;
@@ -176,7 +177,7 @@ public class EditProfileFragment extends Fragment {
 
                             etName.setText(fname);
                             etSurname.setText(lname);
-                            //Glide.with(activity).load(image).into(ivProfile);
+                            Glide.with(activity).load(image).into(ivProfile);
                             // TODO: 05.12.2018 Waiting for profile picture link from backend
                             etBio.setText(bio);
                             etCity.setText(city);

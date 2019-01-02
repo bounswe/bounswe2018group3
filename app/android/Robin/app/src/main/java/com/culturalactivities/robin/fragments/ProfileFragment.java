@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
@@ -200,7 +201,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             String image = toUTF(jsonObj.getString("profile_pic"));
 
                             tvName.setText(fname + " " + lname);
-                            //Glide.with(activity).load(image).into(ivProfile);
+                            Glide.with(activity).load(image).into(ivProfile);
                             // TODO: 05.12.2018 Waiting for profile picture link from backend
                             tvBio.setText(bio);
 

@@ -748,7 +748,7 @@ handleAddPhotoButton(){
           </div>
           {this.state.comments.map(comment => {
             console.log(comment);
-            return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.FirstName} text={comment.content} date={Date.parse(comment.date)}/>
+            return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.authorFirstName + " " + comment.authorLastName} text={comment.content} date={Date.parse(comment.date)}/>
           })}
           <br></br>
           <h2 style={{margin:'22px'}}>

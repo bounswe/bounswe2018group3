@@ -76,12 +76,6 @@ class EventRetrieveView(viewsets.ModelViewSet):
         HttpResponse(eventsList)
 """
 
-
-class EventFilter(django_filters.FilterSet):
-    class Meta:
-        model = models.Event
-        fields = '__all__'
-
 #Read only event models,
 class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
     permission_classes = (IsAuthenticatedOrReadOnly,)#(IsAuthenticated,)
@@ -89,7 +83,7 @@ class EventSearchView(generics.ListAPIView): # TODO does not show ratings nicely
     serializer_class = serializers.EventRWSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ("info", "name", "country", "city", "artist", )
-    #filter_class = EventFilter
+
     def get(self, request, *args, **kwargs):
         event_set = models.Event.objects.all()
         event_set = self.filter_queryset(event_set)
@@ -245,3 +239,18 @@ class EventCreateView(mixins.ListModelMixin,
         else:
             data['creator'] = (-1, "Deleted User", "", "", "false", "Deleted User")
         return JsonResponse(data)
+
+"""
+class EventPicView(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = models.Event.objects.all()
+    serializer_class = serializers.BannerPicSerializer
+    pagination_class = None
+
+    def getpic(self, *args, **kwargs):
+
+        event = models.Event.objects.get(pk=self.kwargs['event_id'])
+        image = event.banner_pic
+        size = image.size
+
+        return HttpResponse(image, content_type='image/png')"""

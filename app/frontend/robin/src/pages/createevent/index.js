@@ -157,7 +157,7 @@ export default class CreateEvent extends React.Component {
           console.log(this.state.existingTagsInDB[j].name)
           if(tagsArray[i] === this.state.existingTagsInDB[j].name){
             found = true;
-            id = j;
+            id = this.state.existingTagsInDB[j].id;
           }
         }
         if(!found){
@@ -171,7 +171,7 @@ export default class CreateEvent extends React.Component {
           console.log(options);
           await axios(options).then(async response => {
             console.log(response);
-            if(response.status === 200){
+            if(response.status === 201){
               await this.setState({existingTagsInDB: this.state.existingTagsInDB.append(response.data) })
               tag_ids.push(response.data.id)
             }

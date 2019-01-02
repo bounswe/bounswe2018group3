@@ -483,7 +483,7 @@ handleEdit(){
                 </div>
                 <div class="row" style={{marginLeft:'15px'}}>
                   <div class="col-sm-9">
-                  Tags : {this.state.event.tags ? this.state.event.tags.map((tag, key) => {return tag[1]}) : "no tags were given" } 
+                  Tags : {this.state.event.tags ? this.state.event.tags.map((tag, key) => {return tag[1] + ", "}) : "no tags were given" } 
 
                   </div>
                   <div class="col-sm-3">

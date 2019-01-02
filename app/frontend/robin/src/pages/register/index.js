@@ -214,7 +214,7 @@ export default class Register extends React.Component {
                 Robin
               </h2>
               <form className="form-signup">
-                <input type="text" className="form-control" placeholder="Full Name" required autofocus name="name" onChange={this.handleChange}/>
+                <input type="text" className="form-control" placeholder="Username" required autofocus name="name" onChange={this.handleChange}/>
                 {this.validateEmail()}
                 {this.validatePassword()}
                 <div className="terms">

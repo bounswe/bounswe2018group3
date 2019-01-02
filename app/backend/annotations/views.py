@@ -69,7 +69,7 @@ class AnnotationCreateView(mixins.ListModelMixin,
             selector_data["type"] = request.data["target"]["selector"]["type"]
             selector_data["image_id"] = request.data["target"]["selector"]["image_id"]
             selector_data["width"] = request.data["target"]["selector"]["width"]
-            selector_data["height"] = request.data["target"]["selector"]["width"]
+            selector_data["height"] = request.data["target"]["selector"]["height"]
             selector_data["x"] = request.data["target"]["selector"]["x"]
             selector_data["y"] = request.data["target"]["selector"]["y"]
             target_data["source"] = request.data["target"]["source"]

@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./eventpage.css";
 import StarRatingComponent from 'react-star-rating-component';
 import { Link, Redirect } from "react-router-dom";
-import { ANNOTATION_URL, EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
+import { ANNOTATION_URL,EVENT_IMAGES_URL,EVENT_ATTEND_URL, EVENT_INTEREST_URL,USERS_URL, EVENT_IMAGE_URL, EVENT_URL, USERS_URL, RATING_URL, DELETE_URL, EVENT_COMMENTS_URL } from "../constants/backend-urls";
 
 import {
   PointSelector,
@@ -28,16 +28,20 @@ export default class EventPage extends React.Component{
       id: this.props.location.pathname.substring(7),
       redirect : "",
       event: {},
-      creator : {},
+      creator : [],
       rating : "",
       joined: false,
       interested: false,
       comments: [],
       annotationArr: [],
+      images: [],
+      shownImage: "",
       error: false,
+      token: Cookies.get("token"),
+      user: {},
+      tags: [],
     }
     this.onStarClick = this.onStarClick.bind(this);
-    this.getUser = this.getUser.bind(this);
     this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
     this.handleJoin = this.handleJoin.bind(this);
     this.handleInterested = this.handleInterested.bind(this);
@@ -68,16 +72,91 @@ export default class EventPage extends React.Component{
       headers: headers,
     };
     //console.log(options);
-    await axios(options).then(response => {
+    await axios(options).then(async response => {
       //console.log(response);
       if(response.status === 200){
-        var event_ = response.data;
-        this.setState({event: event_, error: false});
+        var eventList = response.data;
+        this.setState({event: eventList, error: false});
+        this.setState({creator: {id: this.state.event.creator[0], firstName: this.state.event.creator[1], lastName: this.state.event.creator[2]}});
+        if(this.state.event.images.length > 0){
+          var data = {
+            // TODO: Change here according to API
+            id: this.state.id
+          };
+          var headers= {
+            "Content-Type": "application/json",
+            //"Authorization" : "JWT " + Cookies.get("token")
+          };
+          var options = {
+            method: "GET",
+            // TODO: Update search url page.
+            url: EVENT_IMAGES_URL + this.state.event.images[0],
+            data: data,
+            headers: headers,
+          };
+          await axios(options).then(async response => {
+            console.log(response);
+            var headers= {
+              "Content-Type": "application/json",
+              //"Authorization" : "JWT " + Cookies.get("token")
+            };
+            var options = {
+              method: "GET",
+              // TODO: Update search url page.
+              url: response.data.content,
+              //data: data,
+              headers: headers,
+            };
+            this.setState({shownImage: response.data.content})
+            
+        })
+        }
       }
     }).catch(error => {
       console.error(error);
       this.setState({error: true});
     })
+    if(this.state.token !== undefined){
+      console.log("logged in")
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            ...this.state, 
+            user: {           
+              pastEvents: response.data.pastEvents.map((event, key) => {return event[0]}),
+              createdEvents: response.data.createdEvents.map((event, key) => {return event[0]}),
+              futureEvents: response.data.futureEvents.map((event, key) => {return event[0]}),
+              interestedEvents: response.data.interestedEvents.map((event, key) => {return event[0]}),
+            }
+          });
+        } 
+      }).then(() => {
+        if(this.state.user.futureEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }
+        /*if(this.state.user.createdEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }
+        if(this.state.user.pastEvents.includes(parseInt(this.state.id))){
+          this.setState({joined: true, interested: true});
+        }*/
+        if(this.state.user.interestedEvents.includes(parseInt(this.state.id))){
+          this.setState({interested: true});
+        }
+      }).catch(error => {
+        console.error(error);
+      })
     this.state.event.images.forEach(element =>{
       var data = {
         // TODO: Change here according to API
@@ -203,34 +282,6 @@ export default class EventPage extends React.Component{
   }
 
 
-  getUser(e){
-    var data = {
-    // TODO: Change here according to API
-    //id: Cookies.get("clickedEvent")
-  };
-  var headers= {
-    "Content-Type": "application/json",
-    //"Authorization" : "JWT " + Cookies.get("token")
-  };
-  var options = {
-    method: "GET",
-    // TODO: Update search url page.
-    url: USERS_URL + e,
-    data: data,
-    headers: headers,
-  };
-  axios(options).then(response => {
-    if(response.status === 200){
-      var resp = response.data;
-      this.setState({creator: resp});
-      return resp.username;
-    }
-  }).catch(error => {
-    console.error(error);
-    this.setState({error: true});
-  })
-
-} 
 
 handleDeleteEvent(e){
   var data = {
@@ -259,61 +310,146 @@ handleDeleteEvent(e){
     this.setState({error: true});
   })
 }
-handleJoinClick(){
-  this.setState({joined: !this.state.joined})
+async handleJoinClick(){
+  await this.setState({joined: !this.state.joined})
+  if(this.state.joined){
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "GET",
+      url: EVENT_ATTEND_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  else{
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "DELETE",
+      url: EVENT_ATTEND_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
 }
 
-handleInterestedClick(){
-  this.setState({interested: !this.state.interested})
+async handleInterestedClick(){
+  await this.setState({interested: !this.state.interested})
+  if(this.state.interested){
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "GET",
+      url: EVENT_INTEREST_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  else{
+    var headers= {
+      "Content-Type": "application/json",
+      "Authorization" : "JWT " + Cookies.get("token")
+    };
+    var options = {
+      method: "DELETE",
+      url: EVENT_INTEREST_URL + this.state.event.id,
+      headers: headers,
+    };
+    axios(options).then(response => {
+      if(response.status === 200){
+        console.log(response);      
+      }
+    }).catch(error => {
+      console.error(error);
+      this.setState({error: true});
+    })
+  }
+  
 }
 
 handleJoin(){
-  if(!this.state.joined){
-    return(
-      <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
-    )
-  }
-  else{
-    return(
-      <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
+  if(this.state.token !== undefined){
+    if(!this.state.joined ){
+      return(
+        <button href="#" className="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Join Event</button>
+      )
+    }
+    else{
+      return(
+        <button href="#" className="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleJoinClick}>Going</button>
 
-    )
+      )
+    }
   }
 }
 
 handleInterested(){
-  if(!this.state.interested){
-    return(
-      <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
-    )
-  }
-  else{
-    return(
-      <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
+  if(this.state.token !== undefined){
+    if(!this.state.interested){
+      return(
+        <button href="#" class="btn btn-primary" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Mark as Interested</button>
+      )
+    }
+    else{
+      return(
+        <button href="#" class="btn btn-success" style={{marginLeft:'30px', marginTop:'30px'}} onClick={this.handleInterestedClick}>Interested</button>
 
-    )
+      )
+    }
   }
 }
 
 handleDelete(){
-  //console.log(Cookies.get("userid") == this.state.creator.id)
-  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
-    return(
-      <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
-    )
+  if(this.state.token !== undefined){
+    //console.log(Cookies.get("userid") == this.state.creator.id)
+    if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+      return(
+        <a href="#" class="btn btn-danger"  onClick={e => this.handleDeleteEvent(e)} style={{marginLeft:'30px', marginTop:'30px'}}>Delete</a>
+      )
+    }
+    else 
+      return;
   }
-  else 
-    return;
 }
 
 handleEdit(){
-  if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
-    return(
-      <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
-    )
+  if(this.state.token !== undefined){
+    if(Cookies.get("userid") == this.state.creator.id && Cookies.get("token") !== undefined && Cookies.get("token") !== ""){
+      return(
+        <a href="#" class="btn btn-info" style={{marginLeft:'30px', marginTop:'30px'}}>Edit</a>
+      )
+    }
+    else 
+      return;
   }
-  else 
-    return;
 }
 
   onStarClick(nextValue, prevValue, name) {     
@@ -367,12 +503,10 @@ handleEdit(){
     //console.log(options)
     axios(options).then(response => {
       if(response.status === 200){
-        //console.log("comment add" + response);
         window.location.reload();
       }
     }).catch(error => {
       console.error(error);
-      console.log("error in the comment")
       this.setState({error: true});
     })
     this.setState({commentValue: ""});
@@ -405,7 +539,8 @@ handleEdit(){
   }
 
   render(){
-    //console.log(this.state);
+    console.log("state in the render");
+    console.log(this.state);
     const { rating } = this.state;
     if(this.state.redirect !== ""){
       return (<Redirect to={this.state.redirect}/>)
@@ -440,16 +575,16 @@ handleEdit(){
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
             <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.event.imageLink} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
             </div>
             <div class="col-sm-6">
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
                 <div class="col-sm-9">
-                    Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.id}</a>
+                    Created by: <a href={"/profile/" + this.state.creator.id}>{this.state.creator.firstName + " " + this.state.creator.lastName}</a>
                   </div>
                   <div class="col-sm-9">
-                    Price: {this.state.event.price}
+                    Price: {this.state.event.price} $
                   </div>
                   <div class="col-sm-3">
                   <StarRatingComponent 
@@ -465,9 +600,24 @@ handleEdit(){
                   Date-Time : {this.state.event.date} {this.state.event.time}
                   </div>
                   <div class="col-sm-3">
-                  {
-                    //this.getUser(this.state.event.creator)
-                  }
+                 
+                  </div>
+                </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Artist : {this.state.event.artist ? this.state.event.artist : "Anonymous" } 
+                  </div>
+                  <div class="col-sm-3">
+                 
+                  </div>
+                </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Tags : {this.state.event.tags ? this.state.event.tags.map((tag, key) => {return tag[1] + ", "}) : "no tags were given" } 
+
+                  </div>
+                  <div class="col-sm-3">
+                 
                   </div>
                 </div>
 

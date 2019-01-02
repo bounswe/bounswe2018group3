@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import datetime
 
 from django.urls import reverse_lazy
 
@@ -27,7 +28,7 @@ SECRET_KEY = 'cy%k9*l+31$5@e&wb7whjg5y)^yov4ll02ctz155cc)$_7i61l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["139.59.128.92" , "127.0.0.1"] # For local testing purposes.
+ALLOWED_HOSTS = ["139.59.128.92" , "127.0.0.1", "localhost"] # For local testing purposes.
 
 
 # Application definition
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+
+    'corsheaders',
 
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
@@ -56,6 +59,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -138,7 +143,7 @@ STATIC_URL = '/static/'
 # User Model for authentication.
 AUTH_USER_MODEL = 'users.CustomUser'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True   
 ACCOUNT_USERNAME_REQUIRED = False
 #ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
@@ -161,6 +166,11 @@ REST_FRAMEWORK = {
    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser',
    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
 REST_USE_JWT = True
@@ -182,3 +192,9 @@ EMAIL_SUBJECT_PREFIX = '[Test mail]'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = reverse_lazy('account_confirm_complete')
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = reverse_lazy('account_confirm_complete')
+
+# CORS stuff
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_METHODS = ( 'DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', ) 
+CORS_ALLOW_HEADERS = ( 'accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with', )

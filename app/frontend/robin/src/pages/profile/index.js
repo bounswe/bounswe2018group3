@@ -7,7 +7,7 @@ import axios from 'axios';
 import Navbar from "../components/navbar/index"
 import GuestBar from "../components/guestBar/index"
 
-import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL } from "../constants/backend-urls"
+import { USERS_URL, EDIT_USER_URL, GET_USER_PIC_URL, FOLLOW_URL, TAGS_URL, USER_WATCH_TAGS_URL } from "../constants/backend-urls"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
@@ -16,43 +16,13 @@ import "jquery/dist/jquery.min.js";
 import 'font-awesome/css/font-awesome.min.css';
 import "./index.css"
 
-var examplePeople = [
-  {
-    id: 3,
-    first_name: "Debbie",
-    last_name: "Smith",
-    city: "New York",
-    country: "NY",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/w104.jpg",
-    private: true,
-  },
-  {
-    id: 4,
-    first_name: "Michael",
-    last_name: "Anderson",
-    city: "Boston",
-    country: "MA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
-    private: false,
-
-  },
-  {
-    id: 5,
-    first_name: "Jordan",
-    last_name: "Schlansky",
-    city: "Los Angeles",
-    country: "CA",
-    pic: "http://demos.themes.guide/bodeo/assets/images/users/m101.jpg",
-    private: false,
-
-  },
-]
 
 export default class ProfileCard extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       redirect: "",
+      token: Cookies.get("token"),
       propsToken: this.props.location.token,
       id: this.props.location.pathname.substring(9),
       email: "",
@@ -70,15 +40,27 @@ export default class ProfileCard extends React.Component{
       //languages: "",
       //about: "",
       bio: "",
-      interests: "",
       //likes: "",
       //hates: "",
       //favourites: "",
-      attendedEvents: "",
-      willAttendEvents: "",
-      createdEvents: "",
-      profile_pic: "",
-      photo: "",
+      pastEvents: [],
+      futureEvents: [],
+      createdEvents: [],
+      interestedEvents: [],
+      chosen_profile_pic: "",
+      profile_pic: {},
+      profile_photo: {},
+       /*photo: {},
+      uploadPhoto: {},*/
+      private: false,
+      followedUsers: [],
+      followers: [],
+      following: false,
+      userFollowing: [],
+      interests: "",
+      interestsArray: [],
+      existingTagsInDB: [],
+      watchingTags: [],
     }
     this.oldState = this.state;
     this.state.propsToken = this.props.location.token;
@@ -86,29 +68,54 @@ export default class ProfileCard extends React.Component{
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.listFriends = this.listFriends.bind(this);
-    this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
+    //this.uploadPhotoHandler = this.uploadPhotoHandler.bind(this);
     this.uploadProfilePhotoHandler = this.uploadProfilePhotoHandler.bind(this);
     this.profilePhotoHandler = this.profilePhotoHandler.bind(this);
+    this.follow = this.follow.bind(this);
+    this.handleFollowButton = this.handleFollowButton.bind(this);
+    this.redirectProfile = this.redirectProfile.bind(this);
   }
 
   async componentDidMount(){
     if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === "")
       return;
 
-    var headers= {
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: TAGS_URL ,
+        headers: headers,
+      };
+      await axios(options).then(async response => {
+        console.log("tags");
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            existingTagsInDB: response.data,
+  
+          })
+        }
+        })
+
+    headers= {
       "Content-Type": "application/json",
-      "Authorization" : "JWT " + Cookies.get("token")
+      //"Authorization" : "JWT " + Cookies.get("token")
     };
-    var options = {
+    options = {
       method: "GET",
       url: USERS_URL + this.props.location.pathname.substring(9),
       headers: headers,
     };
+    console.log(options)
     await axios(options).then(async response => {
-      //console.log(response);
+      console.log("did mount");
+      console.log(response);
       if(response.status === 200){
-        this.setState({
-          ...this.state,
+        await this.setState({
+          //...this.state,
           id: response.data.id,
           bio: response.data.bio,
           birthday: response.data.birthday,
@@ -117,16 +124,30 @@ export default class ProfileCard extends React.Component{
           email: response.data.email,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-          profile_pic: response.data.profile_pic,
-          followedUsers: response.data.followedUsers,
-          followers: response.data.followers,
+          followedUsers: response.data.followedUsers.map((person, key) => {return {id: person[0], first_name: person[1], last_name: person[2], pic: person[3], private: person[4]}}),
+          followers: response.data.followers.map((person, key) => {return {id: person[0], first_name: person[1], last_name: person[2], pic: person[3], private: person[4]}}),
           private: response.data.private,
-          photo: "",
-        });
+          profile_pic: response.data.profile_pic,
+          profile_photo: {},
+          private: response.data.is_private,
+          pastEvents: response.data.pastEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          createdEvents: response.data.createdEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          futureEvents: response.data.futureEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          interestedEvents: response.data.interestedEvents.map((event, key) => {return {id: event[0], name: event[1]}}),
+          watchingTags: response.data.watchingTags,
+            interestsArray: response.data.watchingTags.map((tag, key) => {
+              for(let i = 0; i < this.state.existingTagsInDB.length; i++){
+                if(this.state.existingTagsInDB[i].id === tag){
+                  return this.state.existingTagsInDB[i].name;
+                }
+              }
+              }),
+        }); 
+        this.setState({interests: this.state.interestsArray.toString()})
         //if(response.data.private || this.state.private){
-        if(this.state.id === 3){
+        if(this.state.private && this.state.id !== Cookies.get("userid")){
           await this.setState({redirect: "/privateprofile/" + this.state.id});
-          console.log("true");
+
         }
       }
     }).catch(error => {
@@ -139,15 +160,62 @@ export default class ProfileCard extends React.Component{
       headers: headers,
     }
     await axios(options).then(response => {
-      console.log("*************" + response);
+      //console.log(response);
       if(response.status === 200){
-        this.setState({profile_pic: response.data.profile_pic})
+        this.setState({profile_pic: response.data.profile_pic.data})
       }
     }).catch(error => {
       console.error(error);
       this.setState({error: true});
     })
+    if(this.state.token !== undefined){
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + Cookies.get("userid"),
+        headers: headers,
+      };
+      //console.log(options)
+      await axios(options).then(async response => {
+        console.log("did mount");
+        //console.log(response);
+        if(response.status === 200){
+          //console.log(response)
+          this.setState({
+            userFollowing: response.data.followedUsers.map((person, key) => {return person[0]}),
+          });
+        }
+      }).catch(error => {
+        console.error(error);
+      }) 
+    }
+    
+    this.oldState = this.state;
 
+  }
+
+  handleFollowButton(){
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        return(
+          <button href="" className="btn btn-md btn-primary btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Follow
+          </button>
+        )
+      }
+      else{
+        return(
+          <button href="" className="btn btn-md btn-success btn-block col-4 " onClick={this.follow}>
+            <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
+            Following
+          </button>
+        )
+      }
+    }
   }
 
   async handleChange(e) {
@@ -161,7 +229,8 @@ export default class ProfileCard extends React.Component{
   }
 
   async handleSave(){
-    this.oldState = this.state;
+    var profile_pic_changed = false;
+    var interests_changed = false;
     var headers= {
       "Content-Type": "application/json",
       "Authorization" : "JWT " + Cookies.get("token")
@@ -174,45 +243,226 @@ export default class ProfileCard extends React.Component{
       email: this.state.email,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      profile_pic: this.state.profile_pic,
-      followedUsers: this.state.followedUsers,
-      followers: this.state.followers,
+      //profile_pic: this.state.profile_pic,
+      //followedUsers: this.state.followedUsers,
+      //followers: this.state.followers,
     };
+    if(this.state.profile_pic !== this.oldState.profile_pic){ 
+      profile_pic_changed = true;
+    }
+    if(this.state.interests !== this.oldState.interests){
+      interests_changed = true;
+    }
+      
+    this.oldState = this.state;
+
     var options = {
       method: "PATCH",
       url: EDIT_USER_URL + Cookies.get("userid"),
       headers: headers,
-      body: body,
+      data: body,
     };
-    console.log(options);
+    //console.log(options);
     await axios(options).then(response => {
-      console.log(response);
+      //console.log(response);
       if(response.status === 200){
       }
       }).catch(error => {
       console.error(error);
       this.setState({error: true});
     })
+    if(profile_pic_changed){
+      const formData = new FormData()
+      formData.append('profile_pic', this.state.profile_pic, this.state.profile_pic.name)
+      options = {
+        method: "PATCH",
+        url: EDIT_USER_URL + Cookies.get("userid"),
+        headers: headers,
+        data: formData,
+      }
+      console.log(options)
+      await axios(options).then(response => {
+        //console.log(response);
+        if(response.status === 200){
+          //window.location.reload();
+        }
+        }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+    }
+    if(interests_changed){
+      console.log("interests changed")
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      for(let i = 0; i < this.state.interestsArray.length; i++){
+        for(let j = 0; j < this.state.existingTagsInDB.length; j++){
+          console.log(this.state.interestsArray[i])
+          console.log(this.state.existingTagsInDB[j].name)
+          if(this.state.interestsArray[i] === this.state.existingTagsInDB[j].name ){
+            found = true;
+            var options = {
+              method: "DELETE",
+              url: USER_WATCH_TAGS_URL + this.state.existingTagsInDB[j].id,
+              headers: headers,
+            };
+            console.log(options);
+            await axios(options).then(response => {
+              console.log(response);
+              if(response.status === 200){
+                
+              }
+              }).catch(error => {
+              console.error(error);
+              this.setState({error: true});
+          })
+          
+          }
+        }
+      }
+
+      await this.setState({interestsArray: this.state.interests.split(",")});
+      for(let i = 0; i < this.state.interestsArray.length; i++){
+        var found = false;
+        for(let j = 0; j < this.state.existingTagsInDB.length; j++){
+          console.log(this.state.interestsArray[i])
+          console.log(this.state.existingTagsInDB[j].name)
+          if(this.state.interestsArray[i] === this.state.existingTagsInDB[j].name ){
+            found = true;
+            var options = {
+              method: "GET",
+              url: USER_WATCH_TAGS_URL + this.state.existingTagsInDB[j].id,
+              headers: headers,
+            };
+            await axios(options).then(response => {
+              console.log(response);
+              if(response.status === 200){
+                
+              }
+              }).catch(error => {
+              console.error(error);
+              this.setState({error: true});
+          })
+          
+          }
+        }
+        if(found){
+          found = false;
+          continue;
+        }
+        var data = {name: this.state.interestsArray[i]};
+        var options = {
+          method: "POST",
+          url: TAGS_URL,
+          headers: headers,
+          data: data,
+        };
+        console.log(options);
+        await axios(options).then(async response => {
+          console.log(response);
+          if(response.status === 200){
+            await this.setState({existingTagsInDB: this.state.existingTagsInDB.append(response.data)})
+          }
+          var options = {
+            method: "GET",
+            url: USER_WATCH_TAGS_URL + response.data.id,
+            headers: headers,
+          };
+          await axios(options).then(response => {
+            console.log(response);
+            if(response.status === 200){
+              
+            }
+            }).catch(error => {
+            console.error(error);
+            this.setState({error: true});
+        })
+          }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+      })
+      
+      }
+      
   }
 
+  }
+/*
   uploadPhotoHandler(e){
     e.preventDefault();
-    console.log(this.state);
-  }
+    this.setState({uploadPhoto: e.target.files[0]});
+    console.log(e.target.files[0])
 
-  uploadProfilePhotoHandler(e){
-    e.preventDefault();
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   fileChangedHandler(event){
     const file = event.target.files[0];
     this.setState({photo: file})
   }
+*/
+  async uploadProfilePhotoHandler(e){
+    e.preventDefault();
+    await this.setState({profile_pic: this.state.profile_photo, profile_photo: {}});
+    //console.log(this.state);
+  }
 
-  profilePhotoHandler(event){
-    const file = event.target.files[0];
-    this.setState({profile_pic: file})
+  async profilePhotoHandler(e){
+    const file = e.target.files[0];
+    await this.setState({profile_photo: file})
+    //console.log(this.state);
+  }
+
+  async follow(){ 
+    if(this.state.token !== undefined){
+      if(!this.state.userFollowing.includes(this.state.id)){
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "GET",
+          url: FOLLOW_URL + this.props.location.pathname.substring(9),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+      else{
+        var headers= {
+          "Content-Type": "application/json",
+          "Authorization" : "JWT " + Cookies.get("token")
+        };
+        var options = {
+          method: "DELETE",
+          url: FOLLOW_URL + this.props.location.pathname.substring(9),
+          headers: headers,
+        }
+        await axios(options).then(response => {
+          //console.log(response);
+          if(response.status === 200){
+          }
+        }).catch(error => {
+          console.error(error);
+          this.setState({error: true});
+        })
+      }
+      window.location.reload();
+    }
+  } 
+
+  redirectProfile(link){
+    this.setState({redirect: link});
+    window.location.reload();
+
   }
 
   listFriends(people){
@@ -227,28 +477,27 @@ export default class ProfileCard extends React.Component{
       }
       if(i % 2 === 1){
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-right my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-right my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
-            <div className="col-12 col-sm-8 col-md-10 float-right">
+            <div className="col-12 col-sm-8 col-md-10 float-right" >
               <Link to={profileLink}>
                 <label className="name lead mb-0">
                   {people[i].first_name + " " + people[i].last_name}
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )
       }
       else{
         ret.push(
-          <li className="list-item col-xs-12 col-lg-6 float-left my-3">
+          <li className="list-item col-xs-12 col-lg-6 float-left my-3" onClick={this.redirectProfile}>
             <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-              <img src={people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
+              <img src={USERS_URL + people[i].pic} alt={people[i].first_name + " " + people[i].last_name} className="img-fluid rounded-circle d-block mx-auto"/>
             </div>
             <div className="col-12 col-sm-8 col-md-10 float-right">
               <Link to={profileLink}>
@@ -257,8 +506,7 @@ export default class ProfileCard extends React.Component{
                 </label>
               </Link>
               <br/>
-              <i className="fa fa-map-marker" aria-hidden="true"></i> {people[i].city + ", " + people[i].country}
-              <br/>
+              
             </div>
           </li>
         )
@@ -268,6 +516,8 @@ export default class ProfileCard extends React.Component{
   }
 
   render(){
+    console.log("state in render");
+    console.log(this.state);
     if(this.props.location.pathname.substring(9) === undefined || this.props.location.pathname.substring(9) === ""){
       return(
         <div>
@@ -277,12 +527,8 @@ export default class ProfileCard extends React.Component{
         </div>
       )
     }
-    if(this.state.redirect !== ""){
-      return(
-        <Redirect to={this.state.redirect}/>
-      )
-    }
-    if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
+    
+    else if(Cookies.get("userid") === this.props.location.pathname.substring(9)){
     return (
       <div>
         <div className="mb-70">
@@ -361,14 +607,17 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interestsArray.map((tag, key) => {
+                            return (<div className="badge badge-success badge-pill interest-pills">{tag}</div>)
+                          })}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                      <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>
@@ -376,13 +625,45 @@ export default class ProfileCard extends React.Component{
                       <div className="row">
                         <div className="col-md-12">
                           <h5>Events I have attended to</h5>
-                          <p> {this.state.attendedEvents}</p>
+                          <p> {this.state.pastEvents.length > 0 ? this.state.pastEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.willAttendEvents}</p>
+                          <p>{this.state.futureEvents.length > 0 ? this.state.futureEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
+                          <hr/>
+                          <h5>Events I am interested in</h5>
+                          <p>{this.state.interestedEvents.length > 0 ? this.state.interestedEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents}</p>
+                          <p>{this.state.createdEvents.length > 0 ? this.state.createdEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
+                          
                           <hr/>
                         </div>
                       </div>
@@ -395,53 +676,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(this.state.followers)}                                
                                 </ul>
                               </div>
                             </div>
@@ -457,53 +692,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(this.state.followedUsers)} 
                                 </ul>
                               </div>
                             </div>
@@ -511,6 +700,7 @@ export default class ProfileCard extends React.Component{
                         </div>
                       </div>
                     </div>
+                    {/*
                     <div className="tab-pane" id="photos">
                       <div className="row">
                         <div className="col-md-12">
@@ -518,7 +708,7 @@ export default class ProfileCard extends React.Component{
                           <form role="form">
                             <div className="form-group row">
                               <div className="col-lg-9">
-                                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)}/>
+                                <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.fileChangedHandler(e)} />
                                 <label value="choose a photo" for="photo">{this.state.photo==="" ? "Choose a file": this.state.photo.name}</label>
                                 <button className="btn btn-primary" onClick={e => this.uploadPhotoHandler(e)}>Upload</button>
                               </div>
@@ -529,6 +719,7 @@ export default class ProfileCard extends React.Component{
                         </div>
                       </div>
                     </div>
+                    */}
                     <div className="tab-pane" id="edit">
                       <form role="form">
                         <div className="form-group row">
@@ -543,7 +734,7 @@ export default class ProfileCard extends React.Component{
                             <input className="form-control" type="text" name="last_name" value={this.state.last_name} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
-                        <div className="form-group row">
+                        {/*<div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Email</label>
                           <div className="col-lg-9">
                             <input className="form-control" type="email" name="email" value={this.state.email} onChange={e => this.handleChange(e)}/>
@@ -555,6 +746,7 @@ export default class ProfileCard extends React.Component{
                             <input className="form-control" type="password" name="password" onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
+                        */}
                         {/*
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Short Summary</label>
@@ -567,7 +759,7 @@ export default class ProfileCard extends React.Component{
                           <label className="col-lg-3 col-form-label form-control-label">Profile Photo</label>
                             <div className="col-lg-9">
                               <input className="form-control inputfile" id="photo" type="file" name="photo" onChange={e => this.profilePhotoHandler(e)}/>
-                              <label value="choose a photo" for="photo">{this.state.profile_pic==="" ? "Choose a file": this.state.profile_pic}</label>
+                              <label value="choose a photo" for="photo">{this.state.profile_photo.name ? this.state.profile_photo.name : "Choose a file" }</label>
                               <button className="btn btn-primary" onClick={e => this.uploadProfilePhotoHandler(e)}>Set as profile photo</button>
                             </div>
                           </div>
@@ -646,7 +838,7 @@ export default class ProfileCard extends React.Component{
                         */}
                         <div className="form-group row">
                           <label className="col-lg-3 col-form-label form-control-label">Interests</label>
-                          <div className="col-lg-9">
+                          <div className="col-lg-9">                        
                             <input className="form-control" type="text" name="interests" value={this.state.interests} onChange={e => this.handleChange(e)}/>
                           </div>
                         </div>
@@ -668,6 +860,11 @@ export default class ProfileCard extends React.Component{
       </div>
     );
     }
+    else if(this.state.redirect !== ""){
+      return(
+        <Redirect to={this.state.redirect}/>
+      )
+    }
     else{
       return (
         <div>
@@ -685,7 +882,7 @@ export default class ProfileCard extends React.Component{
                   <div className="card w-100" >
                     <img className="card-img-top w-100" src={this.state.profile_pic} alt="Card image"  />
                     <div className="card-body">
-                      <h4 className="card-title">{this.state.name}</h4>
+                      <h4 className="card-title">{this.state.first_name + " " + this.state.last_name}</h4>
                       <p className="card-text">{this.state.cardSummary}</p>
                       <div className="address">								
                         <ul>
@@ -710,11 +907,8 @@ export default class ProfileCard extends React.Component{
                 </div>
                 <div className="col-lg-8 col-md-6 order-lg-2">
                 <div className="col-12 buttons mb-10 mx-auto">
-                  <button href="" className="btn btn-md btn-success btn-block col-4 ">
-                    <i className="fa fa-user-plus add-friend-image" aria-hidden="true"></i>
-                    Follow
-                  </button>
-                  <button href="" className="btn btn-md btn-primary btn-block col-4 ">
+                  {this.handleFollowButton()}
+                  <button href="" className="btn btn-md btn-warning btn-block col-4 ">
                     <i className="fa fa-envelope add-friend-image" aria-hidden="true"></i>
                     Message
                   </button>
@@ -757,28 +951,62 @@ export default class ProfileCard extends React.Component{
                         </div>
                         <div className="col-md-12">
                           <h5>Interests</h5>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
+                          <p>{this.state.interestsArray.map((tag, key) => {
+                            return (<div className="badge badge-success badge-pill interest-pills">{tag}</div>)
+                          })}</p>
+                          {/*<a href="#" className="badge badge-success badge-pill interest-pills">html5</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">react</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">codeply</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">angularjs</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">css3</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">jquery</a>
                           <a href="#" className="badge badge-success badge-pill interest-pills">bootstrap</a>
-                          <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>
+                        <a href="#" className="badge badge-success badge-pill interest-pills">responsive-design</a>*/}
                         </div>
                       </div>
                     </div>
                     <div className="tab-pane" id="events">
                       <div className="row">
                         <div className="col-md-12">
-                          <h5>Events I have attended to</h5>
-                          <p> {this.state.attendedEvents}</p>
+                        <h5>Events I have attended to</h5>
+                          <p> {this.state.pastEvents.length > 0 ? this.state.pastEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I will attend to</h5>
-                          <p>{this.state.willAttendEvents}</p>
+                          <p>{this.state.futureEvents.length > 0 ? this.state.futureEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
+                          <hr/>
+                          <h5>Events I am interested in</h5>
+                          <p>{this.state.interestedEvents.length > 0 ? this.state.interestedEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                           <h5>Events I have created</h5>
-                          <p>{this.state.createdEvents}</p>
+                          <p>{this.state.createdEvents.length > 0 ? this.state.createdEvents.map((event, key) => {
+                            var eventLink = "/event/" + event.id;
+                            return(
+                              <div>
+                              <Link to={eventLink}> {event.name} </Link> <br/>
+                              </div>
+                            )}
+                          ) : "Wow such empty"}</p>
                           <hr/>
                         </div>
                       </div>
@@ -791,53 +1019,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(this.state.followers)}
                                 </ul>
                               </div>
                             </div>
@@ -853,53 +1035,7 @@ export default class ProfileCard extends React.Component{
                             <div className="card card-default">
                               <div id="contacts" className="panel-collapse collapse show" aria-expanded="true" >
                                 <ul className="list-unstyled ">
-                                {this.listFriends(examplePeople)}
-                                {/*
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-left my-3">
-                                    <div className="col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="Mike Anamendolla" className="rounded-circle mx-auto d-block img-fluid"/>
-                                    </div>
-                                    <div className="col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Mike Anamendolla</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Los Angeles, CA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                  <li className="list-item col-xs-12 col-lg-6 float-right my-3">
-                                    <div className="col-8 col-sm-4 col-md-2 px-0 float-left">
-                                      <img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg" alt="Debbie Schmidt" className="img-fluid rounded-circle d-block mx-auto"/>
-                                    </div>
-                                    <div className="col-12 col-sm-8 col-md-10 float-right">
-                                      <label className="name lead mb-0">Debbie Schmidt</label>
-                                      <br/>
-                                      <i className="fa fa-map-marker" aria-hidden="true"></i> Boston, MA
-                                      <br/>
-                                    </div>
-                                  </li>
-                                */}
+                                  {this.listFriends(this.state.followedUsers)}
                                 </ul>
                               </div>
                             </div>

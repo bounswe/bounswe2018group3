@@ -64,7 +64,7 @@ export default class Home extends React.Component{
           <NavBar currentPath={this.props.location.pathname}/>
         </div>
         <div className="eventContainer col-md-6">
-        {this.state.events.map(comp => {
+        {this.state.events.map((comp, key) => {
               return <EventComp title={comp.name} subtitle={comp.locatio}
               eventPhoto={comp.country} eventDetails={comp.info} id={comp.id}/>
             })}

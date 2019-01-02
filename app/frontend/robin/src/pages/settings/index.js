@@ -4,7 +4,7 @@ import "./index.css";
 import Cookies from 'js-cookie';
 
 import { Redirect } from "react-router-dom";
-
+import { USERS_URL, EDIT_USER_URL } from "../constants/backend-urls"
 import axios from 'axios';
 import { push } from 'react-router-redux';
 
@@ -14,18 +14,50 @@ export default class Settings extends React.Component {
       super(props);
       this.state = {
         id: Cookies.get("userid"),
+        token: Cookies.get("token"),
         redirect: "",
         private: false,
         submitClicked: false,
         followingSettings: [true, true, true, false],
       };
   
+      this.handleSave = this.handleSave.bind(this);
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleFollowingCheckboxes = this.handleFollowingCheckboxes.bind(this);
       this.handleFollowingCheckboxesChange = this.handleFollowingCheckboxesChange.bind(this);
+      this.oldState = this.state;
       
     }
+
+    async componentDidMount(){
+      if(this.state.token === undefined || this.state.token === "")
+        return;
+  
+      var headers= {
+        "Content-Type": "application/json",
+        //"Authorization" : "JWT " + Cookies.get("token")
+      };
+      var options = {
+        method: "GET",
+        url: USERS_URL + this.state.id,
+        headers: headers,
+      };
+      console.log(options)
+      await axios(options).then(async response => {
+        console.log("did mount");
+        console.log(response);
+        if(response.status === 200){
+          this.setState({
+            //...this.state,
+            id: response.data.id,
+            private: response.data.is_private,
+          });
+        }
+      }).catch(error => {
+        console.error(error);
+      })
+    } 
 
     handleCheckboxChange(){
       this.setState({private: !this.state.private})
@@ -79,7 +111,38 @@ export default class Settings extends React.Component {
           [name]: value
         });
     }
-    handleSave(){}
+    async handleSave(){
+      var headers= {
+        "Content-Type": "application/json",
+        "Authorization" : "JWT " + Cookies.get("token")
+      };
+      var body = {
+        is_private: this.state.private
+        //profile_pic: this.state.profile_pic,
+        //followedUsers: this.state.followedUsers,
+        //followers: this.state.followers,
+      };
+        
+      this.oldState = this.state;
+  
+      var options = {
+        method: "PATCH",
+        url: EDIT_USER_URL + Cookies.get("userid"),
+        headers: headers,
+        data: body,
+      };
+      //console.log(options);
+      await axios(options).then(response => {
+        console.log(response);
+        if(response.status === 200){
+
+        }
+        }).catch(error => {
+        console.error(error);
+        this.setState({error: true});
+      })
+      
+    }
   
     render() {
       console.log(this.state);

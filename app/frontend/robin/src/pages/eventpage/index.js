@@ -80,8 +80,38 @@ export default class EventPage extends React.Component{
       //console.log(response);
       if(response.status === 200){
         var eventList = response.data;
+        console.log(eventList);
+        var commentArray = [];
+        eventList.comments.forEach(element =>{
+          var data = {
+            // TODO: Change here according to API
+            id: this.state.id
+          };
+          var headers= {
+            "Content-Type": "application/json",
+            //"Authorization" : "JWT " + Cookies.get("token")
+          };
+          var options = {
+            method: "GET",
+            // TODO: Update search url page.
+            url: EVENT_COMMENTS_URL + element,
+            data: data,
+            headers: headers,
+          };
+          axios(options).then(response => {
+            //console.log(response);
+            if(response.status === 200){
+              commentArray.push(response.data);
+            }
+          }).catch(error => {
+            console.error(error);
+            this.setState({error: true});
+          })
+          
+        });
         this.setState({event: eventList, error: false});
         this.setState({creator: {id: this.state.event.creator[0], firstName: this.state.event.creator[1], lastName: this.state.event.creator[2]}});
+        this.setState({comments: commentArray});
         if(this.state.event.images.length > 0){
           var data = {
             // TODO: Change here according to API
@@ -521,7 +551,8 @@ handleAddPhotoButton(){
       //id: Cookies.get("clickedEvent")
       title: this.state.event.name,
       content: this.state.commentValue,
-      id: this.state.id,
+      event: this.state.id,
+      ratings: []
     };
     var headers= {
       "Content-Type": "application/json",
@@ -530,8 +561,8 @@ handleAddPhotoButton(){
     var options = {
       method: "POST",
       // TODO: Update search url page.
-      url: EVENT_COMMENTS_URL + this.state.id,
-      body: data,
+      url: EVENT_COMMENTS_URL,
+      data: data,
       headers: headers,
     };
     //console.log(options)
@@ -646,10 +677,10 @@ handleAddPhotoButton(){
       <div class="card">
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
-            <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/> 
+            <div class="col-sm-3">
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%'}}/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-9">
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
                 <div class="col-sm-9">
@@ -708,7 +739,22 @@ handleAddPhotoButton(){
               </div>
             </div>
           </div>
-          <div class="col-sm-12">
+          <br></br>
+          <h2 style={{margin:'22px'}}>
+          Comments:
+          </h2>
+          <div class="col-sm-8">
+          {this.handleAddcommentBox()}
+          </div>
+          {this.state.comments.map(comment => {
+            console.log(comment);
+            return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.FirstName} text={comment.content} date={Date.parse(comment.date)}/>
+          })}
+          <br></br>
+          <h2 style={{margin:'22px'}}>
+          Pictures:
+          </h2>
+          <div class="col-sm-6">
         {this.state.annotationArr.map(annot => {
               return(<div><Annotation
                   src={annot.imageLink}
@@ -722,14 +768,7 @@ handleAddPhotoButton(){
         <br/>
         </div>)})}
         </div>
-        <h2 style={{margin:'22px'}}>
-        Comments:
-        </h2>
         
-        {this.handleAddcommentBox()}
-        {this.state.comments.map(comment => {
-          return <Comment userName={comment.userName} text={comment.text} date={Date.now()}/>
-        })}
       </React.Fragment>
     );
   }

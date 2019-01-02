@@ -160,6 +160,7 @@ class EventUserRelated(APIView):
             old_index_offset = 0
             for ix in changed_indexes:
                 returned_events.insert(0, returned_events.pop(ix+old_index_offset))
+                old_index_offset += 1
 
         return JsonResponse(returned_events[page*10:(page+1)*10], safe=False)
 

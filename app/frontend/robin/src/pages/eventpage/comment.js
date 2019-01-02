@@ -24,7 +24,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minut
       const { rating } = this.state;
 
         return (
-          <div class="card">
+          <div class="card col-sm-10">
             <div class="card-body">
             <div class="row">
             <div class="col-sm-2">
@@ -44,7 +44,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en-EN", { hour: "numeric", minut
               />
             </div>
             </div>
-            <p class="card-text shadow-sm bg-white rounded" style={{marginRight:'30px', marginTop:'20px'}}>{ text }</p>
+            <p class="card-text" style={{marginRight:'30px', marginTop:'20px', fontSize: '20px'}}>{ text }</p>
             </div>
             </div>
           </div>

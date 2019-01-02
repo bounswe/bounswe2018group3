@@ -619,10 +619,10 @@ handleEdit(){
       <div class="card">
           <h3 class="card-title" style={{marginTop:'30px', marginBottom:'30px', marginLeft:'30px'}}>{this.state.event.name}</h3>
           <div class="row">
-            <div class="col-sm-6">
-              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%',height:'auto'}}/>
+            <div class="col-sm-3">
+              <img class="card-img-top img-fluid shadow-lg bg-white" src={this.state.shownImage} alt="Card image cap" style={{marginBottom:'20px', maxWidth:'100%'}}/>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-9">
             <div class="card-body">
                 <div class="row" style={{marginLeft:'15px'}}>
                 <div class="col-sm-9">
@@ -680,6 +680,20 @@ handleEdit(){
             </div>
           </div>
           <br></br>
+          <h2 style={{margin:'22px'}}>
+          Comments:
+          </h2>
+          <div class="col-sm-8">
+          {this.handleAddcommentBox()}
+          </div>
+          {this.state.comments.map(comment => {
+            console.log(comment);
+            return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.FirstName} text={comment.content} date={Date.parse(comment.date)}/>
+          })}
+          <br></br>
+          <h2 style={{margin:'22px'}}>
+          Pictures:
+          </h2>
           <div class="col-sm-6">
         {this.state.annotationArr.map(annot => {
               return<Annotation
@@ -692,15 +706,7 @@ handleEdit(){
                   onSubmit={e => this.onSubmit(e,this.state.annotationArr.indexOf(annot), annot.id)}
         />})}
         </div>
-        <h2 style={{margin:'22px'}}>
-        Comments:
-        </h2>
         
-        {this.handleAddcommentBox()}
-        {this.state.comments.map(comment => {
-          console.log(comment);
-          return <Comment pp={USERS_URL+comment.authorProfilePic} userName={comment.FirstName} text={comment.content} date={Date.parse(comment.date)}/>
-        })}
       </React.Fragment>
     );
   }

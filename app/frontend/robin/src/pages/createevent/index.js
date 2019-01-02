@@ -172,7 +172,7 @@ export default class CreateEvent extends React.Component {
           await axios(options).then(async response => {
             console.log(response);
             if(response.status === 201){
-              await this.setState({existingTagsInDB: this.state.existingTagsInDB.append(response.data) })
+              await this.setState({existingTagsInDB: this.state.existingTagsInDB.push(response.data) })
               tag_ids.push(response.data.id)
             }
           })

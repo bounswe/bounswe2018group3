@@ -446,7 +446,6 @@ export default class CreateEvent extends React.Component {
               </div>
               </div>
               <br />
-              
               {this.handleErrorMessage()}
               <div className="row">
                 <div className="col-xs-2 mx-auto">

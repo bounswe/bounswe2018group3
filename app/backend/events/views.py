@@ -155,7 +155,7 @@ class EventUserRelated(APIView):
             for ix in range(len(returned_events)-1,-1,-1):
                 if returned_events[ix]["tags"]:
                     for event_tag in returned_events[ix]["tags"]:
-                        if event_tag in user_tag_ids:
+                        if event_tag[0] in user_tag_ids:
                             changed_indexes.append(ix)
             old_index_offset = 0
             for ix in changed_indexes:

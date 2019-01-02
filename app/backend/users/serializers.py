@@ -63,6 +63,7 @@ class UserRWSerializer(serializers.ModelSerializer):
                 instance.city = validated_data.get('city', instance.city)
                 instance.country = validated_data.get('country', instance.country)
                 instance.email = validated_data.get('email', instance.email)
+                instance.is_private = validated_data.get('is_private', instance.is_private)
                 instance.username = validated_data.get('username', instance.username)
                 instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)
                 instance.birthday = validated_data.get('birthday', instance.birthday)

@@ -32,6 +32,7 @@ export default class EventPage extends React.Component{
       error: false,
       token: Cookies.get("token"),
       user: {},
+      tags: [],
     }
     this.onStarClick = this.onStarClick.bind(this);
     this.handleDeleteEvent = this.handleDeleteEvent.bind(this);
@@ -475,6 +476,15 @@ handleEdit(){
                 <div class="row" style={{marginLeft:'15px'}}>
                   <div class="col-sm-9">
                   Artist : {this.state.event.artist ? this.state.event.artist : "Anonymous" } 
+                  </div>
+                  <div class="col-sm-3">
+                 
+                  </div>
+                </div>
+                <div class="row" style={{marginLeft:'15px'}}>
+                  <div class="col-sm-9">
+                  Tags : {this.state.event.tags ? this.state.event.tags.map((tag, key) => {return tag[1] + ", "}) : "no tags were given" } 
+
                   </div>
                   <div class="col-sm-3">
                  

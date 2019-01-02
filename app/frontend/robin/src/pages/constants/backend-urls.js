@@ -12,6 +12,7 @@ export const USERS_URL = "http://139.59.128.92:8080/api/v1/users/";
 export const EDIT_USER_URL = "http://139.59.128.92:8080/api/v1/users/edit/";
 export const GET_USER_PIC_URL = "http://139.59.128.92:8080/api/v1/users/getpic/";
 export const FOLLOW_URL = "http://139.59.128.92:8080/api/v1/users/follow/"
+export const USER_WATCH_TAGS_URL = "http://139.59.128.92:8080/api/v1/users/watch/"
 
 export const EVENT_URL = "http://139.59.128.92:8080/api/v1/events/";
 export const EVENT_COMMENTS_URL = "http://139.59.128.92:8080/api/v1/eventcomments/"
@@ -23,4 +24,6 @@ export const HOMEPAGE_URL = "http://139.59.128.92:8080/api/v1/events/homepage/";
 
 export const RATING_URL = "http://139.59.128.92:8080/api/v1/events/rate/";
 export const DELETE_URL = "http://139.59.128.92:8080/api/v1/events/delete/";
+
+export const TAGS_URL = "http://139.59.128.92:8080/api/v1/tags/"
 

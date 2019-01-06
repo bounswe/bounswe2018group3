@@ -1,26 +1,26 @@
 package com.culturalactivities.robin.models;
 
 public class Location {
-    private double latitude, longitude;
+    private String latitude, longitude;
 
-    public Location(double latitude, double longitude) {
+    public Location(String latitude, String longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.LocaleList;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,17 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.CommentAdapter;
@@ -53,10 +47,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,13 +66,12 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
 
     RequestQueue queue;
-    private Event event= new Event();
+    private Event event = new Event();
     private String eventid;
-    private double lat = 0, lon = 0;
     private ImageView ivBanner;
     private TextView tvTitle, tvDescription, tvArtistInfo, tvPrice, tvDate;
     private RatingBar rbEvent, rbMakeRate;
-    private ArrayList<Image> images = new ArrayList<>();
+
 
     //comments part
     private RecyclerView recyclerView;
@@ -113,6 +103,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         super.onAttach(context);
     }
 
+
     public EventFragment() {
         // Required empty public constructor
     }
@@ -122,20 +113,9 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         fragment.setEvent(eventid);
         return fragment;
     }
-    public static EventFragment newInstance(String eventid, double lat, double lon) {
-        EventFragment fragment = new EventFragment();
-        fragment.setEvent(eventid, lat, lon);
-        return fragment;
-    }
 
     private void setEvent(String eventid){
         this.eventid = eventid;
-    }
-
-    private void setEvent(String eventid, double lat, double lon){
-        this.eventid = eventid;
-        this.lat = lat;
-        this.lon = lon;
     }
 
     @Override
@@ -162,7 +142,7 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         return view;
     }
 
-    //@SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n")
     private void setView(View view) {
         queue = Volley.newRequestQueue(activity);
         ivBanner = view.findViewById(R.id.ivProfile);
@@ -183,31 +163,22 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         rbMakeRate.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-               // Log.e("sizeee3","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
                 rateEvent(rating);
-                //Log.e("sizeee4","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
             }
         });
-        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getArtistInfo()+" "+eventid);
-        //comments part
-        recyclerView = view.findViewById(R.id.rvComments);
-        commentAdapter = new CommentAdapter(activity, comments, EventFragment.this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(commentAdapter);
 
-        buttonInterested = view.findViewById(R.id.buttonInterested);
-        buttonAttend = view.findViewById(R.id.buttonAttend);
-
-        getEventDetails();
-        getComments();
-
-        //Log.e("sizeee2","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
         // image gallery
         rvGallery = view.findViewById(R.id.rvGallery);
         imageAdapter = new ImageAdapter(activity, event.getImages(), EventFragment.this);
         rvGallery.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         rvGallery.setAdapter(imageAdapter);
 
+        //comments part
+        recyclerView = view.findViewById(R.id.rvComments);
+        commentAdapter = new CommentAdapter(activity, comments, EventFragment.this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(commentAdapter);
+        getComments();
 
         mapView = view.findViewById(R.id.map);
         if (mapView != null){
@@ -235,6 +206,9 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         });
 
 
+        buttonInterested = view.findViewById(R.id.buttonInterested);
+        buttonAttend = view.findViewById(R.id.buttonAttend);
+
         buttonInterested.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,9 +217,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 }else {
                     setInterested(Request.Method.GET);
                 }
-
-                buttonInterested.setText("Interested?");
-                buttonInterested.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
             }
         });
 
@@ -257,23 +228,13 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                 }else {
                     setAttend(Request.Method.GET);
                 }
-                buttonAttend.setText("Attend?");
-                buttonAttend.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
             }
         });
-        if (MainActivity.isGuest){
-            etComment.setVisibility(View.INVISIBLE);
-            etCommentTitle.setVisibility(View.INVISIBLE);
-            buttonComment.setVisibility(View.INVISIBLE);
-            buttonInterested.setVisibility(View.INVISIBLE);
-            buttonAttend.setVisibility(View.INVISIBLE);
-            rbMakeRate.setVisibility(View.INVISIBLE);
-        }
+
+        getEventDetails();
     }
 
     private void getEventDetails() {
-        isInterested = false;
-        isAttended= false;
         String url = Constants.EVENTS_URL + eventid;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -288,45 +249,32 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                             String artist = toUTF(jsonObject.getString("artist"));
                             String date = toUTF(jsonObject.getString("date"));
                             String time = toUTF(jsonObject.getString("time"));
-                            double lattitude = jsonObject.getDouble("loc_lattitude");
-                            double longitude = jsonObject.getDouble("loc_longitude");
                             //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
-                            /*JSONArray commentArray= jsonObject.getJSONArray("comments");
+                            JSONArray commentArray= jsonObject.getJSONArray("comments");
                             for(int j=0;j<commentArray.length();j++){
                                 comments.add(new Comment(commentArray.get(j).toString(),id));
-                            }*/
+                            }
                             Double price = Double.valueOf(jsonObject.getString("price"));
                             Float rating = Float.valueOf(jsonObject.getString("rating"));
+                            ArrayList<Image> images = new ArrayList<>();
+                            //images.add(new Image(image, null));
 
+                            //JSONArray arrayCreator = jsonObject.getJSONArray("creator");
                             JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
 
                             for (int i = 0; i < arrayAttendants.length(); i++) {
                                 String attendantid = arrayAttendants.get(i).toString();
                                 if (attendantid.equals(MainActivity.pk)){
                                     isAttended = true;
-                                    buttonAttend.setText("Attending");
+                                    buttonAttend.setText("Attended");
                                     buttonAttend.setBackgroundColor(Color.GREEN);
                                 }
                             }
-                            JSONArray arrayInterestants = jsonObject.getJSONArray("interestants");
-
-                            for (int i = 0; i < arrayInterestants.length(); i++) {
-                                String interestantid = arrayInterestants.get(i).toString();
-                                if (interestantid.equals(MainActivity.pk)){
-                                    isInterested = true;
-                                    buttonInterested.setText("Interested");
-                                    buttonInterested.setBackgroundColor(Color.GREEN);
-                                }
-                            }
-
-                            JSONArray imagesArray= jsonObject.getJSONArray("images");
-                            if (imagesArray.length()>0){
-                                getImage(imagesArray.get(0).toString());
-                            }else {
-                                Glide.with(activity).load(R.drawable.eventimage).into(ivBanner);
-                            }
 
                             event = new Event(id, name,info, artist, date, time, price, rating, null, comments, null, null, images);
+
+
+                            //Glide.with(view).load(event.getImages().get(0).getUrl()).into(ivBanner);
                             tvTitle.setText(event.getEventName());
                             tvDescription.setText(event.getEventInfo());
                             rbEvent.setRating(event.getRating());
@@ -367,60 +315,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         queue.add(jsonObjReq);
     }
 
-    /*private void getImages(JSONArray imagesArray) {
-        images.clear();
-        for (int i = 0; i < imagesArray.length(); i++) {
-            try {
-                getImage(imagesArray.get(i).toString());
-                Log.d("IMAGES"+i, images.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        if (images.size()>0){
-            Glide.with(activity).load(images.get(0).getUrl()).into(ivBanner);
-            imageAdapter.notifyDataSetChanged();
-        }
-    }*/
-
-    private void getImage(final String imageid) {
-        String url = Constants.EVENT_IMAGES_URL + imageid;
-        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String url = jsonObject.getString("content");
-                            Glide.with(activity).load(url).into(ivBanner);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "JWT " + MainActivity.token);
-                return params;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
-            }
-        };
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjReq);
-    }
-
     private void setInterested(int requestCode) {
         String url = Constants.EVENT_INTEREST_URL + event.getId();
         StringRequest jsonObjReq = new StringRequest(requestCode,
@@ -429,7 +323,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     @Override
                     public void onResponse(String response) {
                         Log.d("INTERESTEDDD", response);
-                        getEventDetails();
                     }
                 }, new Response.ErrorListener() {
 
@@ -463,7 +356,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
                     @Override
                     public void onResponse(String response) {
                         Log.d("ATTENDED", response);
-                        getEventDetails();
                     }
                 }, new Response.ErrorListener() {
 
@@ -493,7 +385,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
 
     private void rateEvent(float rating) {
         String url = Constants.RATE_URL + event.getId()+ "/" + (int) rating;
-        //Log.e("sizeee","here "+event.getComments().size()+" "+event.getId()+" "+eventid);
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 url,
                 new Response.Listener<String>() {
@@ -534,7 +425,6 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
     }
 
     private void makeComment(final String comment, final String commentTitle) {
-        Log.e("commentxxx",comment+" "+commentTitle);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         /*try {
             HttpResponse<String> response = Unirest.post("http://139.59.128.92:8080/api/v1/eventcomments/")
@@ -549,39 +439,18 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             e.printStackTrace();
         }*/
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+        /*StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 Constants.COMMENT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        try {
-                            JSONObject json= new JSONObject(response);
-                            Toast.makeText(activity, "Thanks for your comment", Toast.LENGTH_SHORT).show();
-                            MainActivity.progressBar.setVisibility(View.INVISIBLE);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        // TODO: 15.12.2018
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                NetworkResponse response = error.networkResponse;
-                if (error instanceof ServerError && response != null) {
-                    try {
-                        String res = new String(response.data,
-                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                        // Now you can use any deserializer to make sense of data
-                        Log.d("RESSOO", res);
-                        //JSONObject obj = new JSONObject(res);
-                    } catch (UnsupportedEncodingException e1) {
-                        // Couldn't properly decode data to string
-                        e1.printStackTrace();
-                    }
-                }
                 Toast.makeText(activity, "Failed!", Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -589,49 +458,61 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("event", eventid);
+                params.put("author", MainActivity.pk);
+                params.put("event", event.getId());
                 params.put("content", comment);
+                params.put("date", date);
                 params.put("title", commentTitle);
                 return params;
             }
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
                 params.put("Authorization", "JWT " + MainActivity.token);
                 return params;
             }
         };
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
+        queue.add(jsonObjReq);
+        */
     }
+
     private void getComments() {
-        String getCommentURL= Constants.COMMENT_URL;
+        comments.clear();
+        //User user = new User("0", "test@test.com", "Tester", "password");
+        for(int i=0;i<event.getComments().size();i++){
+            //Log.e("here","here "+event.getComments().get(i).getEventId()+" "+event.getId());
+            if(event.getComments().get(i).getEventId().equals(event.getId())){
+                getComment(event.getComments().get(i).getId());
+                //user.setName(event.getComments().get(i).getId());
+            }
+        }
+        //Comment comment = new Comment("",user,"", getString(R.string.lorem_ipsum_base), "7 November 2018", 4);
+        //comments.add(comment);
+        /*User user2 = new User("0", "test@test.com", "Tester", "pass");
+        user2.setName("Fatih Arslan");
+        Comment comment2 = new Comment("",user2,"", getString(R.string.lorem_ipsum_content), "5 April 2018", 3);
+        comments.add(comment2);
+        commentAdapter.notifyDataSetChanged();*/
+    }
+    private void getComment(final String commentId) {
+        String getCommentURL= Constants.COMMENT_URL+commentId;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
                 getCommentURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray jsonArray = new JSONArray(response);
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String id = toUTF(jsonObject.getString("id"));
-                                String content = toUTF(jsonObject.getString("content"));
-                                String title = toUTF(jsonObject.getString("title"));
-                                String author = toUTF(jsonObject.get("author").toString());
-                                String date = toUTF(jsonObject.getString("date"));
-                                String authorfirstname = toUTF(jsonObject.getString("authorFirstName"));
-                                String authorlastname = toUTF(jsonObject.getString("authorLastName"));
-                                String authorpicture = toUTF(jsonObject.getString("authorProfilePic"));
-                                date=date.substring(11,16)+"  "+date.substring(0,10);
-                                String commenteventid = toUTF(jsonObject.getString("event"));
-                                if (commenteventid.equals(eventid)){
-                                    comments.add(new Comment(id, new User(author,"",authorfirstname,  authorlastname, authorpicture), commenteventid, title, content, date, 0));
-                                }
-                            }
-                            event.setComments(comments);
+                            JSONObject jsonObject = new JSONObject(response);
+                            String content = toUTF(jsonObject.getString("content"));
+                            String title = toUTF(jsonObject.getString("title"));
+                            String author = toUTF(jsonObject.getString("author"));
+                            String date = toUTF(jsonObject.getString("date"));
+                            date=date.substring(11,16)+"  "+date.substring(0,10);
+                            String event = toUTF(jsonObject.getString("event"));
+                            Comment comment = new Comment(commentId, new User(author,"","",""), event, title, content, date, 4);
+                            comments.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -665,8 +546,8 @@ public class EventFragment extends Fragment implements View.OnClickListener, OnM
         MapsInitializer.initialize(activity);
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(event.getEventName()).snippet("Event Location"));
-        CameraPosition position = CameraPosition.builder().target(new LatLng(lat, lon)).zoom(14).build();
+        map.addMarker(new MarkerOptions().position(new LatLng(41.085830, 29.046891)).title(event.getEventName()).snippet("huhuu"));
+        CameraPosition position = CameraPosition.builder().target(new LatLng(41.085830, 29.046891)).zoom(14).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
     public String toUTF(String str){

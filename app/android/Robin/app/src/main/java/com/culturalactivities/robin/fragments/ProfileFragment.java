@@ -25,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
@@ -201,7 +200,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             String image = toUTF(jsonObj.getString("profile_pic"));
 
                             tvName.setText(fname + " " + lname);
-                            Glide.with(activity).load(image).into(ivProfile);
+                            //Glide.with(activity).load(image).into(ivProfile);
                             // TODO: 05.12.2018 Waiting for profile picture link from backend
                             tvBio.setText(bio);
 
@@ -235,9 +234,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                     events.add(new Event(false, 1, String.valueOf(createdEventArray.getJSONArray(j).get(0)),createdEventArray.getJSONArray(j).get(1).toString()));
                                 }
                             }
-
-                            recyclerView.setAdapter(eventAdapter);
-                            eventAdapter.notifyDataSetChanged();
 
                             // get followers
                             JSONArray followersArray = jsonObj.getJSONArray("followers");
@@ -335,10 +331,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         int position = recyclerView.getChildLayoutPosition(view);
         switch (tabLayout.getSelectedTabPosition()){
             case 0:
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment, EventFragment.newInstance(events.get(position).getId()));
-                transaction.addToBackStack("addEF");
-                transaction.commit();
                 break;
             case 1:
                 FragmentTransaction transaction2 = activity.getSupportFragmentManager().beginTransaction();

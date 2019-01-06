@@ -40,8 +40,11 @@ import com.culturalactivities.robin.adapters.SearchUserAdapter;
 import com.culturalactivities.robin.models.Comment;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
+import com.culturalactivities.robin.models.Location;
 import com.culturalactivities.robin.models.Tag;
 import com.culturalactivities.robin.models.User;
+import com.culturalactivities.robin.utilities.Constants;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -252,7 +255,10 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(String response) {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
+
                             for (int i = 0; i < jsonArray.length(); i++) {
+                                ArrayList<Tag> tags = new ArrayList<>();
+                                ArrayList<Comment> comments = new ArrayList<>();
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String id = toUTF(jsonObject.getString("id"));
                                 String name = toUTF(jsonObject.getString("name"));
@@ -260,25 +266,29 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
                                 String artist = toUTF(jsonObject.getString("artist"));
                                 String date = toUTF(jsonObject.getString("date"));
                                 String time = toUTF(jsonObject.getString("time"));
+
+                                double lattitude = jsonObject.getDouble("loc_lattitude");
+                                double longitude = jsonObject.getDouble("loc_longitude");
                                 //String image = toUTF(jsonObject.getString("country")); // TODO: 04.12.2018 Here will change
                                 JSONArray commentArray= jsonObject.getJSONArray("comments");
                                 for(int j=0;j<commentArray.length();j++){
                                     comments.add(new Comment(commentArray.get(j).toString(),id));
                                 }
+                                JSONArray tagArray= jsonObject.getJSONArray("tags");
+                                for(int j=0;j<tagArray.length();j++){
+                                    tags.add(new Tag(tagArray.get(j).toString().substring(tagArray.get(j).toString().indexOf(",")+2,tagArray.get(j).toString().indexOf("]")-1),0,null));
+                                }
+                                JSONArray imagesArray= jsonObject.getJSONArray("images");
+                                ArrayList<Image> images = new ArrayList<>();
+                                for(int j=0;j<imagesArray.length();j++){
+                                    images.add(new Image(imagesArray.get(j).toString(), ""));
+                                }
                                 Double price = Double.valueOf(jsonObject.getString("price"));
                                 Float rating = Float.valueOf(jsonObject.getString("rating"));
-                                ArrayList<Image> images = new ArrayList<>();
-                                //images.add(new Image(image, null));
 
                                 //JSONArray arrayCreator = jsonObject.getJSONArray("creator");
-                                ///JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
-                                JSONArray tagsArray = jsonObject.getJSONArray("tags");
-
-                                for (int j = 0; j < tagsArray.length(); j++) {
-
-                                }
-
-                                events.add(new Event(id, name,info, artist, date, time, price, rating, null, comments, null, tags, images));
+                                //JSONArray arrayAttendants = jsonObject.getJSONArray("attendants");
+                                events.add(new Event(id, name,info, artist, date, time, price, rating, new Location(lattitude, longitude), comments, null, tags, images));
                             }
                             recyclerView.setAdapter(eventAdapter);
                             eventAdapter.notifyDataSetChanged();

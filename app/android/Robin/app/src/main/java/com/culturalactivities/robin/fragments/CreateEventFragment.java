@@ -133,7 +133,7 @@ public class CreateEventFragment extends Fragment {
 
         buttonSelectDate.setTypeface(MainActivity.ubuntuRegular);
         buttonSelectHour.setTypeface(MainActivity.ubuntuRegular);
-        /*buttonSelectLocation.setTypeface(MainActivity.ubuntuRegular);
+        buttonSelectLocation.setTypeface(MainActivity.ubuntuRegular);
 
         buttonSelectLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +142,7 @@ public class CreateEventFragment extends Fragment {
                     selectLocation();
                 }
             }
-        });*/
+        });
 
         buttonSelectDate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,13 +12,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.adapters.EventAdapter;
 import com.culturalactivities.robin.models.Event;
 import com.culturalactivities.robin.models.Image;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +45,8 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     private EventAdapter eventAdapter;
     private ArrayList<Event> events = new ArrayList<>();
 
+    RequestQueue queue;
+    private String EVENTS_URL = "http://139.59.128.92:8080/api/v1/events/";
 
     private AppCompatActivity activity;
     @Override
@@ -41,8 +58,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     public EventsFragment() {}
 
     public static EventsFragment newInstance(){
-        EventsFragment fragment = new EventsFragment();
-        return fragment;
+        return new EventsFragment();
     }
 
     @Override
@@ -56,9 +72,10 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
 
     private void setView(View view) {
         MainActivity.progressBar.setVisibility(View.VISIBLE);
-        activity.getSupportActionBar().setSubtitle(activity.getString(R.string.my_events));
+        queue = Volley.newRequestQueue(activity);
+
         recyclerView = view.findViewById(R.id.rvEvents);
-        eventAdapter = new EventAdapter(activity, events, this);
+        eventAdapter = new EventAdapter(activity, events, this,0);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(eventAdapter);
         getEvents();
@@ -66,22 +83,55 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
 
     private void getEvents() {
         events.clear();
-        Image image = new Image("https://cappadociaballoonflights.com/blog/img/cappadocia%20balloon%20ride.JPG", null);
-        ArrayList<Image> images = new ArrayList<>();
-        images.add(image);
-        for (int i = 0; i < 3; i++) {
-            Event event = new Event();
-            event.setImages(images);
-            event.setRating(3);
-            event.setEventInfo("MY Event description");
-            events.add(event);
-        }
-        eventAdapter.notifyDataSetChanged();
-        MainActivity.progressBar.setVisibility(View.INVISIBLE);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.GET,
+                EVENTS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String name = toUTF(jsonObject.getString("name"));
+                                String info = toUTF(jsonObject.getString("info"));
+                                events.add(new Event(false, 1, name, info));
+                            }
+                            eventAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "JWT " + MainActivity.token);
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjReq);
     }
 
     @Override
     public void onClick(View view) {
 
+    }
+    public String toUTF(String str){
+        try {
+            byte ptext[] = str.getBytes("ISO-8859-1");
+            str = new String(ptext, "UTF-8");
+        }catch(UnsupportedEncodingException ex){
+
+        }
+        return str;
     }
 }

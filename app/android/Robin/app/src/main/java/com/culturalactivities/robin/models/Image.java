@@ -3,12 +3,19 @@ package com.culturalactivities.robin.models;
 import java.util.ArrayList;
 
 public class Image {
-    private String url;
-    private ArrayList<Annotation> annotations;
+    private String id, url;
 
-    public Image(String url, ArrayList<Annotation> annotations) {
+    public Image(String id, String url) {
+        this.id = id;
         this.url = url;
-        this.annotations = annotations;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUrl() {
@@ -17,13 +24,5 @@ public class Image {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public ArrayList<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(ArrayList<Annotation> annotations) {
-        this.annotations = annotations;
     }
 }

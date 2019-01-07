@@ -1,35 +1,26 @@
 package com.culturalactivities.robin.models;
 
 public class Location {
-    private String address, referenceLinks, googleMapsLink;
+    private double latitude, longitude;
 
-    public Location(String address, String referenceLinks, String googleMapsLink) {
-        this.address = address;
-        this.referenceLinks = referenceLinks;
-        this.googleMapsLink = googleMapsLink;
+    public Location(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public String getAddress() {
-        return address;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public String getReferenceLinks() {
-        return referenceLinks;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setReferenceLinks(String referenceLinks) {
-        this.referenceLinks = referenceLinks;
-    }
-
-    public String getGoogleMapsLink() {
-        return googleMapsLink;
-    }
-
-    public void setGoogleMapsLink(String googleMapsLink) {
-        this.googleMapsLink = googleMapsLink;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

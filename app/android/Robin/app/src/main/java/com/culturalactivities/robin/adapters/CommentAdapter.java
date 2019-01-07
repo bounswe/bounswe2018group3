@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.culturalactivities.robin.R;
 import com.culturalactivities.robin.activities.MainActivity;
 import com.culturalactivities.robin.models.Comment;
+import com.culturalactivities.robin.utilities.Constants;
 
 import java.util.ArrayList;
 
@@ -28,16 +30,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     // you provide access to all the views for a data item in a view holder
     static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        TextView tvAuthor, tvComment, tvDate;
+        TextView tvAuthor, tvComment, tvDate, tvTitle;
         RatingBar rbComment;
-        ImageView ivAuthor;
+        ImageView ivBanner;
         ViewHolder(View v) {
             super(v);
             tvAuthor = v.findViewById(R.id.tvAuthor);
-            ivAuthor = v.findViewById(R.id.ivAuthor);
+            tvTitle = v.findViewById(R.id.tvTitle);
             tvComment = v.findViewById(R.id.tvComment);
             tvDate = v.findViewById(R.id.tvDate);
             rbComment = v.findViewById(R.id.rbComment);
+            ivBanner = v.findViewById(R.id.ivBanner);
         }
     }
 
@@ -68,13 +71,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         Comment comment = comments.get(position);
-        holder.tvAuthor.setText(comment.getAuthor().getName());
+        holder.tvAuthor.setText(comment.getAuthor().getFullName());
+        holder.tvTitle.setText(comment.getTitle());
         holder.tvComment.setText(comment.getContent());
         holder.tvDate.setText(comment.getDate());
         holder.rbComment.setRating(comment.getRating());
         holder.tvAuthor.setTypeface(MainActivity.ubuntuRegular);
-        holder.tvComment.setTypeface(MainActivity.ubuntuRegular);
-        //Glide.with(context).load(event.getImages().get(0).getUrl()).into(holder.ivBanner);
+        holder.tvTitle.setTypeface(MainActivity.ubuntuBold);
+        holder.tvComment.setTypeface(MainActivity.ubuntuItalic);
+        holder.tvDate.setTypeface(MainActivity.ubuntuRegular);
+        Glide.with(context).load(Constants.USERS_URL +comment.getAuthor().getProfileImage()).into(holder.ivBanner);
 
     }
 

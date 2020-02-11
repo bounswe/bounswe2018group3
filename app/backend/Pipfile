@@ -8,7 +8,7 @@ pip = "==18.0"
 pylint = "*"
 
 [packages]
-django = "==2.0"
+django = "==2.2.10"
 djangorestframework = "==3.8.2"
 markdown = "*"
 django-filter = "*"
